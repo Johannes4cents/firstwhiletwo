@@ -14,7 +14,14 @@ const MainPage = () => {
         width: "100%",
       }}
     >
-      <div style={{ width: "15%", height: "100%", justifyContent: "center" }}>
+      <div
+        style={{
+          width: "15%",
+          height: "100%",
+          justifyContent: "center",
+          minWidth: "250px",
+        }}
+      >
         <StrainsArea />
       </div>
       <div style={{ width: "55%", height: "100%", justifyContent: "center" }}>

@@ -26,7 +26,7 @@ const InputField = () => {
   };
 
   const submitMsg = () => {
-    const msg = ChatMessage(content, info.uid);
+    const msg = ChatMessage(content, { nickname: info.nickname, id: info.uid });
     sendMessageToTurfChats(activeChats, msg);
     setContent("");
   };

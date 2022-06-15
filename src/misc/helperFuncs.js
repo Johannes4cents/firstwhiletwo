@@ -99,7 +99,33 @@ function dateToTimestamp(date) {
   return resultObject;
 }
 
+function timestampToChatDate(timestamp) {
+  const currentTimeStamp = dateToTimestamp(new Date());
+  var dateString = "";
+  var todayString = "";
+  if (
+    (timestamp.year =
+      currentTimeStamp.year && timestamp.month == currentTimeStamp.month)
+  ) {
+    if (timestamp.day == currentTimeStamp.day) {
+      todayString = "today at ";
+    } else if (currentTimeStamp.day - timestamp.day < 2)
+      todayString = "yesterday at ";
+
+    dateString = todayString + timestamp.hour + ":" + timestamp.minute;
+  } else
+    dateString =
+      timestamp.day.toString() +
+      "/" +
+      timestamp.month.toString() +
+      "/" +
+      timestamp.year.toString();
+
+  return dateString;
+}
+
 export {
+  timestampToChatDate,
   getRandomId,
   getItemFromList,
   showImagePreviewWithFileReader,
