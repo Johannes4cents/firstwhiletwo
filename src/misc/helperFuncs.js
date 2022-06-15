@@ -124,7 +124,12 @@ function timestampToChatDate(timestamp) {
   return dateString;
 }
 
+function makeMousePositionObj(e) {
+  return { x: e.clientX, y: e.clientY };
+}
+
 export {
+  makeMousePositionObj,
   timestampToChatDate,
   getRandomId,
   getItemFromList,

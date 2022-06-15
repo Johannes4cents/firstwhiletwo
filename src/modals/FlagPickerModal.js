@@ -15,6 +15,7 @@ const FlagPickerModal = ({ mousePosition, setModalOpen }) => {
     localStorage.setItem("info", JSON.stringify(newInfo));
     // setState
     setInfo(newInfo);
+    setModalOpen(false);
   };
 
   return (

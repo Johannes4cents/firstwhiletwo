@@ -11,6 +11,7 @@ function createNewUserInFirestore(rawId, setInfo) {
     nickname: "Pick a Nickname",
     uid: uid,
     admin: false,
+    imgUrl: null,
     ressources: {
       cash: { amount: 0 },
       mana: { amount: 0 },

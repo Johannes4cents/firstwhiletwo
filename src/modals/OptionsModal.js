@@ -7,12 +7,20 @@ import {
   getSingleDocFromFirestore,
   updateDocInFirestore,
 } from "../misc/handleFirestore";
+import { makeMousePositionObj } from "../misc/helperFuncs";
+import FlagPickerModal from "./FlagPickerModal";
 
 const OptionsModal = ({ mousePosition, setModalOpen }) => {
   const auth = getAuth();
   const [nameModalOpen, setNameModalOpen] = useState(false);
+  const [flagModalOpen, setFlagModalOpen] = useState(false);
   const { setInfo, info } = userStore();
   const [nameMousePosition, setNameMousePosition] = useState({});
+
+  const flagObj = {
+    english: "/images/flags/flag_us.png",
+    german: "/images/flags/flag_german.png",
+  };
 
   const signOutUser = () => {
     const newInfo = { ...info, loggedIn: false };
@@ -28,6 +36,11 @@ const OptionsModal = ({ mousePosition, setModalOpen }) => {
   const onChangePenNameClicked = (e) => {
     setNameMousePosition({ x: e.clientX, y: e.clientY });
     setNameModalOpen(true);
+  };
+
+  const onChangeLanguage = (e) => {
+    setNameMousePosition(makeMousePositionObj(e));
+    setFlagModalOpen(true);
   };
 
   const checkIfNameAlreadyExists = (data, nameString) => {
@@ -67,16 +80,15 @@ const OptionsModal = ({ mousePosition, setModalOpen }) => {
         className="modalContent"
         style={{ left: `${mousePosition.x}px`, top: `${mousePosition.y}px` }}
       >
-        <div className="optionButton" onClick={onChangePenNameClicked}>
-          <div className="textBoldWhiteCenter" style={{ marginTop: "2px" }}>
-            Change Pen Name
-          </div>
-        </div>
-        <div className="optionButton">
-          <div className="textBoldWhiteCenter" style={{ marginTop: "2px" }}>
-            Options
-          </div>
-        </div>
+        <OptionsHolder
+          text={"change Nickname"}
+          onClick={onChangePenNameClicked}
+        />
+        <OptionsHolder
+          text={"Language"}
+          onClick={onChangeLanguage}
+          image={flagObj[info.language]}
+        />
         <div
           className="optionButton"
           style={{ marginTop: "5px", marginBottom: "2px" }}
@@ -96,8 +108,25 @@ const OptionsModal = ({ mousePosition, setModalOpen }) => {
           title="Enter New Pen Name"
         />
       )}
+      {flagModalOpen && (
+        <FlagPickerModal
+          mousePosition={nameMousePosition}
+          setModalOpen={setFlagModalOpen}
+        />
+      )}
     </div>
   );
 };
+
+function OptionsHolder({ text, onClick, image = null }) {
+  return (
+    <div className="optionButton" onClick={onClick}>
+      <div className="textBoldWhiteCenter" style={{ marginTop: "2px" }}>
+        {text}
+      </div>
+      {image && <img src={image} className="icon20" />}
+    </div>
+  );
+}
 
 export default OptionsModal;

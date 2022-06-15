@@ -11,11 +11,6 @@ const UserButton = () => {
   const flagImage = useRef();
   const [nickName, setNickName] = useState("Not signed in");
 
-  const onFlagClicked = (e) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
-    setModalOpen(true);
-  };
-
   const onOptionsClicked = (e) => {
     setMousePosition({ x: e.clientX, y: e.clientY });
     setOptionsOpen(true);
@@ -25,18 +20,6 @@ const UserButton = () => {
     if (info != null) {
       // set displayed name
       setNickName(info.nickname);
-      // set localization
-      switch (info.language) {
-        case "german":
-          flagImage.current.setAttribute(
-            "src",
-            "/images/flags/flag_german.png"
-          );
-          break;
-        case "english":
-          flagImage.current.setAttribute("src", "/images/flags/flag_us.png");
-          break;
-      }
     } else {
       setNickName("Not signed in");
     }
@@ -47,19 +30,6 @@ const UserButton = () => {
       <div className="userButton" onClick={onOptionsClicked}>
         <div className="textBoldWhite">{nickName}</div>
       </div>
-      <img
-        onClick={onFlagClicked}
-        className="icon40"
-        src={"/images/flags/flag_german.png"}
-        style={{ marginLeft: "5px" }}
-        ref={flagImage}
-      />
-      {modalOpen && (
-        <FlagPickerModal
-          mousePosition={mousePosition}
-          setModalOpen={setModalOpen}
-        />
-      )}
       {optionsOpen && (
         <OptionsModal
           setModalOpen={setOptionsOpen}
