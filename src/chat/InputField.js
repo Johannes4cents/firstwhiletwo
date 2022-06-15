@@ -26,7 +26,11 @@ const InputField = () => {
   };
 
   const submitMsg = () => {
-    const msg = ChatMessage(content, { nickname: info.nickname, id: info.uid });
+    const msg = ChatMessage(content, {
+      nickname: info.nickname,
+      id: info.uid,
+      imgUrl: info.profilePicUrl,
+    });
     sendMessageToTurfChats(activeChats, msg);
     setContent("");
   };
