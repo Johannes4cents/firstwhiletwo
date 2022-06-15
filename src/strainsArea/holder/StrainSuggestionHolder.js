@@ -38,6 +38,7 @@ const StrainSuggestionHolder = ({ strain }) => {
       className="divRow"
       style={{
         backgroundImage: `url(${bgImg})`,
+        minHeight: "29px",
         height: "29px",
         width: "100%",
       }}

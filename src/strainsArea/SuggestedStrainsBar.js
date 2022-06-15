@@ -46,7 +46,7 @@ const SuggestedStrainsBar = () => {
     setDisplayedStrains(strainWords);
   }, [strainWords]);
   return (
-    <div className="divColumn" style={{ flex: 1 }}>
+    <div className="divColumn" style={{ flex: 1, overflow: "auto" }}>
       <div
         className="bgSection"
         style={{
@@ -70,7 +70,16 @@ const SuggestedStrainsBar = () => {
           className="icon20"
         />
       </div>
-      <div className="divColumn" style={{ width: "100%" }}>
+      <div
+        className="divColumn"
+        style={{
+          width: "100%",
+          height: "100%",
+          flex: 1,
+          maxHeight: "380px",
+          overflow: "auto",
+        }}
+      >
         {displayedStrains.map((s) => {
           return <StrainSuggestionHolder key={s.id} strain={s} />;
         })}

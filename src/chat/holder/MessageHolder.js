@@ -4,7 +4,7 @@ import { storage } from "../../firebase/fireInit";
 import { timestampToChatDate } from "../../misc/helperFuncs";
 
 const MessageHolder = ({ message }) => {
-  const profilePic = useRef();
+  const profilePic = useRef(null);
   const [hover, setHover] = useState(false);
 
   useEffect(() => {
@@ -14,7 +14,8 @@ const MessageHolder = ({ message }) => {
         console.log("message.author.imgUrl is  -", message.author.imgUrl);
         getDownloadURL(ref(storage, message.author.imgUrl)).then((url) => {
           console.log("url is ", url);
-          profilePic.current.setAttribute("src", url);
+          if (profilePic.current != null)
+            profilePic.current.setAttribute("src", url);
         });
       }
     }

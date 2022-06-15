@@ -14,7 +14,7 @@ const MyStrainsBar = () => {
 
   const onSearchFunc = (result) => {};
   return (
-    <div className="divColumn" style={{ flex: 1 }}>
+    <div className="divColumn" style={{ flex: 1, overflow: "auto" }}>
       <div
         className="bgSection"
         style={{
@@ -26,7 +26,16 @@ const MyStrainsBar = () => {
       <div style={{ marginBottom: "2px" }}>
         <SearchBar onSearchFunc={onSearchFunc} />
       </div>
-      <div className="divColumn" style={{ width: "100%" }}>
+      <div
+        className="divColumn"
+        style={{
+          width: "100%",
+          maxHeight: "380px",
+          overflow: "auto",
+          height: "100%",
+          flex: 1,
+        }}
+      >
         {displayedStrains.map((s) => {
           return <StrainListHolder key={s.id} strain={s} />;
         })}

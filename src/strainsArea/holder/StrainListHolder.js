@@ -21,8 +21,10 @@ const StrainListHolder = ({ strain }) => {
       className="divRow"
       style={{
         backgroundImage: `url(${bgImg})`,
+        maxHeight: "29px",
         height: "29px",
         width: "100%",
+        minHeight: "29px",
       }}
     >
       <img
