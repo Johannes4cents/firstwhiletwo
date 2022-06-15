@@ -2,13 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import FlagPickerModal from "../../modals/FlagPickerModal";
 import OptionsModal from "../../modals/OptionsModal";
 import userStore from "../../stores/userStore";
+import ProfilePictureImage from "./ProfilePictureImage";
 
 const UserButton = () => {
-  const [modalOpen, setModalOpen] = useState(false);
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState(null);
   const { info } = userStore();
-  const flagImage = useRef();
   const [nickName, setNickName] = useState("Not signed in");
 
   const onOptionsClicked = (e) => {
@@ -30,6 +29,7 @@ const UserButton = () => {
       <div className="userButton" onClick={onOptionsClicked}>
         <div className="textBoldWhite">{nickName}</div>
       </div>
+      <ProfilePictureImage />
       {optionsOpen && (
         <OptionsModal
           setModalOpen={setOptionsOpen}

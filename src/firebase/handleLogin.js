@@ -11,7 +11,7 @@ function createNewUserInFirestore(rawId, setInfo) {
     nickname: "Pick a Nickname",
     uid: uid,
     admin: false,
-    imgUrl: null,
+    profilePicUrl: null,
     ressources: {
       cash: { amount: 0 },
       mana: { amount: 0 },
@@ -56,9 +56,6 @@ function createNewUserInFirestore(rawId, setInfo) {
   // set Info object in Firestore
   const docRef = doc(db, "users/", uid);
   setDoc(docRef, infoObj);
-
-  // set Info in localStorage
-  localStorage.setItem("info", JSON.stringify(infoObj));
 
   // setState of info
   setInfo(infoObj);

@@ -38,7 +38,15 @@ const PickImageImage = ({
   }, [selectedImage]);
 
   return (
-    <div className="divRow" style={{ marginLeft: "5px", marginRight: "5px" }}>
+    <div
+      className="divRow"
+      style={{
+        marginLeft: "5px",
+        marginRight: "5px",
+        width: "100%",
+        height: "100%",
+      }}
+    >
       <form className="imageForm">
         <input
           type="file"
@@ -56,7 +64,7 @@ const PickImageImage = ({
           inputFile.current.click();
         }}
         src={"/images/drawable/icon_question_mark.png"}
-        className={imgSize}
+        className="icon25"
       />
     </div>
   );

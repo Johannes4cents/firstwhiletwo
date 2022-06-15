@@ -1,5 +1,5 @@
 import React from "react";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
 import db from "../firebase/fireInit";
 import userStore from "../stores/userStore";
 
@@ -10,9 +10,7 @@ const FlagPickerModal = ({ mousePosition, setModalOpen }) => {
     let newInfo = { ...info, language: language };
     // update in Firestore
     const docRef = doc(db, "users/", info.uid);
-    updateDoc(docRef, { info: newInfo });
-    // update in localStorage
-    localStorage.setItem("info", JSON.stringify(newInfo));
+    setDoc(docRef, newInfo);
     // setState
     setInfo(newInfo);
     setModalOpen(false);
