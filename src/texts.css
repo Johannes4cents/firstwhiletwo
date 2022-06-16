@@ -158,4 +158,6 @@
   resize: none;
   border-radius: 3em/5em;
   background-color: rgb(82, 82, 82);
+  border: none;
+  outline: none;
 }

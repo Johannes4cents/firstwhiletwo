@@ -5,10 +5,12 @@ import { getRandomId } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import userStore from "../stores/userStore";
 import { sendMessageToTurfChats } from "./handleChat";
+import InputOptionsBar from "./InputOptionsBar";
 
 const InputField = () => {
   const heightSpan = useRef(null);
   const inputWidth = useRef(null);
+  const [focusColor, setFocusColor] = useState("rgb(82, 82, 82)");
   const { activeChat, activeChats } = chatStore();
   const { info } = userStore();
   const [content, setContent] = useState("");
@@ -47,42 +49,58 @@ const InputField = () => {
   return (
     <div
       className="divRow"
-      style={{ width: "100%", marginBottom: "5px", marginTop: "10px" }}
+      style={{
+        width: "100%",
+        marginBottom: "5px",
+        marginTop: "10px",
+        backgroundColor: focusColor,
+        borderRadius: "3em/5em",
+      }}
     >
-      <span
-        ref={heightSpan}
-        style={{
-          position: "absolute",
-          opacity: 0.5,
-          textAlign: "center",
-          overflow: "hidden",
-          width,
-          color: "green",
-          pointerEvents: "none",
-          fontFamily: "Roboto-Regular",
-          fontSize: "15px",
-          minHeight: "20px",
-          borderRadius: "3em/5em",
-        }}
-      >
-        {content}
-      </span>
-      <textarea
-        ref={inputWidth}
-        onKeyDown={onEnter}
-        type={"textarea"}
-        className="inputField"
-        style={{
-          width: "100%",
-          height,
-          textAlign: "center",
-          overflow: "hidden",
-        }}
-        value={content}
-        onChange={(e) => {
-          setContent(e.target.value);
-        }}
-      />
+      <div className="divRow" style={{ width: "100%" }}>
+        <span
+          ref={heightSpan}
+          style={{
+            position: "absolute",
+            opacity: 0.5,
+            textAlign: "center",
+            overflow: "hidden",
+            width,
+            color: "green",
+            pointerEvents: "none",
+            fontFamily: "Roboto-Regular",
+            fontSize: "15px",
+            minHeight: "20px",
+            borderRadius: "3em/5em",
+          }}
+        >
+          {content}
+        </span>
+        <textarea
+          onFocus={(e) => {
+            setFocusColor("rgb(100, 100, 100)");
+          }}
+          onBlur={() => {
+            setFocusColor("rgb(82, 82, 82)");
+          }}
+          ref={inputWidth}
+          onKeyDown={onEnter}
+          type={"textarea"}
+          className="inputField"
+          style={{
+            flex: 1,
+            height,
+            textAlign: "center",
+            overflow: "hidden",
+            backgroundColor: focusColor,
+          }}
+          value={content}
+          onChange={(e) => {
+            setContent(e.target.value);
+          }}
+        />
+      </div>
+      <InputOptionsBar height={height} />
     </div>
   );
 };
