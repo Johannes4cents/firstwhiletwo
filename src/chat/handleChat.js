@@ -4,6 +4,9 @@ import {
   getDoc,
   onSnapshot,
   setDoc,
+  query,
+  where,
+  collectionGroup,
 } from "@firebase/firestore";
 import db from "../firebase/fireInit";
 import Turf from "../fire_classes/Turf";
@@ -11,13 +14,18 @@ import { setDocInFirestore } from "../misc/handleFirestore";
 import { dateToTimestamp } from "../misc/helperFuncs";
 
 function getChatListener(chat, onCollection) {
-  const collectionRef = collection(db, "turfChats/" + chat + "/messages");
-  const unsubscribe = onSnapshot(collectionRef, (snapshot) => {
-    let items = [];
+  const q = query(
+    collectionGroup(db, "messages"),
+    where("chats", "array-contains", chat)
+  );
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    console.log("snapshot is - ", snapshot);
+    let docs = [];
     snapshot.forEach((doc) => {
-      items.push(doc.data());
+      docs.push(doc.data());
     });
-    onCollection(items, unsubscribe);
+    console.log("docs are - ", docs);
+    onCollection(docs, unsubscribe);
   });
   return unsubscribe;
 }
@@ -33,7 +41,7 @@ async function checkIfTurfChatExists(chatName, uid, username) {
   });
 }
 
-function makeChatDoc(chatName, uid, username) {
+function makeChatDoc(chatName, uid, username, chats) {
   return {
     id: chatName,
     created: dateToTimestamp(new Date()),
@@ -42,11 +50,8 @@ function makeChatDoc(chatName, uid, username) {
   };
 }
 
-function sendMessageToTurfChats(chats, msg) {
-  for (let i = 0; i < chats.length; i++) {
-    const chat = chats[i];
-    setDocInFirestore("turfChats/" + chat + "/messages", msg.id, msg);
-  }
+function sendMessageToTurfChats(chat, msg) {
+  setDocInFirestore("turfChats/" + chat + "/messages", msg.id, msg);
 }
 
 function getChatList(activeStrains) {

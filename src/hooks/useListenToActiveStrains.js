@@ -11,7 +11,7 @@ import userStore from "../stores/userStore";
 import chatStore from "../stores/chatStore";
 const useListenToActiveStrains = (subscriptions, setSubscriptions) => {
   const { activeStrains } = listsStore();
-  const { setActiveChats, setDisplayedMessages } = chatStore();
+  const { setActiveChat, setDisplayedMessages, setActiveChats } = chatStore();
 
   const { info } = userStore();
 
@@ -20,17 +20,16 @@ const useListenToActiveStrains = (subscriptions, setSubscriptions) => {
       const unsubscribe = subscriptions[i];
       unsubscribe();
     }
+
     const strains = activeStrains
       .map((s) => s.text)
       .sort((a, b) => (a > b ? 1 : -1));
 
+    setActiveChats(getChatList(strains));
     const turfChat = strains.join("|").toLowerCase();
-    const chatList = getChatList(strains);
-    for (let i = 0; i < chatList.length; i++) {
-      const chat = chatList[i];
-      checkIfTurfChatExists(chat, info.uid, info.nickname);
-    }
-    setActiveChats(chatList);
+
+    checkIfTurfChatExists(turfChat, info.uid, info.nickname, strains);
+    setActiveChat(turfChat);
     const unsubscribe = getChatListener(turfChat, (messages) => {
       setDisplayedMessages(messages);
     });

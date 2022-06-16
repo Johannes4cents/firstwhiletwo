@@ -2,9 +2,15 @@ import React from "react";
 import create from "zustand";
 
 const chatStore = create((set) => ({
+  activeChat: [],
+  setActiveChat: (chats) => {
+    set((state) => {
+      return { activeChat: chats };
+    });
+  },
   activeChats: [],
   setActiveChats: (chats) => {
-    set((state) => {
+    set(() => {
       return { activeChats: chats };
     });
   },

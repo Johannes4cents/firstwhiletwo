@@ -59,8 +59,8 @@ const StrainListHolder = ({ strain }) => {
         style={{ marginRight: "5px" }}
         src={
           activeStrains.map((s) => s.id).includes(strain.id)
-            ? "/images/icons/icon_strain.png"
-            : "/images/icons/icon_strain_unselected.png"
+            ? "/images/icons/icon_strain_green.png"
+            : "/images/icons/icon_strain_white.png"
         }
         className="icon20"
       />

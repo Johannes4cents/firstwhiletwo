@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import SearchBar from "../misc/elements/SearchBar";
+import SearchStrainsBar from "../misc/elements/SearchStrainsBar";
 import listsStore from "../stores/listsStore";
 import StrainListHolder from "./holder/StrainListHolder";
 
@@ -12,7 +13,6 @@ const MyStrainsBar = () => {
     if (myStrains != null) setDisplayedStrains(myStrains);
   }, [myStrains]);
 
-  const onSearchFunc = (result) => {};
   return (
     <div className="divColumn" style={{ flex: 1, overflow: "auto" }}>
       <div
@@ -23,9 +23,10 @@ const MyStrainsBar = () => {
       >
         My Strains
       </div>
-      <div style={{ marginBottom: "2px" }}>
-        <SearchBar onSearchFunc={onSearchFunc} />
-      </div>
+      <SearchStrainsBar
+        setDisplayedStrains={setDisplayedStrains}
+        displayedStrains={displayedStrains}
+      />
       <div
         className="divColumn"
         style={{

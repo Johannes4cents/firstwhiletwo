@@ -1,11 +1,11 @@
 import React from "react";
 
-const TurfSection = () => {
+const MyGuySection = () => {
   return (
     <div className="divColumn" style={{ flex: 1 }}>
-      TurfSection
+      MyGuySection
     </div>
   );
 };
 
-export default TurfSection;
+export default MyGuySection;

@@ -72,8 +72,10 @@ const StrainSuggestionHolder = ({ strain }) => {
         style={{ marginRight: "5px" }}
         src={
           activeStrains.map((s) => s.id).includes(strain.id)
-            ? "/images/icons/icon_strain_gold.png"
-            : "/images/icons/icon_strain_green.png"
+            ? "/images/icons/icon_strain_green.png"
+            : myStrains.map((s) => s.id).includes(strain.id)
+            ? "/images/icons/icon_strain_white.png"
+            : "/images/icons/icon_strain_unselected.png"
         }
         className="icon20"
       />

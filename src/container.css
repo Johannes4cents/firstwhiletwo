@@ -345,6 +345,8 @@
 
 .App {
   background-color: #4a4a4a;
+  display: flex;
+  width: 100%;
 }
 
 .bgSection {

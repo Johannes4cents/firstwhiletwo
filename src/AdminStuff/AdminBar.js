@@ -8,12 +8,12 @@ import chatStore from "../stores/chatStore";
 const AdminBar = () => {
   const { info, setInfo, loggedIn } = userStore();
   const { activeStrains, myStrains } = listsStore();
-  const { activeChats } = chatStore();
+  const { activeChat } = chatStore();
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const checkStuff = () => {
-    console.log("activeChats - ", activeChats);
+    console.log("activeChat - ", activeChat);
     console.log("activeStrains - ", activeStrains);
     console.log("myStrains - ", myStrains);
   };

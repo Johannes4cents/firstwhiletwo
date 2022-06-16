@@ -9,7 +9,7 @@ import { sendMessageToTurfChats } from "./handleChat";
 const InputField = () => {
   const heightSpan = useRef(null);
   const inputWidth = useRef(null);
-  const { activeChats } = chatStore();
+  const { activeChat, activeChats } = chatStore();
   const { info } = userStore();
   const [content, setContent] = useState("");
   const [height, setHeight] = useState();
@@ -26,12 +26,12 @@ const InputField = () => {
   };
 
   const submitMsg = () => {
-    const msg = ChatMessage(content, {
+    const msg = ChatMessage(activeChats, content, {
       nickname: info.nickname,
       id: info.uid,
       imgUrl: info.profilePicUrl,
     });
-    sendMessageToTurfChats(activeChats, msg);
+    sendMessageToTurfChats(activeChat, msg);
     setContent("");
   };
 

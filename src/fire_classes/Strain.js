@@ -18,16 +18,13 @@ function makeStrain(uid, strainText, addMyStrain, addRemoveStrainWord) {
       (s) => s.text.toLowerCase() == strainText.toLowerCase()
     );
     if (strain == null) {
-      const strain = Strain(getRandomId(), strainText);
+      strain = Strain(getRandomId(), strainText);
       addItemToGeneralList("strainWords", strain);
-      addMyStrain(uid, strain);
       setDocInFirestore("strains/", strain.id, strain);
-      setDocInFirestore("users/" + uid + "/myStrains", strain.id, strain);
       addRemoveStrainWord(uid, strain);
-    } else {
-      console.log("strain is already there");
-      alert("user should not see this: strain is already there");
     }
+    addMyStrain(uid, strain);
+    setDocInFirestore("users/" + uid + "/myStrains", strain.id, strain);
   });
 }
 

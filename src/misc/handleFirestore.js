@@ -109,7 +109,6 @@ async function addItemToGeneralList(list, item) {
   await getDoc(docRef).then((snapshot) => {
     let l = snapshot.data()[list];
     l.push(item);
-
     updateDoc(docRef, { [list]: l });
   });
 }
@@ -212,6 +211,17 @@ function uploadImageToStorage(path, image, thenFunc) {
   uploadBytes(imageStorageRef, image).then((snapshot) => {
     if (thenFunc != null) thenFunc(snapshot.metadata.fullPath);
   });
+}
+
+function getSuggestedStrains(category) {
+  switch (category) {
+    case "general":
+      break;
+    case "personal":
+      break;
+    case "All time":
+      break;
+  }
 }
 
 export {

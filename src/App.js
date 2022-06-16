@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import ContextMenu from "./contextMenu/ContextMenu";
 import DragCursor from "./contextMenu/DragCursor";
@@ -19,7 +18,7 @@ function App() {
   const { info, setInfo } = userStore();
   const { setDragCursor } = miscStore();
   const { activeStrains } = listsStore();
-  const { setActiveChats } = chatStore();
+  const { setActiveChat, setDisplayedMessages } = chatStore();
   const [subscriptions, setSubscriptions] = useState([]);
   const fillStorage = useFillStatesOnEnter();
   const clearOnLogOut = useClearOnLogOut();
@@ -36,8 +35,9 @@ function App() {
       for (let i = 0; i < subscriptions.length; i++) {
         const unsubscribe = subscriptions[i];
         unsubscribe();
+        setDisplayedMessages([]);
       }
-      setActiveChats([]);
+      setActiveChat(null);
     }
     return () => {
       unsubscribe();
@@ -69,25 +69,8 @@ function App() {
     <div className="App" onMouseUp={() => setDragCursor(null)}>
       <ContextMenu />
       <HoverBox />
-      <ToastContainer
-        position="bottom-left"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
       <DragCursor />
       <BrowserRouter>
-        <div
-          className="divRow"
-          style={{ width: "100%", justifyContent: "end", marginTop: "5px" }}
-        >
-          <SignInBar />
-        </div>
         <Routes>
           <Route path="/*" element={<MainPage />} />
           <Route path="/create_flags" element={<MakeFlagsPage />} />
