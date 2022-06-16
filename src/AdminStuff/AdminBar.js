@@ -32,47 +32,45 @@ const AdminBar = () => {
 
   return (
     <div className="divRow">
-      {isAdmin && (
-        <div>
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/pageFlags/icon_flag.png"
-            onClick={(e) => navigate("create_flags")}
-          />
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/drawable/event_shield.png"
-            onClick={(e) => navigate("admin")}
-          />
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/drawable/icon_event.png"
-            onClick={checkStuff}
-          />
+      <div>
+        <img
+          className="icon40"
+          style={{
+            marginRight: "25px",
+            alignSelf: "center",
+          }}
+          src="/images/pageFlags/icon_flag.png"
+          onClick={(e) => navigate("create_flags")}
+        />
+        <img
+          className="icon40"
+          style={{
+            marginRight: "25px",
+            alignSelf: "center",
+          }}
+          src="/images/drawable/event_shield.png"
+          onClick={(e) => navigate("admin")}
+        />
+        <img
+          className="icon40"
+          style={{
+            marginRight: "25px",
+            alignSelf: "center",
+          }}
+          src="/images/drawable/icon_event.png"
+          onClick={checkStuff}
+        />
 
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/drawable/icon_delete.png"
-            onClick={clearStorage}
-          />
-        </div>
-      )}
+        <img
+          className="icon40"
+          style={{
+            marginRight: "25px",
+            alignSelf: "center",
+          }}
+          src="/images/drawable/icon_delete.png"
+          onClick={clearStorage}
+        />
+      </div>
     </div>
   );
 };
