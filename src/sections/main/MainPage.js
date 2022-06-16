@@ -46,7 +46,12 @@ const MainPage = () => {
           </div>
           <div
             className="divColumn"
-            style={{ width: "37%", justifyContent: "baseline", height: "100%" }}
+            style={{
+              width: "37%",
+              justifyContent: "baseline",
+              height: "100%",
+              marginRight: "10px",
+            }}
           >
             <MyGuySection />
             <TurfSection />

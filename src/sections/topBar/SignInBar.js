@@ -13,7 +13,7 @@ const SignInBar = () => {
   const { loggedIn, setInfo } = userStore();
 
   // after successfully logging into the account
-
+  // <AdminBar />
   async function onLogInSuccess(user) {
     // check if localStorage has info stored
     let foundInfo = JSON.parse(localStorage.getItem("info"));
@@ -32,7 +32,6 @@ const SignInBar = () => {
 
   return (
     <div className="divRowColored" style={{ marginRight: "10px" }}>
-      <AdminBar />
       {loggedIn && <UserButton />}
       {!loggedIn && (
         <div className="signInButtons">

@@ -4,6 +4,8 @@ import settingsStore from "../stores/settingsStore";
 import PeopleFilterHolder from "./holder/PeopleFilterHolder";
 
 const MessageFilterSection = () => {
+  const [expanded, setExpanded] = useState(false);
+  const [hover, setHover] = useState(false);
   const { minMaxMsgUpvotes, setMinMaxUpvotes } = settingsStore();
 
   const handleUpvotesChange = (e) => {
@@ -21,7 +23,6 @@ const MessageFilterSection = () => {
       style={{
         border: "1px solid grey",
         borderRadius: "1rem/1rem",
-        flex: 1,
         maxHeight: "150px",
         overflowY: "auto",
         width: "90%",
@@ -30,15 +31,17 @@ const MessageFilterSection = () => {
         backgroundColor: "#676867",
       }}
     >
-      <div
-        className="divColumn"
-        style={{ width: "100%", flex: 1, marginTop: "5px" }}
-      >
-        <PeopleFilterHolder people={"allies"} />
-        <PeopleFilterHolder people={"alike"} />
-        <PeopleFilterHolder people={"foes"} />
-        <PeopleFilterHolder people={"celebs"} />
-      </div>
+      {expanded && (
+        <div
+          className="divColumn"
+          style={{ width: "100%", flex: 1, marginTop: "5px" }}
+        >
+          <PeopleFilterHolder people={"allies"} />
+          <PeopleFilterHolder people={"alike"} />
+          <PeopleFilterHolder people={"foes"} />
+          <PeopleFilterHolder people={"celebs"} />
+        </div>
+      )}
 
       <div className="divRow">
         <div
@@ -50,22 +53,43 @@ const MessageFilterSection = () => {
         <img src="/images/icons/icon_upvote.png" className="icon15" />
       </div>
 
-      <Box
-        style={{
-          width: "100%",
-          maxWidth: "200px",
-          paddingRight: "20px",
-          paddingLeft: "20px",
-        }}
-      >
-        <Slider
-          getAriaLabel={() => "Upvotes Range"}
-          value={minMaxMsgUpvotes}
-          onChange={handleUpvotesChange}
-          valueLabelDisplay="auto"
-          getAriaValueText={valuetext}
+      <div className="divRow" style={{ width: "100%" }}>
+        <img
+          onMouseEnter={() => {
+            setHover(true);
+          }}
+          onMouseLeave={() => {
+            setHover(false);
+          }}
+          onClick={() => setExpanded(!expanded)}
+          src={
+            expanded
+              ? hover
+                ? "/images/icons/icon_contract.png"
+                : "/images/icons/icon_contract_unselected.png"
+              : hover
+              ? "/images/icons/icon_expand.png"
+              : "/images/icons/icon_expand_unselected.png"
+          }
+          className="icon20"
         />
-      </Box>
+        <Box
+          style={{
+            width: "100%",
+            maxWidth: "200px",
+            paddingRight: "20px",
+            paddingLeft: "20px",
+          }}
+        >
+          <Slider
+            getAriaLabel={() => "Upvotes Range"}
+            value={minMaxMsgUpvotes}
+            onChange={handleUpvotesChange}
+            valueLabelDisplay="auto"
+            getAriaValueText={valuetext}
+          />
+        </Box>
+      </div>
     </div>
   );
 };
