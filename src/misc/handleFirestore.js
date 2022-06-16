@@ -1,5 +1,6 @@
 import { async } from "@firebase/util";
 import {
+  increment,
   collection,
   getDoc,
   getDocs,
@@ -133,6 +134,12 @@ async function deleteItemInGeneralList(
   });
 }
 
+function incrementField(path, docId, key, inc) {
+  console.log("path is -", path);
+  const docRef = doc(db, path, docId);
+  updateDoc(docRef, { [key]: increment(inc) });
+}
+
 async function updateItemInGeneralList(
   list,
   item,
@@ -241,4 +248,5 @@ export {
   deleteItemInGeneralList,
   getGeneralList,
   getCollectionFromUserFirestore,
+  incrementField,
 };

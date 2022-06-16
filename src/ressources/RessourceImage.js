@@ -1,10 +1,11 @@
 import React from "react";
 import useOnHover from "../hooks/useOnHover";
+import chatStore from "../stores/chatStore";
 
-const RessourceImage = ({ ressource, selectedRessource, onClick }) => {
+const RessourceImage = ({ ressource, onClick, selectedRessources }) => {
   const hover = useOnHover({
     item: ressource,
-    active: selectedRessource,
+    inclusionList: selectedRessources,
     imageSelected: `/images/ressources/res_${ressource}.png`,
     imageUnselected: `/images/ressources/res_${ressource}_unselected.png`,
   });
@@ -15,11 +16,11 @@ const RessourceImage = ({ ressource, selectedRessource, onClick }) => {
       style={{ position: "relative" }}
       {...hover.divProps}
     >
-      <img src={hover.activeImage} className="icon20" />
+      <img src={hover.activeImage} className="icon25" />
       <img
         src="/images/icons/icon_upvote.png"
         className="icon15"
-        style={{ position: "absolute" }}
+        style={{ position: "absolute", right: 0, bottom: 0 }}
       />
     </div>
   );

@@ -2,6 +2,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
 import { storage } from "../../firebase/fireInit";
 import { timestampToChatDate } from "../../misc/helperFuncs";
+import VoteRessourceArrows from "../VoteRessourceArrows";
 
 const MessageHolder = ({ message }) => {
   const profilePic = useRef(null);
@@ -57,6 +58,21 @@ const MessageHolder = ({ message }) => {
           </div>
         </div>
         <div className="textWhite">{message.msg}</div>
+      </div>
+      <div style={{ flex: 1 }} />
+      <div className="divColumn">
+        {(message.ressources ?? []).map((r) => {
+          return (
+            <VoteRessourceArrows
+              key={r.ressource}
+              ressource={r.ressource}
+              message={message}
+              hover={hover}
+              setHover={setHover}
+              index={r.index}
+            />
+          );
+        })}
       </div>
     </div>
   );

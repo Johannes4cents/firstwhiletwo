@@ -14,11 +14,13 @@ import useListenToActiveStrains from "./hooks/useListenToActiveStrains";
 import listsStore from "./stores/listsStore";
 import chatStore from "./stores/chatStore";
 import changeInfoObject from "./fixStuff/changeInfoObject";
+import { checkMessagesForUpdate } from "./chat/handleChat";
 
 function App() {
   const { info, setInfo } = userStore();
   const { setDragCursor } = miscStore();
   const { activeStrains } = listsStore();
+  const { displayedMessages } = chatStore();
   const { setActiveChat, setDisplayedMessages } = chatStore();
   const [subscriptions, setSubscriptions] = useState([]);
   const fillStorage = useFillStatesOnEnter();
@@ -27,6 +29,12 @@ function App() {
     subscriptions,
     setSubscriptions
   );
+
+  useEffect(() => {
+    setInterval(() => {
+      checkMessagesForUpdate(displayedMessages);
+    }, 5000);
+  }, []);
 
   useEffect(() => {
     var unsubscribe = () => {};

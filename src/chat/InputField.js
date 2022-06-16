@@ -11,7 +11,7 @@ const InputField = () => {
   const heightSpan = useRef(null);
   const inputWidth = useRef(null);
   const [focusColor, setFocusColor] = useState("rgb(82, 82, 82)");
-  const { activeChat, activeChats } = chatStore();
+  const { activeChat, activeChats, selectedMsgRessources } = chatStore();
   const { info } = userStore();
   const [content, setContent] = useState("");
   const [height, setHeight] = useState();
@@ -28,7 +28,7 @@ const InputField = () => {
   };
 
   const submitMsg = () => {
-    const msg = ChatMessage(activeChats, content, {
+    const msg = ChatMessage(selectedMsgRessources, activeChats, content, {
       nickname: info.nickname,
       id: info.uid,
       imgUrl: info.profilePicUrl,

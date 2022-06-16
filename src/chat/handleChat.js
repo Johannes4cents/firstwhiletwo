@@ -50,7 +50,11 @@ function makeChatDoc(chatName, uid, username, chats) {
   };
 }
 
+function checkMessagesForUpdate(messages) {}
+
 function sendMessageToTurfChats(chat, msg) {
+  msg.collection = "turfChats/" + chat + "/messages";
+  console.log("msg is ", msg);
   setDocInFirestore("turfChats/" + chat + "/messages", msg.id, msg);
 }
 
@@ -82,4 +86,5 @@ export {
   checkIfTurfChatExists,
   getChatList,
   sendMessageToTurfChats,
+  checkMessagesForUpdate,
 };
