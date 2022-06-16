@@ -13,6 +13,7 @@ import useFillStatesOnEnter from "./startup/useFillStatesOnEnter";
 import useListenToActiveStrains from "./hooks/useListenToActiveStrains";
 import listsStore from "./stores/listsStore";
 import chatStore from "./stores/chatStore";
+import changeInfoObject from "./fixStuff/changeInfoObject";
 
 function App() {
   const { info, setInfo } = userStore();
@@ -49,6 +50,7 @@ function App() {
     const info = JSON.parse(localStorage.getItem("info"));
     if (info != null) {
       setInfo(info);
+      changeInfoObject(info, setInfo);
     }
   }, []);
 

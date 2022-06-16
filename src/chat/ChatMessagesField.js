@@ -15,9 +15,11 @@ const ChatMessagesField = () => {
       }}
     >
       <div className="divColumn" style={{ width: "100%" }}>
-        {displayedMessages.map((msg) => {
-          return <MessageHolder message={msg} key={msg.id} />;
-        })}
+        {displayedMessages
+          .sort((a, b) => (a.timestamp.msTime > b.timestamp.msTime ? 1 : -1))
+          .map((msg) => {
+            return <MessageHolder message={msg} key={msg.id} />;
+          })}
       </div>
     </div>
   );

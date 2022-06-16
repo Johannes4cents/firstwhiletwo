@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import useOnHover from "../../hooks/useOnHover";
 import bgImg from "../../images/bg_strain.png";
 import {
   deleteDocInFirestore,
@@ -19,6 +20,14 @@ const StrainSuggestionHolder = ({ strain }) => {
     addRemoveMyStrain,
   } = listsStore();
 
+  const hover = useOnHover({
+    item: strain,
+    inclusionList: activeStrains,
+    identifier: "id",
+    imageSelected: "/images/icons/icon_strain_green.png",
+    imageUnselected: "/images/icons/icon_strain_white.png",
+  });
+
   const onClick = () => {
     if (myStrains.map((s) => s.id).includes(strain.id))
       addRemoveActiveStrain(info.uid, strain);
@@ -34,6 +43,7 @@ const StrainSuggestionHolder = ({ strain }) => {
   };
   return (
     <div
+      {...hover.divProps}
       onClick={onClick}
       className="divRow"
       style={{
@@ -64,19 +74,14 @@ const StrainSuggestionHolder = ({ strain }) => {
         style={{
           textAlign: "center",
           flex: 1,
+          color: hover.textColor,
         }}
       >
         {strain.text}
       </div>
       <img
         style={{ marginRight: "5px" }}
-        src={
-          activeStrains.map((s) => s.id).includes(strain.id)
-            ? "/images/icons/icon_strain_green.png"
-            : myStrains.map((s) => s.id).includes(strain.id)
-            ? "/images/icons/icon_strain_white.png"
-            : "/images/icons/icon_strain_unselected.png"
-        }
+        src={hover.activeImage}
         className="icon20"
       />
     </div>

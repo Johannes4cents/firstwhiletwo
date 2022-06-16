@@ -1,4 +1,5 @@
 import React from "react";
+import changeInfoObject from "../fixStuff/changeInfoObject";
 import {
   getCollectionFromUserFirestore,
   getGeneralList,

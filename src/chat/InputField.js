@@ -45,7 +45,10 @@ const InputField = () => {
     setHeight(heightSpan.current.offsetHeight);
   }, [content]);
   return (
-    <div className="divRow" style={{ width: "100%", marginBottom: "5px" }}>
+    <div
+      className="divRow"
+      style={{ width: "100%", marginBottom: "5px", marginTop: "10px" }}
+    >
       <span
         ref={heightSpan}
         style={{

@@ -33,14 +33,23 @@ const MainPage = () => {
       >
         <div
           className="divRow"
-          style={{ width: "100%", justifyContent: "end", marginTop: "5px" }}
+          style={{
+            width: "100%",
+            justifyContent: "end",
+            marginTop: "5px",
+            marginBottom: "5px",
+          }}
         >
           <SignInBar />
         </div>
 
         <div className="divRow" style={{ width: "100%", height: "100%" }}>
           <div
-            style={{ width: "63%", height: "100%", justifyContent: "center" }}
+            style={{
+              width: "63%",
+              height: "100%",
+              justifyContent: "center",
+            }}
           >
             <ChatArea />
           </div>
@@ -51,6 +60,8 @@ const MainPage = () => {
               justifyContent: "baseline",
               height: "100%",
               marginRight: "10px",
+              marginBottom: "15px",
+              paddingLeft: "10px",
             }}
           >
             <MyGuySection />

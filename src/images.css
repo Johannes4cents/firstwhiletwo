@@ -1,6 +1,6 @@
-.icon20 {
+.icon10 {
   object-fit: contain;
-  height: 20px;
+  height: 15px;
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
@@ -10,6 +10,15 @@
 .icon15 {
   object-fit: contain;
   height: 15px;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.icon20 {
+  object-fit: contain;
+  height: 20px;
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
