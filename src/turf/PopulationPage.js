@@ -1,8 +1,7 @@
 import React from "react";
 
-const MyTurfPage = () => {
-  //kacke
+const PopulationPage = () => {
   return <div className="sectionBg"></div>;
 };
 
-export default MyTurfPage;
+export default PopulationPage;
