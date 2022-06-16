@@ -1,9 +1,9 @@
 import React from "react";
 import ChatArea from "../../chat/ChatArea";
-import TurfSection from "../../turf/TurfSection";
 import StrainsArea from "../../strainsArea/StrainsArea";
 import SignInBar from "../topBar/SignInBar";
 import MyGuySection from "../../myGuy/MyGuySection";
+import TurfSection from "../../turf/TurfSection";
 
 const MainPage = () => {
   return (

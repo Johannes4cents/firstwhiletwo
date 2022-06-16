@@ -13,6 +13,8 @@ const AdminBar = () => {
   const navigate = useNavigate();
 
   const checkStuff = () => {
+    console.log("info - ", info);
+    console.log("loggedIn -", loggedIn);
     console.log("activeChat - ", activeChat);
     console.log("activeStrains - ", activeStrains);
     console.log("myStrains - ", myStrains);
