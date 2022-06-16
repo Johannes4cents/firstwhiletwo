@@ -3,7 +3,7 @@ import ChatArea from "../../chat/ChatArea";
 import StrainsArea from "../../strainsArea/StrainsArea";
 import SignInBar from "../topBar/SignInBar";
 import MyGuySection from "../../myGuy/MyGuySection";
-import TurfSection from "../../turf/TurfSection";
+import TurfSection from "../../turfStuff/TurfSection";
 
 //doof
 
