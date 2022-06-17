@@ -10,7 +10,7 @@ import UserButton from "./UserButton";
 import AdminBar from "../../AdminStuff/AdminBar";
 
 const SignInBar = () => {
-  const { loggedIn, setInfo } = userStore();
+  const { loggedIn, setInfo, info } = userStore();
 
   // after successfully logging into the account
 
@@ -32,7 +32,7 @@ const SignInBar = () => {
 
   return (
     <div className="divRowColored" style={{ marginRight: "10px" }}>
-      <AdminBar />
+      {info.admin && <AdminBar />}
       {loggedIn && <UserButton />}
       {!loggedIn && (
         <div className="signInButtons">

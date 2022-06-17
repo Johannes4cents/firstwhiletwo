@@ -220,6 +220,18 @@ function uploadImageToStorage(path, image, thenFunc) {
   });
 }
 
+async function addCustomItemToUserList(uid, item, collection) {
+  const userDocRef = doc(db, "users/", uid);
+  const userDoc = await getDoc(userDocRef);
+  var newList = [];
+  if (userDoc.data()[collection] != null) {
+    newList = [...userDoc.data()[collection], item];
+  } else {
+    newList = [item];
+  }
+  updateDoc(userDocRef, { [collection]: newList });
+}
+
 function getSuggestedStrains(category) {
   switch (category) {
     case "general":
@@ -232,6 +244,8 @@ function getSuggestedStrains(category) {
 }
 
 export {
+  getSuggestedStrains,
+  addCustomItemToUserList,
   updateItemInUserList,
   deleteItemInUserList,
   addItemToUserList,

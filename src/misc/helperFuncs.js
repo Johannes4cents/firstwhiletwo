@@ -26,6 +26,10 @@ function showImagePreviewWithFileReader(file, target) {
   };
 }
 
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 function checkTimeDiff(older, newer) {
   function yearsToMinutes(years) {
     return years * 525600;
@@ -128,13 +132,110 @@ function makeMousePositionObj(e) {
   return { x: e.clientX, y: e.clientY };
 }
 
+function doAfterTimeDiffCheck(uid, timestampName, func, intervalInSeconds) {
+  let oldTimestamp = JSON.parse(localStorage.getItem(uid + timestampName));
+  if (oldTimestamp == null) {
+    const timestamp = dateToTimestamp(new Date());
+    localStorage.setItem(uid + timestampName, JSON.stringify(timestamp));
+    func();
+  } else {
+    const newTimestamp = dateToTimestamp(new Date());
+    const timeDiff = minutesToSeconds(
+      checkTimeDiff(oldTimestamp, newTimestamp)
+    );
+    if (timeDiff >= intervalInSeconds) {
+      localStorage.setItem(uid + timestampName, JSON.stringify(newTimestamp));
+      func();
+    }
+  }
+}
+
+function testChance(chance, maxChance) {
+  let randomNumber = Math.floor(Math.random() * (maxChance + 1));
+  return randomNumber < chance;
+}
+
+function umlautFix(char) {
+  if (char == null) console.log("in umlautFix char is null");
+  if (
+    ![
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "w",
+      "x",
+      "y",
+      "z",
+      "ä",
+      "ö",
+      "ü",
+    ].includes(char.toLowerCase())
+  )
+    return null;
+  if (!["ä", "ö", "ü"].includes(char)) return char;
+  if (char == "ö") return "o";
+  if (char == "ä") return "a";
+  if (char == "ü") return "u";
+}
+
+function forArrayLength(array, func) {
+  for (let i = 0; i < array.length; i++) {
+    func(array[i]);
+  }
+}
+
+function objectToArray(object) {
+  const keys = Object.keys(object);
+  const values = Object.values(object);
+  return keys.map((key, index) => {
+    return { key, value: values[index] };
+  });
+}
+
+function updateItemInStorageAndState(uid, collection, item, setState) {
+  const idList = [];
+  let localList = JSON.parse(localStorage.getItem(uid + collection));
+  localList.forEach((i) => idList.push(i.id));
+  const index = idList.indexOf(item.id);
+
+  let newList = [...localList];
+  newList[index] = item;
+  setState(uid, newList);
+}
+
 export {
+  getRandomNumber,
   makeMousePositionObj,
   timestampToChatDate,
   getRandomId,
   getItemFromList,
   showImagePreviewWithFileReader,
   dateToTimestamp,
-  minutesToSeconds,
   checkTimeDiff,
+  doAfterTimeDiffCheck,
+  minutesToSeconds,
+  testChance,
+  umlautFix,
+  forArrayLength,
+  objectToArray,
+  updateItemInStorageAndState,
 };

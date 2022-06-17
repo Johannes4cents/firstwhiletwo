@@ -15,6 +15,7 @@ import listsStore from "./stores/listsStore";
 import chatStore from "./stores/chatStore";
 import changeInfoObject from "./fixStuff/changeInfoObject";
 import { checkMessagesForUpdate } from "./chat/handleChat";
+import useCheckArraysForResTrigger from "./scanTexts/useCheckArraysForResTrigger";
 
 function App() {
   const { info, setInfo } = userStore();
@@ -25,10 +26,13 @@ function App() {
   const [subscriptions, setSubscriptions] = useState([]);
   const fillStorage = useFillStatesOnEnter();
   const clearOnLogOut = useClearOnLogOut();
+
   const listenToChats = useListenToActiveStrains(
     subscriptions,
     setSubscriptions
   );
+
+  useCheckArraysForResTrigger();
 
   useEffect(() => {
     setInterval(() => {
