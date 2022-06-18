@@ -32,7 +32,7 @@ const SignInBar = () => {
 
   return (
     <div className="divRowColored" style={{ marginRight: "10px" }}>
-      {info.admin && <AdminBar />}
+      <AdminBar />
       {loggedIn && <UserButton />}
       {!loggedIn && (
         <div className="signInButtons">

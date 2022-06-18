@@ -2,6 +2,12 @@ import React from "react";
 import create from "zustand";
 
 const listsStore = create((set) => ({
+  loot: [],
+  setLoot: (loot) => {
+    set(() => {
+      return { loot };
+    });
+  },
   dismissedStrains: [],
   setDismissedStrains: (strains) => {
     set(() => {

@@ -14,7 +14,6 @@ const PeopleFilterHolder = ({ people }) => {
   };
 
   const onClick = () => {
-    console.log("people are ", people);
     switchShowPeople(people);
   };
 

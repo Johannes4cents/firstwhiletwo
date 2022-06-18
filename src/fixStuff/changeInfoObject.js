@@ -23,7 +23,6 @@ export default function changeInfoObject(info, setInfo) {
   };
   delete newInfo.dropChances;
 
-  console.log("newInfo is - ", newInfo);
   setInfo(newInfo);
   setDocInFirestore("users/", info.uid, newInfo);
 }

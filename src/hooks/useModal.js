@@ -8,7 +8,6 @@ const useModal = ({ modalContent, offsetX = 0, offsetY = 0 }, onClick) => {
   const { closeModal, openModal, modalOpen } = miscStore();
 
   const open = () => {
-    console.log("openening Modal - ");
     setOpenPos({ x: mousePosition.x, y: mousePosition.y });
     openModal(true);
   };

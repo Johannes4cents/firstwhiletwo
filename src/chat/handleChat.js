@@ -19,12 +19,10 @@ function getChatListener(chat, onCollection) {
     where("chats", "array-contains", chat)
   );
   const unsubscribe = onSnapshot(q, (snapshot) => {
-    console.log("snapshot is - ", snapshot);
     let docs = [];
     snapshot.forEach((doc) => {
       docs.push(doc.data());
     });
-    console.log("docs are - ", docs);
     onCollection(docs, unsubscribe);
   });
   return unsubscribe;
@@ -54,7 +52,6 @@ function checkMessagesForUpdate(messages) {}
 
 function sendMessageToTurfChats(chat, msg) {
   msg.collection = "turfChats/" + chat + "/messages";
-  console.log("msg is ", msg);
   setDocInFirestore("turfChats/" + chat + "/messages", msg.id, msg);
 }
 

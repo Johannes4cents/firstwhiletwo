@@ -10,7 +10,6 @@ const MessageFilterSection = () => {
 
   const handleUpvotesChange = (e) => {
     setMinMaxUpvotes(e.target.value);
-    console.log("e.target.value ", e.target.value);
   };
 
   function valuetext(value) {

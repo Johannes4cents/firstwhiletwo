@@ -1,5 +1,5 @@
 const resTriggerWords = {
-  ammunition: [
+  weapons: [
     "weapon",
     "waffe",
     "explosion",

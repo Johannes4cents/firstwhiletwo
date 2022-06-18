@@ -10,11 +10,8 @@ const MessageHolder = ({ message }) => {
 
   useEffect(() => {
     if (profilePic != null) {
-      console.log("profilePic is", profilePic);
       if (message.author.imgUrl != null) {
-        console.log("message.author.imgUrl is  -", message.author.imgUrl);
         getDownloadURL(ref(storage, message.author.imgUrl)).then((url) => {
-          console.log("url is ", url);
           if (profilePic.current != null)
             profilePic.current.setAttribute("src", url);
         });

@@ -3,6 +3,7 @@ import ChatMessage from "../fire_classes/ChatMessage";
 import { setDocInFirestore } from "../misc/handleFirestore";
 import { getRandomId } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
+import miscStore from "../stores/miscStore";
 import userStore from "../stores/userStore";
 import { sendMessageToTurfChats } from "./handleChat";
 import InputOptionsBar from "./InputOptionsBar";
@@ -12,6 +13,7 @@ const InputField = () => {
   const inputWidth = useRef(null);
   const [focusColor, setFocusColor] = useState("rgb(82, 82, 82)");
   const { activeChat, activeChats, selectedMsgRessources } = chatStore();
+  const { setInputHeight } = miscStore();
   const { info } = userStore();
   const [content, setContent] = useState("");
   const [height, setHeight] = useState();
@@ -45,6 +47,7 @@ const InputField = () => {
 
   useEffect(() => {
     setHeight(heightSpan.current.offsetHeight);
+    setInputHeight(heightSpan.current.offsetHeight);
   }, [content]);
   return (
     <div

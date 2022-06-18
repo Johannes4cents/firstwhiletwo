@@ -16,6 +16,8 @@ import chatStore from "./stores/chatStore";
 import changeInfoObject from "./fixStuff/changeInfoObject";
 import { checkMessagesForUpdate } from "./chat/handleChat";
 import useCheckArraysForResTrigger from "./scanTexts/useCheckArraysForResTrigger";
+import useScanChatMessages from "./scanTexts/useScanChatMessages";
+import AdminCreateLootItems from "./AdminStuff/AdminLootStuff/AdminCreateLootItems";
 
 function App() {
   const { info, setInfo } = userStore();
@@ -33,6 +35,7 @@ function App() {
   );
 
   useCheckArraysForResTrigger();
+  useScanChatMessages();
 
   useEffect(() => {
     setInterval(() => {
@@ -62,7 +65,6 @@ function App() {
     const info = JSON.parse(localStorage.getItem("info"));
     if (info != null) {
       setInfo(info);
-      changeInfoObject(info, setInfo);
     }
   }, []);
 
@@ -88,6 +90,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<MainPage />} />
           <Route path="/create_flags" element={<MakeFlagsPage />} />
+          <Route path="/create_fire_items" element={<AdminCreateLootItems />} />
         </Routes>
       </BrowserRouter>
     </div>

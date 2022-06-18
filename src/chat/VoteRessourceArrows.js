@@ -19,7 +19,6 @@ const VoteRessourceArrows = ({
   const [fireDownvotes, setFireDownvotes] = useState();
 
   useEffect(() => {
-    console.log("ressource is - ", ressource);
     setFireUpvotes(message[`upvotes${indexObj[index]}`]);
     setFireDownvotes(message[`downvotes${indexObj[index]}`]);
   }, [message]);
@@ -27,8 +26,6 @@ const VoteRessourceArrows = ({
   function vote(vote) {
     setVotes({ ...votes, [vote]: votes[vote] + 1 });
     let key = `${vote}vote${indexObj[index]}`;
-    console.log("key is - ", key);
-    console.log("message.collection is", message.collection);
     incrementField(message.collection, message.id, key, 1);
   }
   return (
@@ -41,7 +38,7 @@ const VoteRessourceArrows = ({
           className="textBoldWhite"
           style={{ borderBottom: "1px solid grey" }}
         >
-          {fireUpvotes - fireDownvotes - votes.down + votes.up}
+          {(fireUpvotes - fireDownvotes - votes.down + votes.up).toString()}
         </div>
       </div>
       <div className="divRow">
@@ -72,7 +69,7 @@ const VoteRessourceArrows = ({
         >
           <img src="/images/icons/icon_downvote.png" className="icon20" />
           <div className="textBoldWhite">
-            {ressource && fireDownvotes + votes.down}
+            {ressource && (fireDownvotes + votes.down).toString()}
           </div>
         </div>
         <img
@@ -114,7 +111,7 @@ const VoteRessourceArrows = ({
             className="textBoldWhite"
             style={{ backgroundColor: "4f4f4f", borderRadius: "2px" }}
           >
-            {ressource && fireUpvotes + votes.up}
+            {ressource && (fireUpvotes + votes.up).toString()}
           </div>
           <img src="/images/icons/icon_upvote.png" className="icon20" />
         </div>

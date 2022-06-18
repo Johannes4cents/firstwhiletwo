@@ -150,13 +150,20 @@ function doAfterTimeDiffCheck(uid, timestampName, func, intervalInSeconds) {
   }
 }
 
+function newTrim(string) {
+  return string
+    .replace(/[^a-zA-Z ]/g, "")
+    .replace(/\s{2,}/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 function testChance(chance, maxChance) {
   let randomNumber = Math.floor(Math.random() * (maxChance + 1));
   return randomNumber < chance;
 }
 
 function umlautFix(char) {
-  if (char == null) console.log("in umlautFix char is null");
   if (
     ![
       "a",
@@ -222,12 +229,55 @@ function updateItemInStorageAndState(uid, collection, item, setState) {
   setState(uid, newList);
 }
 
+function checkIfListsTheSame(listOne, listTwo) {
+  var theSame = true;
+  listOne.forEach((i) => {
+    if (!listTwo.includes(i)) theSame = false;
+    return false;
+  });
+  listTwo.forEach((i) => {
+    if (!listOne.includes(i)) theSame = false;
+    return false;
+  });
+
+  return theSame;
+}
+
+function objectsListToIdList(objects) {
+  let idList = [];
+  objects.forEach((o) => idList.push(o.id));
+  return idList;
+}
+
+function idListToOjectsList(ids, list) {
+  return ids.map((id) => getItemById(id, list));
+}
+
+function getItemById(id, list) {
+  return list.find((i) => i.id == id);
+}
+
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function getNumberInBetweenRange(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 export {
+  getNumberInBetweenRange,
+  capitalize,
+  objectsListToIdList,
+  idListToOjectsList,
+  checkIfListsTheSame,
+  newTrim,
   getRandomNumber,
   makeMousePositionObj,
   timestampToChatDate,
   getRandomId,
   getItemFromList,
+  getItemById,
   showImagePreviewWithFileReader,
   dateToTimestamp,
   checkTimeDiff,

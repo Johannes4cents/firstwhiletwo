@@ -135,7 +135,6 @@ async function deleteItemInGeneralList(
 }
 
 function incrementField(path, docId, key, inc) {
-  console.log("path is -", path);
   const docRef = doc(db, path, docId);
   updateDoc(docRef, { [key]: increment(inc) });
 }
@@ -243,7 +242,44 @@ function getSuggestedStrains(category) {
   }
 }
 
+async function getFireItems(local, uid, setFireItems) {
+  let localItems = local ?? [];
+  const lootDocRef = doc(db, "general/", "fireItems");
+  const lootDoc = await getDoc(lootDocRef);
+  const items = lootDoc.data()["items"] ?? [];
+  const spells = lootDoc.data()["spells"] ?? [];
+  const creatures = lootDoc.data()["creatures"] ?? [];
+  const buildings = lootDoc.data()["buildings"] ?? [];
+  const events = lootDoc.data()["events"] ?? [];
+
+  if (localItems.length < 1) {
+    let firestoreItems = await getCustomUserList(uid, "fireItems");
+    firestoreItems.forEach((i) => localItems.push(i));
+  }
+
+  const localIds = localItems.map((i) => i.id);
+
+  const list = items
+    .concat(spells)
+    .concat(creatures)
+    .concat(buildings)
+    .concat(events);
+  for (let i = 0; i < list.length; i++) {
+    let item = list[i];
+    if (!localIds.includes(item.id)) localItems.push(item);
+  }
+  setFireItems(uid, localItems);
+}
+
+async function getCustomUserList(uid, collection, onCollectionRetrieved) {
+  const userDocRef = doc(db, "users/", uid);
+  const userDoc = await getDoc(userDocRef);
+  return userDoc.data()[collection] ?? [];
+}
+
 export {
+  getCustomUserList,
+  getFireItems,
   getSuggestedStrains,
   addCustomItemToUserList,
   updateItemInUserList,

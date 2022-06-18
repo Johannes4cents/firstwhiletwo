@@ -2,6 +2,12 @@ import React from "react";
 import create from "zustand";
 
 const miscStore = create((set) => ({
+  inputHeight: 0,
+  setInputHeight: (height) => {
+    set(() => {
+      return { inputHeight: height };
+    });
+  },
   modalOpen: false,
   closeModal: () => {
     set(() => {
@@ -23,6 +29,13 @@ const miscStore = create((set) => ({
   setDragCursor: (cursor) => {
     set((state) => {
       return { dragCursor: cursor };
+    });
+  },
+  lastUpdates: { info: {}, votes: {} },
+  setLastUpdates: (lastUpdates) => {
+    localStorage.setItem("lastUpdates", JSON.stringify(lastUpdates));
+    set(() => {
+      return { lastUpdates };
     });
   },
 }));

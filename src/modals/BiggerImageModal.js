@@ -9,7 +9,6 @@ import { setDocInFirestore } from "../misc/handleFirestore";
 const BiggerImageModal = ({ storageUrl, setModalOpen }) => {
   const { info, setInfo } = userStore();
   const handleStorageUrl = (path) => {
-    console.log("path is - ", path);
     let newInfo = { ...info, profilePicUrl: path };
     setDocInFirestore("users/", info.uid, newInfo);
     setInfo(newInfo);

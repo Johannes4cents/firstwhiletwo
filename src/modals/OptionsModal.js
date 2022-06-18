@@ -33,7 +33,7 @@ const OptionsModal = ({ mousePosition, setModalOpen }) => {
     });
   };
 
-  const onChangePenNameClicked = (e) => {
+  const onChangeNicknameClicked = (e) => {
     setNameMousePosition({ x: e.clientX, y: e.clientY });
     setNameModalOpen(true);
   };
@@ -46,7 +46,7 @@ const OptionsModal = ({ mousePosition, setModalOpen }) => {
   const checkIfNameAlreadyExists = (data, nameString) => {
     if (!data["usernames"].includes(nameString.toLowerCase())) {
       // create newInfo object
-      let newInfo = { ...info, penName: nameString };
+      let newInfo = { ...info, nickname: nameString };
       // update info in firestore
       updateDocInFirestore("users/", info.uid, "nickname", nameString);
       // update info in localStorage
@@ -82,7 +82,7 @@ const OptionsModal = ({ mousePosition, setModalOpen }) => {
       >
         <OptionsHolder
           text={"change Nickname"}
-          onClick={onChangePenNameClicked}
+          onClick={onChangeNicknameClicked}
         />
         <OptionsHolder
           text={"Language"}

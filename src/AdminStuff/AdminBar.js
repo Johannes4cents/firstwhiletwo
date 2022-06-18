@@ -2,22 +2,30 @@ import React, { useEffect, useState } from "react";
 import userStore from "../stores/userStore";
 import { useNavigate } from "react-router";
 import listsStore from "../stores/listsStore";
-import { dateToTimestamp } from "../misc/helperFuncs";
+import { dateToTimestamp, objectToArray } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
+import readStore from "../stores/readStore";
 
 const AdminBar = () => {
   const { info, setInfo, loggedIn } = userStore();
   const { activeStrains, myStrains } = listsStore();
+  const {
+    clearRecentlyTyped,
+    scanArrays,
+    scanArraysIndex,
+    scanningArrays,
+    resTrigger,
+    triggerWords,
+  } = readStore();
   const { activeChat } = chatStore();
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const checkStuff = () => {
-    console.log("info - ", info);
-    console.log("loggedIn -", loggedIn);
-    console.log("activeChat - ", activeChat);
-    console.log("activeStrains - ", activeStrains);
-    console.log("myStrains - ", myStrains);
+    clearRecentlyTyped();
+    console.log("scanArrays are - ", scanArrays);
+    const resTriggerArray = objectToArray(resTrigger);
+    console.log("resTrigger is - ", resTriggerArray);
   };
 
   const clearStorage = () => {
@@ -34,45 +42,56 @@ const AdminBar = () => {
 
   return (
     <div className="divRow">
-      <div>
-        <img
-          className="icon40"
-          style={{
-            marginRight: "25px",
-            alignSelf: "center",
-          }}
-          src="/images/pageFlags/icon_flag.png"
-          onClick={(e) => navigate("create_flags")}
-        />
-        <img
-          className="icon40"
-          style={{
-            marginRight: "25px",
-            alignSelf: "center",
-          }}
-          src="/images/drawable/event_shield.png"
-          onClick={(e) => navigate("admin")}
-        />
-        <img
-          className="icon40"
-          style={{
-            marginRight: "25px",
-            alignSelf: "center",
-          }}
-          src="/images/drawable/icon_event.png"
-          onClick={checkStuff}
-        />
+      {isAdmin && (
+        <div>
+          <img
+            className="icon40"
+            style={{
+              marginRight: "25px",
+              alignSelf: "center",
+            }}
+            src="/images/icons/icon_loot.png"
+            onClick={(e) => navigate("create_fire_items")}
+          />
+          <img
+            className="icon40"
+            style={{
+              marginRight: "25px",
+              alignSelf: "center",
+            }}
+            src="/images/pageFlags/icon_flag.png"
+            onClick={(e) => navigate("create_flags")}
+          />
+          <img
+            className="icon40"
+            style={{
+              marginRight: "25px",
+              alignSelf: "center",
+            }}
+            src="/images/drawable/event_shield.png"
+            onClick={(e) => navigate("admin")}
+          />
+          <img
+            className="icon40"
+            style={{
+              marginRight: "25px",
+              alignSelf: "center",
+            }}
+            src="/images/drawable/icon_event.png"
+            onClick={checkStuff}
+          />
 
-        <img
-          className="icon40"
-          style={{
-            marginRight: "25px",
-            alignSelf: "center",
-          }}
-          src="/images/drawable/icon_delete.png"
-          onClick={clearStorage}
-        />
-      </div>
+          <img
+            className="icon40"
+            style={{
+              marginRight: "25px",
+              alignSelf: "center",
+            }}
+            src="/images/drawable/icon_delete.png"
+            onClick={clearStorage}
+          />
+        </div>
+      )}
     </div>
   );
 };

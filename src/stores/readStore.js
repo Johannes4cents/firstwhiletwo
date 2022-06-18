@@ -22,9 +22,43 @@ const resetResTrigger = {
   health: [],
   love: [],
   cash: [],
+  religion: [],
 };
 
 const readStore = create((set) => ({
+  fireItems: [],
+  setFireItems: (uid, items, onItemsNull) => {
+    set((state) => {
+      if (items != null) {
+        localStorage.setItem(uid + "fireItems", JSON.stringify(items));
+        // setTriggerWords
+        const triggerWords = [];
+        forArrayLength(items, (item) => {
+          forArrayLength(item.phrases.english, (phrase) => {
+            const triggerWord = {
+              string: phrase.phrase,
+              item,
+              language: "english",
+            };
+            triggerWords.push(triggerWord);
+          });
+          forArrayLength(item.phrases.german, (phrase) => {
+            const triggerWord = {
+              string: phrase.phrase,
+              item,
+              language: "german",
+            };
+            triggerWords.push(triggerWord);
+          });
+        });
+        state.setTriggerWords(triggerWords, "loot");
+        return { fireItems: items };
+      } else {
+        if (onItemsNull != null) onItemsNull();
+      }
+    });
+  },
+
   resTrigger: { ...resetResTrigger },
   setResTrigger: (resTrigger) => {
     set(() => {
@@ -32,17 +66,18 @@ const readStore = create((set) => ({
     });
   },
   scanningArrays: false,
-  setScannedMessages: (bool) => {
+  setScanningArrays: (bool) => {
     set(() => {
       return { scanningArrays: bool };
     });
   },
-  scanIndex: 0,
-  increaseScanIndex: () => {
+  scanArraysIndex: 0,
+  increaseScanArraysIndex: () => {
     set((state) => {
-      return { scanIndex: state.scanIndex + 1 };
+      return { scanArraysIndex: state.scanArraysIndex + 1 };
     });
   },
+
   scanArrays: [],
   setScanArrays: (uid, list) => {
     set(() => {
@@ -82,32 +117,32 @@ const readStore = create((set) => ({
   },
 
   triggerWords: {
-    a: { loot: [], profile: [], bags: [] },
-    b: { loot: [], profile: [], bags: [] },
-    c: { loot: [], profile: [], bags: [] },
-    d: { loot: [], profile: [], bags: [] },
-    e: { loot: [], profile: [], bags: [] },
-    f: { loot: [], profile: [], bags: [] },
-    g: { loot: [], profile: [], bags: [] },
-    h: { loot: [], profile: [], bags: [] },
-    i: { loot: [], profile: [], bags: [] },
-    j: { loot: [], profile: [], bags: [] },
-    k: { loot: [], profile: [], bags: [] },
-    l: { loot: [], profile: [], bags: [] },
-    m: { loot: [], profile: [], bags: [] },
-    n: { loot: [], profile: [], bags: [] },
-    o: { loot: [], profile: [], bags: [] },
-    p: { loot: [], profile: [], bags: [] },
-    q: { loot: [], profile: [], bags: [] },
-    r: { loot: [], profile: [], bags: [] },
-    s: { loot: [], profile: [], bags: [] },
-    t: { loot: [], profile: [], bags: [] },
-    u: { loot: [], profile: [], bags: [] },
-    v: { loot: [], profile: [], bags: [] },
-    w: { loot: [], profile: [], bags: [] },
-    x: { loot: [], profile: [], bags: [] },
-    y: { loot: [], profile: [], bags: [] },
-    z: { loot: [], profile: [], bags: [] },
+    a: { loot: [], profile: [], ressources: [] },
+    b: { loot: [], profile: [], ressources: [] },
+    c: { loot: [], profile: [], ressources: [] },
+    d: { loot: [], profile: [], ressources: [] },
+    e: { loot: [], profile: [], ressources: [] },
+    f: { loot: [], profile: [], ressources: [] },
+    g: { loot: [], profile: [], ressources: [] },
+    h: { loot: [], profile: [], ressources: [] },
+    i: { loot: [], profile: [], ressources: [] },
+    j: { loot: [], profile: [], ressources: [] },
+    k: { loot: [], profile: [], ressources: [] },
+    l: { loot: [], profile: [], ressources: [] },
+    m: { loot: [], profile: [], ressources: [] },
+    n: { loot: [], profile: [], ressources: [] },
+    o: { loot: [], profile: [], ressources: [] },
+    p: { loot: [], profile: [], ressources: [] },
+    q: { loot: [], profile: [], ressources: [] },
+    r: { loot: [], profile: [], ressources: [] },
+    s: { loot: [], profile: [], ressources: [] },
+    t: { loot: [], profile: [], ressources: [] },
+    u: { loot: [], profile: [], ressources: [] },
+    v: { loot: [], profile: [], ressources: [] },
+    w: { loot: [], profile: [], ressources: [] },
+    x: { loot: [], profile: [], ressources: [] },
+    y: { loot: [], profile: [], ressources: [] },
+    z: { loot: [], profile: [], ressources: [] },
   },
   setTriggerWords: (items, type) => {
     set((state) => {
@@ -116,12 +151,10 @@ const readStore = create((set) => ({
       forArrayLength(triggerNames, (name) => {
         forArrayLength(resTriggerWords[name], (string) => {
           var firstChar = umlautFix(string[0].toLowerCase());
-          wordsObj[firstChar].bags.push({ string, ressource: name });
+          wordsObj[firstChar].ressources.push({ string, ressource: name });
         });
       });
-
       forArrayLength(items, (item) => {
-        if (item == null) console.log("in useStore item.string[0] = null ");
         let firstChar = item.string[0].toLowerCase();
         wordsObj[firstChar][type].push({
           string: item.string,
@@ -133,6 +166,11 @@ const readStore = create((set) => ({
     });
   },
   recentlyTyped: [],
+  clearRecentlyTyped: () => {
+    set(() => {
+      return { recentlyTyped: [] };
+    });
+  },
   addToRecentlyTyped: (uid, stringObj) => {
     set((state) => {
       let newList = [...state.recentlyTyped, stringObj];

@@ -4,7 +4,6 @@ import chatStore from "../../stores/chatStore";
 import miscStore from "../../stores/miscStore";
 
 const SelectUpvoteRessourceBar = () => {
-  console.log("modal open");
   const ressourceList = [
     "cash",
     "diplomacy",
