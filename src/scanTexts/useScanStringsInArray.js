@@ -5,15 +5,30 @@ import userStore from "../stores/userStore";
 import useTryStringForLoot from "./useTryStringForLoot";
 import miscStore from "../stores/miscStore";
 import { updateDocInFirestore } from "../misc/handleFirestore";
+import { createLootObject } from "./handleLoot";
+import readStore from "../stores/readStore";
+import listsStore from "../stores/listsStore";
+import chatStore from "../stores/chatStore";
 
 const useScanStringsInArray = (onScanFinnished) => {
-  const scanString = useTryStringForLoot(onRessourceFound, onLootFound);
+  const scanString = useTryStringForLoot(onRessourceFound, onFireItemFound);
   const { info, setInfo } = userStore();
   const { setLastUpdates } = miscStore();
+  const { setFireItems } = readStore();
+  const { addItemToMessage } = chatStore();
+  const { addLoot } = listsStore();
   const [currentArray, setCurrentArray] = useState(null);
   const [stringIndex, setStringIndex] = useState(0);
-  function onLootFound(loot) {
-    console.log("loot is - ", loot);
+  function onFireItemFound(fireItem) {
+    let loot = createLootObject(
+      info.uid,
+      fireItem,
+      fireItem.string,
+      setFireItems,
+      currentArray.msg
+    );
+    addLoot(info.uid, loot.toObj());
+    addItemToMessage(loot, currentArray.msg);
   }
 
   function onRessourceFound(ressource) {

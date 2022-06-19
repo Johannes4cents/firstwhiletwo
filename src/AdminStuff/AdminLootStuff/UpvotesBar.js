@@ -68,7 +68,6 @@ const UpvoteHolder = ({ fireItem, pickedUpvotes, upvote, onClick }) => {
 
   useEffect(() => {
     if (!firstLoadSafety) {
-      console.log("payload is -", payload);
       onClick({ id: upvote, payload, update: true });
     } else setFirstLoadSafety(false);
   }, [payload]);
@@ -80,7 +79,7 @@ const UpvoteHolder = ({ fireItem, pickedUpvotes, upvote, onClick }) => {
   useEffect(() => {
     if (fireItem != null) {
       if (fireItem.upvotes != null) {
-        let foundUpvote = fireItem.upvotes.find((u) => u == upvote);
+        let foundUpvote = fireItem.upvotes.find((u) => u.id == upvote);
 
         if (foundUpvote != null) {
           setPayload(foundUpvote.payload);

@@ -1,11 +1,19 @@
 import React from "react";
 import create from "zustand";
+import { addItemToUserList, addLootInFirestore } from "../misc/handleFirestore";
 
 const listsStore = create((set) => ({
   loot: [],
   setLoot: (loot) => {
     set(() => {
       return { loot };
+    });
+  },
+  addLoot: (uid, item) => {
+    set((state) => {
+      localStorage.setItem(uid + "loot", JSON.stringify([...state.loot, item]));
+      addLootInFirestore(uid, item);
+      return { loot: [...state.loot, item] };
     });
   },
   dismissedStrains: [],
@@ -113,7 +121,7 @@ const listsStore = create((set) => ({
   },
 
   activeStrains: [],
-  setActiveStrains: (strains) => {
+  setActiveStrains: (uid, strains) => {
     set((state) => {
       return { activeStrains: strains };
     });

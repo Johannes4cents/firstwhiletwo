@@ -9,24 +9,18 @@ export default class Loot {
     imgUrl,
     type = "",
     connectedString = "",
-    snippet,
-    story,
-    snippetPart,
-    spType,
-    id = getRandomId(),
-    kingdomItemId
+    fireItemId,
+    message = null,
+    id = getRandomId()
   ) {
     this.name = name;
     this.id = id;
     this.attributes = attributes;
     this.imgUrl = imgUrl;
     this.type = type;
-    this.story = story;
     this.connectedString = connectedString;
-    this.snippet = snippet;
-    this.snippetPart = snippetPart;
-    this.spType = spType;
-    this.kingdomItemId = kingdomItemId;
+    this.message = message;
+    this.fireItemId = fireItemId;
   }
 
   toObj() {
@@ -34,14 +28,10 @@ export default class Loot {
       name: this.name,
       id: this.id,
       attributes: this.attributes,
+      connectedString: this.connectedString,
       imgUrl: this.imgUrl,
       type: this.type,
-      story: this.story,
-      snippet: this.snippet,
-      connectedString: this.connectedString,
-      snippetPart: this.snippetPart,
-      spType: this.spType,
-      kingdomItemId: this.kingdomItemId,
+      fireItemId: this.fireItemId,
     };
   }
 }
@@ -53,12 +43,8 @@ function docToLoot(data) {
     data.imgUrl,
     data.type,
     data.connectedString,
-    data.snippet,
-    data.story,
-    data.snippetPart,
-    data.spType,
     data.id,
-    data.kingdomItemId
+    data.fireItemId
   );
 }
 

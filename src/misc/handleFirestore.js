@@ -160,12 +160,33 @@ async function updateItemInGeneralList(
   });
 }
 
+async function updateTriggerWordInGeneralList(item) {
+  const docRef = doc(db, "general", "lists");
+  await getDoc(docRef).then((snapshot) => {
+    let l = snapshot.data()["triggerWords"];
+    const foundWord = l.find((w) => w.text.english == item.text.english);
+
+    const index = l.indexOf(foundWord);
+    l[index] = item;
+    updateDoc(docRef, { triggerWords: l });
+  });
+}
+
 async function addItemToUserList(uid, list, item) {
   const docRef = doc(db, "users/", uid);
   await getDoc(docRef).then((snapshot) => {
     let l = snapshot.data()[list];
     l.push(item);
     updateDoc(docRef, { [list]: l });
+  });
+}
+
+async function addLootInFirestore(uid, item) {
+  const docRef = doc(db, "users/", uid);
+  await getDoc(docRef).then((snapshot) => {
+    let lootObject = { ...snapshot.data()["loot"] };
+    lootObject[item.type].push(item);
+    updateDoc(docRef, { loot: lootObject });
   });
 }
 
@@ -278,6 +299,7 @@ async function getCustomUserList(uid, collection, onCollectionRetrieved) {
 }
 
 export {
+  addLootInFirestore,
   getCustomUserList,
   getFireItems,
   getSuggestedStrains,
@@ -299,4 +321,5 @@ export {
   getGeneralList,
   getCollectionFromUserFirestore,
   incrementField,
+  updateTriggerWordInGeneralList,
 };

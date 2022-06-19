@@ -12,7 +12,6 @@ const FireItemHolder = ({ item, setFireItem, selectedItem }) => {
 
   useEffect(() => {
     if (image != null) {
-      console.log("item.imgUrl - ", item.imgUrl);
       // gets and sets image of snippetPart from firebase storage
       getDownloadURL(ref(storage, item.imgUrl)).then((url) => {
         image.current.setAttribute("src", url);
@@ -20,13 +19,7 @@ const FireItemHolder = ({ item, setFireItem, selectedItem }) => {
     }
   }, [image]);
 
-  useEffect(() => {
-    console.log("item is - ", item);
-    console.log("info is -", info);
-  }, []);
-
   const onClick = () => {
-    console.log(item);
     setFireItem(item);
   };
 

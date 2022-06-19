@@ -77,6 +77,11 @@ const readStore = create((set) => ({
       return { scanArraysIndex: state.scanArraysIndex + 1 };
     });
   },
+  resetScanArraysIndex: () => {
+    set((state) => {
+      return { scanArraysIndex: 0 };
+    });
+  },
 
   scanArrays: [],
   setScanArrays: (uid, list) => {
@@ -85,9 +90,11 @@ const readStore = create((set) => ({
       return { scanArrays: list };
     });
   },
-  resetScanArray: (uid) => {
+  resetScanArrays: (uid) => {
     localStorage.setItem(uid + "scanArrays", JSON.stringify([]));
-    return { scanArrays: [] };
+    set(() => {
+      return { scanArrays: [] };
+    });
   },
   addScanArrays: (uid, arrays) => {
     set((state) => {

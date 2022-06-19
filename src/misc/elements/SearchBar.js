@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 const SearchBar = ({
+  elRef,
   onSearchFunc,
   showButton,
   onlyTitle,
@@ -32,6 +33,7 @@ const SearchBar = ({
         />
       )}
       <input
+        ref={elRef}
         onKeyDown={onEnter}
         autoComplete="off"
         className="textBlackCenter"

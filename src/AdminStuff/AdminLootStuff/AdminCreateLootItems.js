@@ -115,7 +115,6 @@ const AdminCreateLootItems = () => {
   ]);
 
   const onUpvoteClicked = (obj) => {
-    console.log("obj is -", obj);
     if (!obj.update) {
       if (upvotes.map((o) => o.id).includes(obj.id)) {
         setUpvotes(upvotes.filter((o) => o.id != obj.id));
@@ -174,7 +173,6 @@ const AdminCreateLootItems = () => {
       multiPhrases
     );
 
-    console.log("created item is = ", item);
     if (id == null) {
       addItemToFireItemsList(item, type);
     } else {

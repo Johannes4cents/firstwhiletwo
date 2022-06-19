@@ -12,7 +12,7 @@ import readStore from "../stores/readStore";
 const useFillStatesOnEnter = () => {
   const { setMyStrains, setActiveStrains, setStrainWords } = listsStore();
   const { setLastUpdates } = miscStore();
-  const { setFireItems } = readStore();
+  const { setFireItems, setScannedMessages } = readStore();
 
   function getListFromUser(uid, collection, setFunc) {
     const localList = JSON.parse(localStorage.getItem(uid + collection));
@@ -27,7 +27,7 @@ const useFillStatesOnEnter = () => {
 
   function storageListToState(uid, list, setFunc) {
     let localList = JSON.parse(localStorage.getItem(uid + list));
-    if (localList != null) setFunc(localList);
+    if (localList != null) setFunc(uid, localList);
   }
 
   function generalListToState(listName, onRetrievedFunc) {
@@ -37,6 +37,7 @@ const useFillStatesOnEnter = () => {
   function fillStates(uid) {
     getListFromUser(uid, "myStrains", setMyStrains);
     storageListToState(uid, "activeStrains", setActiveStrains);
+    storageListToState(uid, "scannedMessages", setScannedMessages);
     generalListToState("strainWords", setStrainWords);
 
     // fireItems

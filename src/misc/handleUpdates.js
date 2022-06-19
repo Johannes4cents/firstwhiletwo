@@ -5,7 +5,6 @@ function handleTimecheck(lastUpdates, setLastUpdates, cat, newTimestamp) {
     ...lastUpdates,
     [cat]: { ...lastUpdates[cat], timestamp: newTimestamp },
   };
-  console.log("newUpdates are - ", newUpdates);
   setLastUpdates(newUpdates);
 }
 
@@ -18,7 +17,6 @@ function updateTimeCheck(cat, minDiff, setLastUpdates) {
   const oldTimestamp = lastUpdates[cat].timestamp;
   if (oldTimestamp != null) {
     let timeDiff = checkTimeDiff(oldTimestamp, newTimestamp);
-    console.log("timeDiff is - ", timeDiff);
     if (timeDiff > minDiff) {
       handleTimecheck(lastUpdates, setLastUpdates, cat, newTimestamp);
       return true;

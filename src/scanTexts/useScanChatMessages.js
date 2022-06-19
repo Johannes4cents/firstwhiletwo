@@ -24,6 +24,7 @@ const useScanChatMessages = () => {
   useEffect(() => {
     const messageArrays = [];
     const newAddedMessages = [];
+
     for (let i = 0; i < displayedMessages.length; i++) {
       let msg = displayedMessages[i];
       if (!scannedMessages.map((m) => m.message).includes(msg.id)) {

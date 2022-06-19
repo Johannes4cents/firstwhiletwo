@@ -5,16 +5,20 @@ import {
   addCustomItemToUserList,
   updateItemInUserList,
 } from "../misc/handleFirestore";
-import { updateItemInStorageAndState } from "../misc/helperFuncs";
+import {
+  dateToTimestamp,
+  getItemById,
+  updateItemInStorageAndState,
+} from "../misc/helperFuncs";
 
-function createLootObject(uid, fireItem, string, setFireItems) {
+function createLootObject(uid, fireItem, string, setFireItems, messageId) {
   let concatList = fireItemAttributes.concat(specialAttributes);
 
-  updateItemInStorageAndState(d, "fireItems", fireItem, setFireItems);
+  updateItemInStorageAndState(uid, "fireItems", fireItem, setFireItems);
   if (fireItem.firstFound == null) {
     fireItem.firstFound = dateToTimestamp(new Date());
-    addCustomItemToUserList(uid, fireItem, "fireItems");
-  } else updateItemInUserList(uid, fireItem, "fireItems");
+    addCustomItemToUserList(uid, "fireItems", fireItem, "id", fireItem.id);
+  } else updateItemInUserList(uid, "fireItems", fireItem, "id", fireItem.id);
 
   // create the concrete attributes from the payloads
   const createdAttributes = [];
@@ -36,9 +40,11 @@ function createLootObject(uid, fireItem, string, setFireItems) {
     createdAttributes,
     fireItem.imgUrl,
     fireItem.type,
-    string
+    string,
+    fireItem.id,
+    messageId
   );
-  loot.kingdomItemId = fireItem.id;
+  loot.fireItemId = fireItem.id;
   return loot;
 }
 

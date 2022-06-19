@@ -19,8 +19,7 @@ const ImgUrlBar = ({ setImgUrl, imgUrl }) => {
   };
 
   useEffect(() => {
-    if (previewImage != null) {
-      console.log("imgUrl - ", imgUrl);
+    if (previewImage != null && imgUrl != "") {
       // gets and sets image of snippetPart from firebase storage
       getDownloadURL(ref(storage, imgUrl)).then((url) => {
         previewImage.current.setAttribute("src", url);
@@ -29,13 +28,11 @@ const ImgUrlBar = ({ setImgUrl, imgUrl }) => {
   }, [previewImage]);
 
   useEffect(() => {
-    console.log("useEffect called");
     if (file != null) showImagePreview();
   }, [file]);
 
   const onFileChange = (e) => {
     uploadImageToStorage("fireItems", e.target.files[0], (url) => {
-      console.log("url is - ", url);
       setImgUrl(url);
     });
   };

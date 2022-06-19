@@ -49,7 +49,6 @@ async function getFireItems(info, onItemsRetrieved) {
 
   if (localList.length < 1) {
     let firestoreItems = await getGeneralList(info, "fireItems");
-    console.log("firestoreItems are -", firestoreItems);
     firestoreItems.forEach((i) => localList.push(i));
   }
   const list = items

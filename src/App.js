@@ -18,6 +18,7 @@ import { checkMessagesForUpdate } from "./chat/handleChat";
 import useCheckArraysForResTrigger from "./scanTexts/useCheckArraysForResTrigger";
 import useScanChatMessages from "./scanTexts/useScanChatMessages";
 import AdminCreateLootItems from "./AdminStuff/AdminLootStuff/AdminCreateLootItems";
+import AdminTriggerWordsPage from "./AdminStuff/AdminMakeTriggerWords/AdminTriggerWordsPage";
 
 function App() {
   const { info, setInfo } = userStore();
@@ -91,6 +92,7 @@ function App() {
           <Route path="/*" element={<MainPage />} />
           <Route path="/create_flags" element={<MakeFlagsPage />} />
           <Route path="/create_fire_items" element={<AdminCreateLootItems />} />
+          <Route path="/create_word_cats" element={<AdminTriggerWordsPage />} />
         </Routes>
       </BrowserRouter>
     </div>

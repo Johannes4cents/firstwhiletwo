@@ -33,8 +33,25 @@ const chatStore = create((set) => ({
   },
   displayedMessages: [],
   setDisplayedMessages: (messages) => {
+    set((state) => {
+      const dms = [...state.displayedMessages];
+      const newMessages = messages.filter(
+        (msg) => !state.displayedMessages.map((m) => m.id).includes(msg.id)
+      );
+      return { displayedMessages: dms.concat(newMessages) };
+    });
+  },
+  resetDisplayedMessages: () => {
     set(() => {
-      return { displayedMessages: messages };
+      return { displayedMessages: [] };
+    });
+  },
+  addItemToMessage: (item, msgId) => {
+    set((state) => {
+      let newMessages = [...state.displayedMessages];
+      let msg = newMessages.find((m) => m.id == msgId);
+      msg.spawnedItems.push(item);
+      return { displayedMessages: newMessages };
     });
   },
 }));

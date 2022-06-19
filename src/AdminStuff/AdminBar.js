@@ -8,7 +8,7 @@ import readStore from "../stores/readStore";
 
 const AdminBar = () => {
   const { info, setInfo, loggedIn } = userStore();
-  const { activeStrains, myStrains } = listsStore();
+  const { activeStrains, myStrains, loot } = listsStore();
   const {
     clearRecentlyTyped,
     scanArrays,
@@ -16,6 +16,8 @@ const AdminBar = () => {
     scanningArrays,
     resTrigger,
     triggerWords,
+    fireItems,
+    scannedMessages,
   } = readStore();
   const { activeChat } = chatStore();
   const [isAdmin, setIsAdmin] = useState(false);
@@ -23,9 +25,10 @@ const AdminBar = () => {
 
   const checkStuff = () => {
     clearRecentlyTyped();
-    console.log("scanArrays are - ", scanArrays);
-    const resTriggerArray = objectToArray(resTrigger);
-    console.log("resTrigger is - ", resTriggerArray);
+    console.log("scanArrays - ", scanArrays);
+    console.log("fireItems are -", fireItems);
+    console.log("loot - ", loot);
+    console.log("scannedMessages - ", scannedMessages);
   };
 
   const clearStorage = () => {
@@ -44,6 +47,15 @@ const AdminBar = () => {
     <div className="divRow">
       {isAdmin && (
         <div>
+          <img
+            className="icon40"
+            style={{
+              marginRight: "25px",
+              alignSelf: "center",
+            }}
+            src="/images/icons/icon_word_cat.png"
+            onClick={(e) => navigate("create_word_cats")}
+          />
           <img
             className="icon40"
             style={{

@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import useOnHover from "../../hooks/useOnHover";
 import bgImg from "../../images/bg_strain.png";
 import { deleteDocInFirestore } from "../../misc/handleFirestore";
+import chatStore from "../../stores/chatStore";
 import listsStore from "../../stores/listsStore";
+import readStore from "../../stores/readStore";
 import userStore from "../../stores/userStore";
 
 const StrainListHolder = ({ strain }) => {
@@ -10,6 +12,9 @@ const StrainListHolder = ({ strain }) => {
   const { info } = userStore();
 
   const { addRemoveActiveStrain, removeMyStrain, activeStrains } = listsStore();
+  const { resetDisplayedMessages } = chatStore();
+  const { resetScanArraysIndex, resetScanArrays, setScanningArrays } =
+    readStore();
   const hover = useOnHover({
     item: strain,
     inclusionList: activeStrains,
@@ -18,6 +23,10 @@ const StrainListHolder = ({ strain }) => {
     imageUnselected: "/images/icons/icon_strain_white.png",
   });
   const onClick = () => {
+    resetScanArrays(info.uid);
+    resetScanArraysIndex(info.uid);
+    setScanningArrays(false);
+    resetDisplayedMessages(info.uid);
     addRemoveActiveStrain(info.uid, strain);
   };
 

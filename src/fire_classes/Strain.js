@@ -14,7 +14,7 @@ export default function Strain(id, text) {
 
 function makeStrain(uid, strainText, addMyStrain, addRemoveStrainWord) {
   getGeneralList("strainWords", (strains) => {
-    const strain = strains.find(
+    var strain = strains.find(
       (s) => s.text.toLowerCase() == strainText.toLowerCase()
     );
     if (strain == null) {

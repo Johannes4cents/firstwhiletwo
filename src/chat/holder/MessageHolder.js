@@ -1,12 +1,16 @@
 import { getDownloadURL, ref } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
+import { useSpring } from "react-spring";
 import { storage } from "../../firebase/fireInit";
 import { timestampToChatDate } from "../../misc/helperFuncs";
 import VoteRessourceArrows from "../VoteRessourceArrows";
+import ItemMessageHolder from "./ItemMessageHolder";
 
 const MessageHolder = ({ message }) => {
   const profilePic = useRef(null);
   const [hover, setHover] = useState(false);
+
+  useEffect(() => {}, [message]);
 
   useEffect(() => {
     if (profilePic != null) {
@@ -19,6 +23,10 @@ const MessageHolder = ({ message }) => {
     }
   }, [profilePic]);
 
+  const onItemClicked = (item) => {
+    console.log("item is - ", item);
+  };
+
   return (
     <div
       onMouseEnter={() => setHover(true)}
@@ -28,13 +36,13 @@ const MessageHolder = ({ message }) => {
         width: "100%",
         marginTop: "10px",
         backgroundColor: hover ? "grey" : "",
-        alignItems: "baseline",
       }}
     >
       <img
         ref={profilePic}
         src="/images/drawable/icon_unknown.png"
         className="icon30"
+        style={{ marginRight: "10px" }}
       />
       <div
         className="divColumn"
@@ -57,6 +65,20 @@ const MessageHolder = ({ message }) => {
         <div className="textWhite">{message.msg}</div>
       </div>
       <div style={{ flex: 1 }} />
+      <div
+        className="divRow"
+        style={{ justifyContent: "center", marginRight: "20px" }}
+      >
+        {(message.spawnedItems ?? []).map((i) => {
+          return (
+            <ItemMessageHolder
+              item={i}
+              key={i.id}
+              onItemClicked={onItemClicked}
+            />
+          );
+        })}
+      </div>
       <div className="divColumn">
         {(message.ressources ?? []).map((r) => {
           return (

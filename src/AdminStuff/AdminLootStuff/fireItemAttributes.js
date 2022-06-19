@@ -62,10 +62,8 @@ const fireItemAttributes = [
       };
       const attribute = {
         name: `${capitalize(dmgType)} attack `,
-        imgUrl: images[dmgType],
-        attack: (target) => {
-          target.receivesAttack({ damage: dmg, ranged, dmgType });
-        },
+        imgUrl: path + `attack_${dmgType}.png`,
+        attack: { damage: dmg, ranged, dmgType },
       };
       return attribute;
     }

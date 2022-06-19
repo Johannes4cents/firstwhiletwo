@@ -13,7 +13,7 @@ import {
 import readStore from "../stores/readStore";
 import userStore from "../stores/userStore";
 
-function useTryStringForLoot(onRessourcesFound, onLootFound) {
+function useTryStringForLoot(onRessourcesFound, onFireItemFound) {
   const {
     resTrigger,
     recentlyTyped,
@@ -37,14 +37,15 @@ function useTryStringForLoot(onRessourcesFound, onLootFound) {
     removeMultipleRecentlyTyped(info.uid, foundOldEntries);
   }
 
-  function findItem(string) {
+  function findFireItem(string) {
     let firstChar = umlautFix(string[0].toLowerCase());
     let lootStrings = firstChar ? triggerWords[firstChar].loot : [];
-    const foundLoot = lootStrings.find((s) => s == string);
+
+    const foundFireItem = lootStrings.find((s) => s.string == string);
     var lucky = false;
-    if (foundLoot != null) {
-      const phrase = foundLoot.item.phrases[foundLoot.language].find(
-        (s) => s == foundLoot.string
+    if (foundFireItem != null) {
+      const phrase = foundFireItem.item.phrases[foundFireItem.language].find(
+        (s) => s.phrase == foundFireItem.string
       );
       if (phrase.firstFound == null) {
         lucky = testChance(phrase.chance, 10000);
@@ -57,7 +58,7 @@ function useTryStringForLoot(onRessourcesFound, onLootFound) {
         if (lucky) phrase.lastFound = dateToTimestamp(new Date());
       }
       if (lucky) {
-        onLootFound(foundLoot.item, string);
+        onFireItemFound(foundFireItem.item, string);
       }
 
       let checkedString = {
@@ -132,16 +133,20 @@ function useTryStringForLoot(onRessourcesFound, onLootFound) {
 
   function tryStringForLoot(string) {
     // check if the string has been typed within the last 5 minutes
-    const foundString = recentlyTyped.find((o) => o.string == string);
-    if (foundString == null) {
-      findItem(string);
+    const recentlTypedString = recentlyTyped.find((o) => o.string == string);
+
+    if (recentlTypedString == null || string == "testitem") {
+      findFireItem(string);
     } else {
       const newTimestamp = dateToTimestamp(new Date());
-      const timeDiff = checkTimeDiff(foundString.timestamp, newTimestamp);
+      const timeDiff = checkTimeDiff(
+        recentlTypedString.timestamp,
+        newTimestamp
+      );
       if (timeDiff >= 5) {
-        findItem(string);
+        findFireItem(string);
         const updatedFoundString = {
-          ...foundString,
+          ...recentlTypedString,
           timestamp: dateToTimestamp(new Date()),
         };
 
