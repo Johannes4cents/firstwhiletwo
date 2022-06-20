@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import miscStore from "../stores/miscStore";
 import useMousePosition from "./useMousPosition";
 
-const useModal = ({ modalContent, offsetX = 0, offsetY = 0 }, onClick) => {
+const useModal = ({
+  modalContent,
+  offsetX = 0,
+  offsetY = 0,
+  extraOpen = true,
+}) => {
   const mousePosition = useMousePosition();
   const [openPos, setOpenPos] = useState({ x: 0, y: 0 });
   const { closeModal, openModal, modalOpen } = miscStore();
@@ -26,7 +31,7 @@ const useModal = ({ modalContent, offsetX = 0, offsetY = 0 }, onClick) => {
                 zIndex: 1,
               }}
             >
-              {modalContent}
+              {extraOpen && modalContent}
             </div>
           </div>
         )}

@@ -13,49 +13,43 @@ import {
   updateItemInFireItemsList,
 } from "./handleLoot";
 import PickTypeButton from "./PickTypeButton";
-import { genres } from "./Genre";
-import GenrePickerModal from "./GenrePickerModal";
 import UpvotesBar from "./UpvotesBar";
 import FireItemsMap from "./FireItemsMap";
 import fireItem from "./fireItem";
 import HintsBar from "./HintsBar";
-import PhrasesBar from "./PhraseBar";
 import StealProtectionBar from "./StealProtectionBar";
 import ImgUrlBar from "./ImgUrlBar";
 import ChanceBar from "./ChanceBar";
 import NameBar from "./NameBar";
-import AdminLootAttributesBar, {
+import AdminFireItemAttributesBar, {
   AdminLootSpecialAttributesBar,
-} from "./AdminLootAttributesBar";
+} from "./AdminFireItemAttributesBar";
 import SteppingStonesBar from "./SteppingStonesBar";
 import MultiPhraseBar from "./MultiPhraseBar";
 import userStore from "../../stores/userStore";
+import AddTriggerWordsSection from "./adminAddTriggerWords/AddTriggerWordsSection";
 
-const AdminCreateLootItems = () => {
+const AdminCreateFireItems = () => {
   const { info } = userStore();
   const [kingdomItems, setKingdomItems] = useState([]);
   const [id, setId] = useState(null);
   const [currentFireItem, setCurrentFireItem] = useState(fireItem());
   const [nameEntered, setNameEntered] = useState({ german: "", english: "" });
   const [oldType, setOldType] = useState("items");
-  const [phrases, setPhrases] = useState({ german: [], english: [] });
+  const [triggerWords, setTriggerWords] = useState([]);
   const [multiPhrases, setMultiPhrases] = useState({ german: [], english: [] });
   const [chance, setChance] = useState(0);
   const [imgUrl, setImgUrl] = useState("");
-  const [genresIds, setGenresId] = useState(genres.map((g) => g.id));
-  const [genreObjects, setGenreObjects] = useState(genres);
   const [enoughFilled, setEnoughFilled] = useState(false);
   const [attributes, setAttributes] = useState([]);
-  const [genreModalOpen, setGenreModalOpen] = useState(false);
   const [stealProtection, setStealProtection] = useState({ from: 0, till: 0 });
-  const [mousePosition, setMousePosition] = useState({});
   const [type, setType] = useState("items");
   const [hints, setHints] = useState({ german: [], english: [] });
   const [upvotes, setUpvotes] = useState([]);
   const [changed, setChanged] = useState(false);
   const [steppingStones, setSteppingStones] = useState([]);
-  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
-  const [confMousePos, setConfMousePos] = useState();
+  const [firstSetTriggerWords, setFirstSetTriggerWords] = useState(true);
+  const [baseItem, setBaseItem] = useState(null);
 
   useEffect(() => {
     getPureFirestoreFireItems(info, (list) => {
@@ -67,6 +61,11 @@ const AdminCreateLootItems = () => {
     setSteppingStones(list);
   };
 
+  const switchItem = (item) => {
+    setFirstSetTriggerWords(true);
+    setCurrentFireItem(item);
+  };
+
   // check if values have changed
   useEffect(() => {
     if (
@@ -74,14 +73,11 @@ const AdminCreateLootItems = () => {
       nameEntered.english != currentFireItem.name.english ||
       currentFireItem.chance != chance ||
       currentFireItem.imgUrl != imgUrl ||
-      !checkIfListsTheSame(genresIds, currentFireItem.genres) ||
       type != currentFireItem.type ||
       stealProtection.from != currentFireItem.stealProtection.from ||
       stealProtection.till != currentFireItem.stealProtection.till ||
       !checkIfListsTheSame(hints.german, currentFireItem.hints.german) ||
       !checkIfListsTheSame(hints.english, currentFireItem.hints.english) ||
-      !checkIfListsTheSame(phrases.german, currentFireItem.phrases.german) ||
-      !checkIfListsTheSame(phrases.english, currentFireItem.phrases.english) ||
       !checkIfListsTheSame(attributes, currentFireItem.attributes) ||
       !checkIfListsTheSame(upvotes, currentFireItem.upvotes) ||
       !checkIfListsTheSame(
@@ -103,11 +99,9 @@ const AdminCreateLootItems = () => {
     nameEntered,
     chance,
     imgUrl,
-    genresIds,
     hints,
     type,
     stealProtection,
-    phrases,
     attributes,
     upvotes,
     steppingStones,
@@ -139,38 +133,23 @@ const AdminCreateLootItems = () => {
     }
   };
 
-  const openGenreModal = (e) => {
-    setMousePosition(makeMousePositionObj(e));
-    setGenreModalOpen(true);
-  };
-
-  const onGenrePicked = (genre) => {
-    if (genresIds.includes(genre.id)) {
-      setGenreObjects(genreObjects.filter((g) => g.id != genre.id));
-      setGenresId(genresIds.filter((id) => id != genre.id));
-    } else {
-      setGenreObjects([...genreObjects, genre]);
-      setGenresId([...genresIds, genre.id]);
-    }
-  };
-
   const createKingdomItem = () => {
     let ssIds = steppingStones.map((i) => i.id);
 
     const item = fireItem(
       id ?? getRandomId(),
       nameEntered,
-      phrases,
+      triggerWords,
       chance,
       imgUrl,
       attributes,
       stealProtection,
       type,
       hints,
-      genresIds,
       upvotes,
       ssIds,
-      multiPhrases
+      multiPhrases,
+      baseItem
     );
 
     if (id == null) {
@@ -184,10 +163,12 @@ const AdminCreateLootItems = () => {
       }
     }
 
+    setFirstSetTriggerWords(true);
     setCurrentFireItem(fireItem());
   };
 
   function clearItem() {
+    setFirstSetTriggerWords(true);
     setCurrentFireItem(fireItem());
   }
 
@@ -200,13 +181,11 @@ const AdminCreateLootItems = () => {
   useEffect(() => {
     if (currentFireItem != null) {
       setNameEntered(currentFireItem.name);
-      setPhrases(currentFireItem.phrases);
+      setTriggerWords(currentFireItem.triggerWords ?? []);
       setChance(currentFireItem.chance);
       setImgUrl(currentFireItem.imgUrl);
       setAttributes(currentFireItem.attributes);
       setStealProtection(currentFireItem.stealProtection);
-      setGenresId(currentFireItem.genres);
-      setGenreObjects(idListToOjectsList(currentFireItem.genres, genres));
       setUpvotes(currentFireItem.upvotes);
       setType(currentFireItem.type);
       setHints(currentFireItem.hints);
@@ -227,8 +206,7 @@ const AdminCreateLootItems = () => {
     if (
       nameEntered.german &&
       nameEntered.english &&
-      ((phrases.german.length > 0 && phrases.english.length > 0) ||
-        (multiPhrases.german.length > 0 && multiPhrases.english.length > 0)) &&
+      triggerWords.length > 0 &&
       attributes.length > 0 &&
       chance > 0 &&
       imgUrl &&
@@ -236,51 +214,10 @@ const AdminCreateLootItems = () => {
     )
       setEnoughFilled(true);
     else setEnoughFilled(false);
-  }, [nameEntered, phrases, chance, imgUrl, attributes, multiPhrases]);
+  }, [nameEntered, triggerWords, chance, imgUrl, attributes, multiPhrases]);
 
   const onName = (name, language) => {
     setNameEntered({ ...nameEntered, [language]: name });
-  };
-
-  const changeChance = (phrase, chance, isSpecial, language) => {
-    setChanged(true);
-    const index = phrases[language]
-      .map((obj) => obj.phrase)
-      .indexOf(phrase.phrase);
-    const filteredList = phrases[language];
-    const newObj = { ...phrase, chance: chance, isSpecial: isSpecial };
-    filteredList[index] = newObj;
-    const newPhrases = { ...phrases, [language]: filteredList };
-    setPhrases(newPhrases);
-  };
-
-  const onPhraseEntered = (phraseText, chance, isSpecial, language) => {
-    if (
-      !phrases[language]
-        .map((obj) => obj.phrase.toLowerCase())
-        .includes(phraseText.toLowerCase())
-    )
-      setPhrases({
-        ...phrases,
-        [language]: [
-          ...phrases[language],
-          {
-            phrase: phraseText.toLowerCase(),
-            firstFound: null,
-            lastFound: null,
-            firstTry: null,
-            chance,
-            isSpecial: false,
-          },
-        ],
-      });
-  };
-
-  const onRemovePhrase = (phrase, language) => {
-    setPhrases({
-      ...phrases,
-      [language]: phrases[language].filter((p) => p.phrase != phrase.phrase),
-    });
   };
 
   return (
@@ -308,33 +245,28 @@ const AdminCreateLootItems = () => {
         >
           <FireItemsMap
             collection={"items"}
-            onItemClicked={setCurrentFireItem}
+            onItemClicked={switchItem}
             selectedItem={currentFireItem}
-            setSelectedItem={setCurrentFireItem}
           />
           <FireItemsMap
             collection={"spells"}
-            onItemClicked={setCurrentFireItem}
+            onItemClicked={switchItem}
             selectedItem={currentFireItem}
-            setSelectedItem={setCurrentFireItem}
           />
           <FireItemsMap
             collection={"creatures"}
-            onItemClicked={setCurrentFireItem}
+            onItemClicked={switchItem}
             selectedItem={currentFireItem}
-            setSelectedItem={setCurrentFireItem}
           />
           <FireItemsMap
             collection={"buildings"}
-            onItemClicked={setCurrentFireItem}
+            onItemClicked={switchItem}
             selectedItem={currentFireItem}
-            setSelectedItem={setCurrentFireItem}
           />
           <FireItemsMap
             collection={"events"}
-            onItemClicked={setCurrentFireItem}
+            onItemClicked={switchItem}
             selectedItem={currentFireItem}
-            setSelectedItem={setCurrentFireItem}
           />
         </div>
         <div
@@ -395,14 +327,6 @@ const AdminCreateLootItems = () => {
             <NameBar nameEntered={nameEntered} onName={onName} />
             <ChanceBar chance={chance} setChance={setChance} />
             <ImgUrlBar imgUrl={imgUrl} setImgUrl={setImgUrl} />
-            <div
-              className="divRow"
-              style={{ margin: "5px" }}
-              onClick={openGenreModal}
-            >
-              <div className="textBoldWhite">Pick Genres</div>
-              <img src="/images/loot/icon_genres.png" className="icon25" />
-            </div>
             <PickTypeButton onTypePicked={setType} type={type} />
             <StealProtectionBar
               stealProtection={stealProtection}
@@ -415,12 +339,12 @@ const AdminCreateLootItems = () => {
           />
           <div className="divColumn" style={{ height: "100%" }}>
             <div style={{ height: "50%" }}>
-              <PhrasesBar
-                changeChance={changeChance}
-                phrases={phrases}
-                onPhraseEntered={onPhraseEntered}
-                onRemovePhrase={onRemovePhrase}
-                startChance={chance}
+              <AddTriggerWordsSection
+                itemChance={chance}
+                setFirstSetTriggerWords={setFirstSetTriggerWords}
+                firstSetTriggerWords={firstSetTriggerWords}
+                triggerWords={triggerWords}
+                setTriggerWords={setTriggerWords}
               />
             </div>
             <div style={{ width: "100%" }}>
@@ -433,7 +357,7 @@ const AdminCreateLootItems = () => {
           </div>
         </div>
 
-        <AdminLootAttributesBar
+        <AdminFireItemAttributesBar
           fireItem={currentFireItem}
           attributes={attributes}
           setAttributes={setAttributes}
@@ -479,17 +403,8 @@ const AdminCreateLootItems = () => {
           />
         </div>
       </div>
-
-      {genreModalOpen && (
-        <GenrePickerModal
-          mousePosition={mousePosition}
-          setModalOpen={setGenreModalOpen}
-          selectedGenres={genreObjects}
-          setSelectedGenres={onGenrePicked}
-        />
-      )}
     </div>
   );
 };
 
-export default AdminCreateLootItems;
+export default AdminCreateFireItems;

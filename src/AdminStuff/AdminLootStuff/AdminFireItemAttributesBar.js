@@ -3,7 +3,11 @@ import { fireItemAttributes } from "./fireItemAttributes";
 import { specialAttributes } from "./specialAttributes";
 import AttributHolder from "./AttributHolder";
 
-const AdminLootAttributesBar = ({ attributes, setAttributes, fireItem }) => {
+const AdminFireItemAttributesBar = ({
+  attributes,
+  setAttributes,
+  fireItem,
+}) => {
   const clickOnAttribute = (attribute, payload, update = false) => {
     const newAttribute = { id: attribute.id, payload };
     if (!update) {
@@ -99,5 +103,5 @@ const AdminLootSpecialAttributesBar = ({
   );
 };
 
-export default AdminLootAttributesBar;
+export default AdminFireItemAttributesBar;
 export { AdminLootSpecialAttributesBar };

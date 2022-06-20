@@ -34,23 +34,28 @@ const readStore = create((set) => ({
         // setTriggerWords
         const triggerWords = [];
         forArrayLength(items, (item) => {
-          forArrayLength(item.phrases.english, (phrase) => {
-            const triggerWord = {
-              string: phrase.phrase,
-              item,
-              language: "english",
-            };
-            triggerWords.push(triggerWord);
-          });
-          forArrayLength(item.phrases.german, (phrase) => {
-            const triggerWord = {
-              string: phrase.phrase,
-              item,
-              language: "german",
-            };
-            triggerWords.push(triggerWord);
+          console.log("item.triggerWords - ", item);
+          forArrayLength(item.triggerWords, (tWord) => {
+            console.log("tWord.obj is - ", tWord.obj);
+            forArrayLength(tWord.obj.words.english, (string) => {
+              const triggerWord = {
+                string,
+                item,
+                language: "english",
+              };
+              triggerWords.push(triggerWord);
+            });
+            forArrayLength(tWord.obj.words.german, (string) => {
+              const triggerWord = {
+                string,
+                item,
+                language: "german",
+              };
+              triggerWords.push(triggerWord);
+            });
           });
         });
+        console.log("triggerWords are - ", triggerWords);
         state.setTriggerWords(triggerWords, "loot");
         return { fireItems: items };
       } else {

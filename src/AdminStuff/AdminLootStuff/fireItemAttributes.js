@@ -1,10 +1,10 @@
 import { capitalize, getNumberInBetweenRange } from "../../misc/helperFuncs";
-import LootAttribute from "./LootAttribute";
+import FireItemAttribute from "./FireItemAttribute";
 
 const path = "/images/loot/items/attributes/";
 
 const fireItemAttributes = [
-  new LootAttribute(
+  new FireItemAttribute(
     "givesGold",
     "/images/loot/effects/icon_gold.png",
     2,
@@ -15,7 +15,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "givesMana",
     "/images/loot/effects/icon_mana.png",
     2,
@@ -26,7 +26,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "overTime",
     "/images/loot/effects/icon_over_time.png",
     2,
@@ -37,7 +37,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "hasDuration",
     "/images/loot/effects/icon_over_time.png",
     2,
@@ -48,7 +48,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "hasAttack",
     "/images/loot/effects/icon_attack.png",
     4,
@@ -68,7 +68,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "givesProtection",
     "/images/loot/effects/icon_has_protection.png",
     3,
@@ -79,9 +79,9 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute("isSet", "/images/loot/effects/icon_is_set.png", 1, 7),
-  new LootAttribute("givesLuck", "/images/loot/icon_chance.png", 2, 8),
-  new LootAttribute(
+  new FireItemAttribute("isSet", "/images/loot/effects/icon_is_set.png", 1, 7),
+  new FireItemAttribute("givesLuck", "/images/loot/icon_chance.png", 2, 8),
+  new FireItemAttribute(
     "hasUpkeep",
     "/images/loot/effects/icon_has_upkeep.png",
     4,
@@ -92,7 +92,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "isRare",
     "/images/loot/effects/icon_rare.png",
     0,
@@ -103,7 +103,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "isUnique",
     "/images/loot/effects/icon_unique.png",
     1,
@@ -114,7 +114,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "isMedival",
     "/images/loot/effects/icon_is_medival.png",
     0,
@@ -128,7 +128,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "isSciFi",
     "/images/loot/effects/icon_is_scifi.png",
     0,
@@ -139,7 +139,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "hasHp",
     "/images/loot/effects/icon_has_health.png",
     2,
@@ -161,7 +161,7 @@ const fireItemAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "hasLevels",
     "/images/loot/effects/icon_levels.png",
     2,

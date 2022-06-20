@@ -6,12 +6,22 @@ const useOnHover = ({
   imageSelected = null,
   imageUnselected = null,
   inclusionList = null,
+  selectedTextColor = null,
+  unselectedTextColor = null,
+  hoverColor = null,
+  hoverBgColor = null,
+  normalBgColor = null,
 }) => {
   const [hover, setHover] = useState(false);
   const [textColor, setTextColor] = useState("white");
   const [activeImage, setActiveImage] = useState(imageUnselected);
+  const [bgColor, setBgColor] = useState("#000000");
 
   useEffect(() => {
+    if (hoverBgColor) {
+      setBgColor(hover ? hoverBgColor : normalBgColor);
+    }
+
     if (inclusionList) {
       var included = false;
       if (identifier) {
@@ -24,15 +34,21 @@ const useOnHover = ({
       setActiveImage(included ? imageSelected : imageUnselected);
     } else {
       if (!identifier) {
-        setTextColor(active == item ? "orange" : hover ? "gold" : "white");
+        setTextColor(
+          active == item
+            ? selectedTextColor ?? "orange"
+            : hover
+            ? hoverColor ?? "gold"
+            : unselectedTextColor ?? "white"
+        );
         setActiveImage(active == item ? imageSelected : imageUnselected);
       } else {
         setTextColor(
           active[identifier] == item[identifier]
-            ? "orange"
+            ? selectedTextColor ?? "orange"
             : hover
-            ? "gold"
-            : "white"
+            ? hoverColor ?? "gold"
+            : unselectedTextColor ?? "white"
         );
         setActiveImage(
           active[identifier] == item[identifier]
@@ -59,6 +75,7 @@ const useOnHover = ({
     },
     textColor,
     activeImage,
+    bgColor,
   };
 };
 

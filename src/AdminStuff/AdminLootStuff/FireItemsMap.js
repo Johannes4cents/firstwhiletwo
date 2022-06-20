@@ -3,12 +3,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 import db from "../../firebase/fireInit";
 import FireItemHolder from "./FireItemHolder";
 
-const FireItemsMap = ({
-  collection,
-  onItemClicked,
-  selectedItem,
-  setSelectedItem,
-}) => {
+const FireItemsMap = ({ collection, onItemClicked, selectedItem }) => {
   const [stuff, setStuff] = useState([]);
   useEffect(() => {
     const fireItemsRef = doc(db, "general", "fireItems");
@@ -17,7 +12,7 @@ const FireItemsMap = ({
         .data()
         [collection].find((i) => i.id == selectedItem.id);
 
-      if (foundItem != null) setSelectedItem(foundItem);
+      if (foundItem != null) onItemClicked(foundItem);
       setStuff(snapshot.data()[collection]);
     });
     return listener.unsubscribe;

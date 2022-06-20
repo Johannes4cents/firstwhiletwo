@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-export default class LootAttribute {
+export default class FireItemAttribute {
   constructor(
     name,
     imgUrl,

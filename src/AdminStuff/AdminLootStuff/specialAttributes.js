@@ -1,7 +1,7 @@
-import LootAttribute from "./LootAttribute";
+import FireItemAttribute from "./FireItemAttribute";
 
 const specialAttributes = [
-  new LootAttribute(
+  new FireItemAttribute(
     "scalesWithUpvotes",
     "/images/loot/effects/icon_levels.png",
     0,
@@ -12,7 +12,7 @@ const specialAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "hasUniqueName",
     "/images/drawable/icon_word.png",
     0,
@@ -23,7 +23,7 @@ const specialAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "givesExtraGold",
     "/images/loot/effects/icon_gold.png",
     2,
@@ -34,7 +34,7 @@ const specialAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "givesExtraMana",
     "/images/loot/effects/icon_mana.png",
     2,
@@ -45,7 +45,7 @@ const specialAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "makesBonusDamage",
     "/images/loot/effects/icon_attack.png",
     4,
@@ -56,7 +56,7 @@ const specialAttributes = [
       return attribute;
     }
   ),
-  new LootAttribute(
+  new FireItemAttribute(
     "hasSpecialRssrc",
     "/images/loot/items/item_unknown.png",
     3,

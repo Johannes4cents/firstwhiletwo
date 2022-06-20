@@ -44,18 +44,19 @@ function useTryStringForLoot(onRessourcesFound, onFireItemFound) {
     const foundFireItem = lootStrings.find((s) => s.string == string);
     var lucky = false;
     if (foundFireItem != null) {
-      const phrase = foundFireItem.item.phrases[foundFireItem.language].find(
-        (s) => s.phrase == foundFireItem.string
+      let itemTriggerWords = foundFireItem.item.triggerWords;
+      const triggerWord = itemTriggerWords.find((tw) =>
+        tw.obj.words[info.language].includes(string.toLowerCase())
       );
-      if (phrase.firstFound == null) {
-        lucky = testChance(phrase.chance, 10000);
+      if (triggerWord.firstFound == null) {
+        lucky = testChance(triggerWord.chance, 10000);
         if (lucky) {
-          phrase.firstFound = dateToTimestamp(new Date());
-          phrase.lastFound = dateToTimestamp(new Date());
+          triggerWord.firstFound = dateToTimestamp(new Date());
+          triggerWord.lastFound = dateToTimestamp(new Date());
         }
       } else {
-        lucky = testChance(phrase.chance / 2, 10000);
-        if (lucky) phrase.lastFound = dateToTimestamp(new Date());
+        lucky = testChance(triggerWord.chance / 2, 10000);
+        if (lucky) triggerWord.lastFound = dateToTimestamp(new Date());
       }
       if (lucky) {
         onFireItemFound(foundFireItem.item, string);
@@ -135,7 +136,7 @@ function useTryStringForLoot(onRessourcesFound, onFireItemFound) {
     // check if the string has been typed within the last 5 minutes
     const recentlTypedString = recentlyTyped.find((o) => o.string == string);
 
-    if (recentlTypedString == null || string == "testitem") {
+    if (true) {
       findFireItem(string);
     } else {
       const newTimestamp = dateToTimestamp(new Date());

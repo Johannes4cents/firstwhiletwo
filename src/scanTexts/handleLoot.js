@@ -17,7 +17,7 @@ function createLootObject(uid, fireItem, string, setFireItems, messageId) {
   updateItemInStorageAndState(uid, "fireItems", fireItem, setFireItems);
   if (fireItem.firstFound == null) {
     fireItem.firstFound = dateToTimestamp(new Date());
-    addCustomItemToUserList(uid, "fireItems", fireItem, "id", fireItem.id);
+    addCustomItemToUserList(uid, fireItem, "fireItems");
   } else updateItemInUserList(uid, "fireItems", fireItem, "id", fireItem.id);
 
   // create the concrete attributes from the payloads

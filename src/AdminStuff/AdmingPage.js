@@ -5,7 +5,7 @@ import AdminHandleGlobalWords from "./AdminHandleGlobalWords";
 import AdminSingleClickOptionsBar from "./AdminSingleClickOptionsBar";
 import AdminHandleActiveStorySps from "./AdminHandleActiveStorySps";
 import AdminHandleCustom from "./AdminHandleCustom";
-import AdminCreateLootItems from "./AdminLootStuff/AdminCreateLootItems";
+import AdminCreateFireItems from "./AdminLootStuff/AdminCreateFireItems";
 
 const AdmingPage = () => {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -92,7 +92,7 @@ const AdmingPage = () => {
             {expandedWords && <AdminHandleGlobalWords />}
             {expandedSps && <AdminHandleActiveStorySps />}
             {expandedCustom && <AdminHandleCustom />}
-            {expandedLoot && <AdminCreateLootItems />}
+            {expandedLoot && <AdminCreateFireItems />}
           </div>
         </div>
       )}

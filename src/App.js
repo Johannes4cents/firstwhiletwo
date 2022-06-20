@@ -13,12 +13,11 @@ import useFillStatesOnEnter from "./startup/useFillStatesOnEnter";
 import useListenToActiveStrains from "./hooks/useListenToActiveStrains";
 import listsStore from "./stores/listsStore";
 import chatStore from "./stores/chatStore";
-import changeInfoObject from "./fixStuff/changeInfoObject";
 import { checkMessagesForUpdate } from "./chat/handleChat";
 import useCheckArraysForResTrigger from "./scanTexts/useCheckArraysForResTrigger";
 import useScanChatMessages from "./scanTexts/useScanChatMessages";
-import AdminCreateLootItems from "./AdminStuff/AdminLootStuff/AdminCreateLootItems";
 import AdminTriggerWordsPage from "./AdminStuff/AdminMakeTriggerWords/AdminTriggerWordsPage";
+import AdminCreateFireItems from "./AdminStuff/AdminLootStuff/AdminCreateFireItems";
 
 function App() {
   const { info, setInfo } = userStore();
@@ -91,7 +90,7 @@ function App() {
         <Routes>
           <Route path="/*" element={<MainPage />} />
           <Route path="/create_flags" element={<MakeFlagsPage />} />
-          <Route path="/create_fire_items" element={<AdminCreateLootItems />} />
+          <Route path="/create_fire_items" element={<AdminCreateFireItems />} />
           <Route path="/create_word_cats" element={<AdminTriggerWordsPage />} />
         </Routes>
       </BrowserRouter>

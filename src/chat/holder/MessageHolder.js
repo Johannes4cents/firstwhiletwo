@@ -23,10 +23,6 @@ const MessageHolder = ({ message }) => {
     }
   }, [profilePic]);
 
-  const onItemClicked = (item) => {
-    console.log("item is - ", item);
-  };
-
   return (
     <div
       onMouseEnter={() => setHover(true)}
@@ -70,13 +66,7 @@ const MessageHolder = ({ message }) => {
         style={{ justifyContent: "center", marginRight: "20px" }}
       >
         {(message.spawnedItems ?? []).map((i) => {
-          return (
-            <ItemMessageHolder
-              item={i}
-              key={i.id}
-              onItemClicked={onItemClicked}
-            />
-          );
+          return <ItemMessageHolder item={i} key={i.id} />;
         })}
       </div>
       <div className="divColumn">

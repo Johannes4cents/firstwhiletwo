@@ -19,13 +19,19 @@ const ImgUrlBar = ({ setImgUrl, imgUrl }) => {
   };
 
   useEffect(() => {
+    console.log("imgUrl is - ", imgUrl);
     if (previewImage != null && imgUrl != "") {
       // gets and sets image of snippetPart from firebase storage
       getDownloadURL(ref(storage, imgUrl)).then((url) => {
         previewImage.current.setAttribute("src", url);
       });
+    } else if (previewImage != null) {
+      previewImage.current.setAttribute(
+        "src",
+        "/images/loot/items/item_unknown.png"
+      );
     }
-  }, [previewImage]);
+  }, [previewImage, imgUrl]);
 
   useEffect(() => {
     if (file != null) showImagePreview();

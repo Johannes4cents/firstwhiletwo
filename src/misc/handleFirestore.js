@@ -221,13 +221,13 @@ async function updateItemInUserList(
 ) {
   const docRef = doc(db, "users/", uid);
   await getDoc(docRef).then((snapshot) => {
-    let l = snapshot.data()[list];
+    let l = snapshot.data()[list] ?? [];
     const foundItem = toLowerCase
       ? l.find(
           (i) => i[identifier].toLowerCase() == identifierValue.toLowerCase()
         )
       : l.find((i) => i[identifier] == identifierValue);
-    const index = l.indexOf(foundItem);
+    const index = l.indexOf(foundItem) ?? 0;
     l[index] = item;
     updateDoc(docRef, { [list]: l });
   });
@@ -264,6 +264,7 @@ function getSuggestedStrains(category) {
 }
 
 async function getFireItems(local, uid, setFireItems) {
+  console.log("local is - ", local);
   let localItems = local ?? [];
   const lootDocRef = doc(db, "general/", "fireItems");
   const lootDoc = await getDoc(lootDocRef);
@@ -289,6 +290,8 @@ async function getFireItems(local, uid, setFireItems) {
     let item = list[i];
     if (!localIds.includes(item.id)) localItems.push(item);
   }
+
+  console.log("localItems are - ", localItems);
   setFireItems(uid, localItems);
 }
 

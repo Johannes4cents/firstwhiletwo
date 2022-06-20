@@ -20,6 +20,7 @@ const FireItemHolder = ({ item, setFireItem, selectedItem }) => {
   }, [image]);
 
   const onClick = () => {
+    console.log("item is - ", item);
     setFireItem(item);
   };
 
