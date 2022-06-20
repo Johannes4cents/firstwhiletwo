@@ -27,7 +27,6 @@ const useScanStringsInArray = (onScanFinnished) => {
       setFireItems,
       currentArray.msg
     );
-    addLoot(info.uid, loot.toObj());
     addItemToMessage(loot, currentArray.msg);
   }
 
