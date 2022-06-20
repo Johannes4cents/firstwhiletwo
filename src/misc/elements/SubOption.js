@@ -9,9 +9,7 @@ const SubOption = ({ name, selectedOption, onClick }) => {
     imageUnselected: `/images/suboptions/icon_${name.toLowerCase()}.png`,
     unselectedTextColor: "lightgray",
   });
-  useEffect(() => {
-    console.log("textColor - ", hover.textColor);
-  }, [hover.textColor]);
+
   return (
     <div {...hover.divProps} onClick={() => onClick(name)} className="divRow">
       <div style={{ color: hover.textColor, flex: 1, textAlign: "center" }}>

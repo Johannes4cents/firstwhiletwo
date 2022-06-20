@@ -16,7 +16,16 @@ const LootPage = () => {
     setDisplayedItems(
       loot.filter((i) => i.type == selectedLootCat.toLowerCase())
     );
-  }, [selectedLootCat]);
+  }, [selectedLootCat, loot]);
+
+  const descriptionFields = [
+    {
+      text: "Locked",
+      width: "45px",
+      textSize: "11px",
+    },
+    { text: "Name", flex: 1 },
+  ];
 
   return (
     <div className="sectionBg">
@@ -26,7 +35,7 @@ const LootPage = () => {
         selectedCat={selectedLootCat}
       />
       <DescriptionsBar
-        fieldTwo={"Name"}
+        fields={descriptionFields}
         sorting={sorting}
         setSorting={setSorting}
       />

@@ -4,9 +4,11 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { storage } from "../firebase/fireInit";
 import useMousePosition from "../hooks/useMousPosition";
 import GenericCursor from "./cursors/GenericCursor";
+import userStore from "../stores/userStore";
 
 const DragCursor = () => {
   const { dragCursor } = miscStore();
+  const { info } = userStore();
   const [dragElement, setDragElement] = useState(null);
   const { x, y } = useMousePosition();
 
@@ -17,6 +19,12 @@ const DragCursor = () => {
           <GenericCursor
             text={dragCursor.item.name}
             image={"/images/icons/icon_statement.png"}
+          />
+        ),
+        loot: (
+          <GenericCursor
+            text={dragCursor.item.name[info.language]}
+            image={dragCursor.item.imgUrl}
           />
         ),
       };

@@ -2,50 +2,40 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
 import { animated, config, useSpring } from "react-spring";
 import { storage } from "../../firebase/fireInit";
+import { getConnectedStringFromMessage } from "../../scanTexts/handleLoot";
 import listsStore from "../../stores/listsStore";
 import userStore from "../../stores/userStore";
 
-const ItemMessageHolder = ({ item, onItemClicked }) => {
+const ItemMessageHolder = ({ item, onItemClicked, message }) => {
   const animDiv = useRef();
+  const [itemClicked, setItemClicked] = useState(false);
   const [flip, setFlip] = useState(false);
   const { info } = userStore();
   const { addLoot } = listsStore();
   const props = useSpring({
-    config: { duration: 1000 },
+    config: { duration: itemClicked ? 100 : 1000 },
     from: { scale: 1.2 },
-    to: { scale: 0.8 },
-    reverse: flip,
-    reset: true,
+    to: { scale: !itemClicked ? 0.8 : 0 },
+    reverse: !itemClicked ? flip : false,
     onRest: () => {
-      console.log("onRest triggered");
+      if (itemClicked) addLootToStuff();
       setFlip(!flip);
     },
-    onChange: () => {
-      console.log("onChange triggered");
-    },
-    onPause: () => {
-      console.log("onPause triggered");
-    },
-    onProps: () => {
-      console.log("onProps triggered");
-    },
-    onResume: () => {
-      console.log("onResume triggered");
-    },
-    onStart: () => {
-      console.log("onStart triggered");
-    },
   });
 
-  const clickProps = useSpring({
-    config: { duration: 4500 },
-    from: { scale: 1 },
-    to: { scale: 0 },
-  });
+  const addLootToStuff = () => {
+    console.log("item is - ", item);
+    item.connectedString = getConnectedStringFromMessage(
+      info.language,
+      message
+    );
+    addLoot(info.uid, item.toObj());
+  };
 
   const onClick = () => {
-    animDiv.current.setAttribute("style", clickProps);
-    addLoot(info.uid, item.toObj());
+    let audio = new Audio("/audio/sound_pick_up.mp3");
+    audio.play();
+    setItemClicked(true);
   };
   const image = useRef();
   useEffect(() => {

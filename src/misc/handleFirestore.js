@@ -264,7 +264,6 @@ function getSuggestedStrains(category) {
 }
 
 async function getFireItems(local, uid, setFireItems) {
-  console.log("local is - ", local);
   let localItems = local ?? [];
   const lootDocRef = doc(db, "general/", "fireItems");
   const lootDoc = await getDoc(lootDocRef);
@@ -291,14 +290,16 @@ async function getFireItems(local, uid, setFireItems) {
     if (!localIds.includes(item.id)) localItems.push(item);
   }
 
-  console.log("localItems are - ", localItems);
   setFireItems(uid, localItems);
 }
 
 async function getCustomUserList(uid, collection, onCollectionRetrieved) {
   const userDocRef = doc(db, "users/", uid);
-  const userDoc = await getDoc(userDocRef);
-  return userDoc.data()[collection] ?? [];
+  await getDoc(userDocRef).then((doc) => {
+    const list = doc.data()[collection];
+    onCollectionRetrieved(list ?? []);
+    return list ?? [];
+  });
 }
 
 export {

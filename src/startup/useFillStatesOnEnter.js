@@ -4,22 +4,36 @@ import {
   getCollectionFromUserFirestore,
   getGeneralList,
   getFireItems,
+  getCustomUserList,
 } from "../misc/handleFirestore";
 import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import readStore from "../stores/readStore";
 
 const useFillStatesOnEnter = () => {
-  const { setMyStrains, setActiveStrains, setStrainWords } = listsStore();
+  const { setMyStrains, setActiveStrains, setStrainWords, setLoot } =
+    listsStore();
   const { setLastUpdates } = miscStore();
   const { setFireItems, setScannedMessages } = readStore();
 
-  function getListFromUser(uid, collection, setFunc) {
+  function getCollectionFromUser(uid, collection, setFunc) {
     const localList = JSON.parse(localStorage.getItem(uid + collection));
     if (localList != null) {
       setFunc(uid, localList);
     } else {
       getCollectionFromUserFirestore(uid, collection, (list) => {
+        setFunc(uid, list);
+      });
+    }
+  }
+
+  function getListFromUser(uid, userList, setFunc) {
+    const localList = JSON.parse(localStorage.getItem(uid + userList));
+    console.log("localList - ", localList);
+    if (localList != null) {
+      setFunc(uid, localList);
+    } else {
+      getCustomUserList(uid, userList, (list) => {
         setFunc(uid, list);
       });
     }
@@ -35,10 +49,11 @@ const useFillStatesOnEnter = () => {
   }
 
   function fillStates(uid) {
-    getListFromUser(uid, "myStrains", setMyStrains);
+    getCollectionFromUser(uid, "myStrains", setMyStrains);
     storageListToState(uid, "activeStrains", setActiveStrains);
     storageListToState(uid, "scannedMessages", setScannedMessages);
     generalListToState("strainWords", setStrainWords);
+    getListFromUser(uid, "loot", setLoot);
 
     // fireItems
     let fireitems = JSON.parse(localStorage.getItem(uid + "fireItems"));

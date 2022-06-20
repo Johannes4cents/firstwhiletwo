@@ -1,12 +1,14 @@
 import React from "react";
 import create from "zustand";
+import { docsToLoot } from "../fire_classes/Loot";
 import { addItemToUserList, addLootInFirestore } from "../misc/handleFirestore";
 
 const listsStore = create((set) => ({
   loot: [],
-  setLoot: (loot) => {
+  setLoot: (uid, loot) => {
+    localStorage.setItem(uid + "loot", JSON.stringify(docsToLoot(loot)));
     set(() => {
-      return { loot };
+      return { loot: docsToLoot(loot) };
     });
   },
   addLoot: (uid, item) => {

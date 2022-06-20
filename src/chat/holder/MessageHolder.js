@@ -5,12 +5,12 @@ import { storage } from "../../firebase/fireInit";
 import { timestampToChatDate } from "../../misc/helperFuncs";
 import VoteRessourceArrows from "../VoteRessourceArrows";
 import ItemMessageHolder from "./ItemMessageHolder";
+import { getConnectedStringFromMessage } from "../../scanTexts/handleLoot";
 
 const MessageHolder = ({ message }) => {
   const profilePic = useRef(null);
-  const [hover, setHover] = useState(false);
 
-  useEffect(() => {}, [message]);
+  const [hover, setHover] = useState(false);
 
   useEffect(() => {
     if (profilePic != null) {
@@ -22,6 +22,8 @@ const MessageHolder = ({ message }) => {
       }
     }
   }, [profilePic]);
+
+  const onTextClicked = () => {};
 
   return (
     <div
@@ -58,7 +60,9 @@ const MessageHolder = ({ message }) => {
             {timestampToChatDate(message.timestamp)}
           </div>
         </div>
-        <div className="textWhite">{message.msg}</div>
+        <div className="textWhite" onClick={onTextClicked}>
+          {message.msg}
+        </div>
       </div>
       <div style={{ flex: 1 }} />
       <div
@@ -66,7 +70,7 @@ const MessageHolder = ({ message }) => {
         style={{ justifyContent: "center", marginRight: "20px" }}
       >
         {(message.spawnedItems ?? []).map((i) => {
-          return <ItemMessageHolder item={i} key={i.id} />;
+          return <ItemMessageHolder item={i} key={i.id} message={message} />;
         })}
       </div>
       <div className="divColumn">

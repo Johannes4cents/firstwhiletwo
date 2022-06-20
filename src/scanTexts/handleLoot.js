@@ -8,8 +8,12 @@ import {
 import {
   dateToTimestamp,
   getItemById,
+  getRandomNumber,
+  newTrim,
   updateItemInStorageAndState,
 } from "../misc/helperFuncs";
+import veryCommonEnglish from "../misc/lists/veryCommonEnglish";
+import veryCommonGerman from "../misc/lists/veryCommonGerman";
 
 function createLootObject(uid, fireItem, string, setFireItems, messageId) {
   let concatList = fireItemAttributes.concat(specialAttributes);
@@ -42,10 +46,24 @@ function createLootObject(uid, fireItem, string, setFireItems, messageId) {
     fireItem.type,
     string,
     fireItem.id,
+    fireItem.upvotes,
     messageId
   );
   loot.fireItemId = fireItem.id;
   return loot;
 }
 
-export { createLootObject };
+function getConnectedStringFromMessage(language, message) {
+  let langObj = {
+    english: veryCommonEnglish,
+    german: veryCommonGerman,
+  };
+  let msgArray = newTrim(message.msg)
+    .split(" ")
+    .filter((s) => !langObj[language].includes(s) && s.length > 2);
+
+  let randomString = msgArray[getRandomNumber(0, msgArray.length - 1)];
+  return randomString ?? "firstwhile";
+}
+
+export { createLootObject, getConnectedStringFromMessage };

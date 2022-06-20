@@ -10,17 +10,21 @@ export default class Loot {
     type = "",
     connectedString = "",
     fireItemId,
+    upvotes = ["cash"],
     message = null,
-    id = getRandomId()
+    id = getRandomId(),
+    locked = true
   ) {
     this.name = name;
     this.id = id;
     this.attributes = attributes;
+    this.connectedString = connectedString;
     this.imgUrl = imgUrl;
     this.type = type;
-    this.connectedString = connectedString;
     this.message = message;
     this.fireItemId = fireItemId;
+    this.upvotes = upvotes;
+    this.locked = locked;
   }
 
   toObj() {
@@ -31,7 +35,10 @@ export default class Loot {
       connectedString: this.connectedString,
       imgUrl: this.imgUrl,
       type: this.type,
+      message: this.message,
       fireItemId: this.fireItemId,
+      upvotes: this.upvotes,
+      locked: this.locked,
     };
   }
 }
@@ -43,8 +50,11 @@ function docToLoot(data) {
     data.imgUrl,
     data.type,
     data.connectedString,
+    data.fireItemId,
+    data.upvotes,
+    data.message,
     data.id,
-    data.fireItemId
+    data.locked
   );
 }
 

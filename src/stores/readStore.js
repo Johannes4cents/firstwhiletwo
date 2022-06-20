@@ -34,9 +34,7 @@ const readStore = create((set) => ({
         // setTriggerWords
         const triggerWords = [];
         forArrayLength(items, (item) => {
-          console.log("item.triggerWords - ", item);
           forArrayLength(item.triggerWords, (tWord) => {
-            console.log("tWord.obj is - ", tWord.obj);
             forArrayLength(tWord.obj.words.english, (string) => {
               const triggerWord = {
                 string,
@@ -55,7 +53,6 @@ const readStore = create((set) => ({
             });
           });
         });
-        console.log("triggerWords are - ", triggerWords);
         state.setTriggerWords(triggerWords, "loot");
         return { fireItems: items };
       } else {
