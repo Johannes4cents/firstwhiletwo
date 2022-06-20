@@ -3,9 +3,9 @@ import create from "zustand";
 
 const chatStore = create((set) => ({
   selectedMsgRessources: ["cash"],
-  setMsgRessource: (ressource) => {
+  setMsgRessources: (ressource) => {
     set(() => {
-      return { selectedMsgRessources: [ressource] };
+      return { selectedMsgRessources: ressource };
     });
   },
   AddRemoveSelectedMsgRessource: (ressource) => {
@@ -52,6 +52,12 @@ const chatStore = create((set) => ({
       let msg = newMessages.find((m) => m.id == msgId);
       msg.spawnedItems.push(item);
       return { displayedMessages: newMessages };
+    });
+  },
+  attachedItem: null,
+  setAttachedItem: (item) => {
+    set(() => {
+      return { attachedItem: item };
     });
   },
 }));

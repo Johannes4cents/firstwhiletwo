@@ -7,7 +7,7 @@ import MessageHolder from "./holder/MessageHolder";
 const ChatMessagesField = () => {
   const { displayedMessages } = chatStore();
   const windowSize = useWindowSize();
-  const { inputHeight } = miscStore();
+  const { inputHeight, attachedItemHeight } = miscStore();
 
   return (
     <div
@@ -23,7 +23,9 @@ const ChatMessagesField = () => {
         className="divColumn"
         style={{
           width: "100%",
-          maxHeight: `${windowSize.height - inputHeight - 90}px`,
+          maxHeight: `${
+            windowSize.height - inputHeight - attachedItemHeight - 95
+          }px`,
           overflow: "auto",
         }}
       >

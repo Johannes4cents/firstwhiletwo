@@ -8,6 +8,12 @@ const miscStore = create((set) => ({
       return { inputHeight: height };
     });
   },
+  attachedItemHeight: 0,
+  setAttachedItemHeight: (height) => {
+    set(() => {
+      return { attachedItemHeight: height };
+    });
+  },
   modalOpen: false,
   closeModal: () => {
     set(() => {

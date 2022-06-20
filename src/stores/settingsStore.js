@@ -7,16 +7,37 @@ const settingsStore = create((set) => ({
   showAlike: false,
   showFoes: false,
   showCelebs: false,
-  switchShowPeople: (people) => {
+  switchShowPeople: (uid, people) => {
     set((state) => {
+      const peopleFilter = {
+        showAllies: people == "allies" ? !state.showAllies : state.showAllies,
+        showAlike: people == "alike" ? !state.showAlike : state.showAlike,
+        showFoes: people == "foes" ? !state.showFoes : state.showFoes,
+        showCelebs: people == "celebs" ? !state.showCelebs : state.showAllies,
+      };
+      localStorage.setItem(uid + "showPeople", JSON.stringify(peopleFilter));
       return {
         [`show${capitalize(people)}`]: !state[`show${capitalize(people)}`],
       };
     });
   },
-  minMaxMsgUpvotes: [0, 100],
-  setMinMaxUpvotes: (valueArray) => {
+  setShowPeople: (peopleFilter) => {
     set(() => {
+      return {
+        showAlike: peopleFilter.showAlike,
+        showAllies: peopleFilter.showAllies,
+        showFoes: peopleFilter.showFoes,
+        showCelebs: peopleFilter.showCelebs,
+      };
+    });
+  },
+  minMaxMsgUpvotes: [0, 100],
+  setMinMaxUpvotes: (uid, valueArray) => {
+    set(() => {
+      localStorage.setItem(
+        uid + "minMaxMsgUpvotes",
+        JSON.stringify(valueArray)
+      );
       return { minMaxMsgUpvotes: valueArray };
     });
   },

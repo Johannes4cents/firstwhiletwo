@@ -1,15 +1,17 @@
 import { Box, Slider } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import settingsStore from "../stores/settingsStore";
+import userStore from "../stores/userStore";
 import PeopleFilterHolder from "./holder/PeopleFilterHolder";
 
 const MessageFilterSection = () => {
   const [expanded, setExpanded] = useState(false);
   const [hover, setHover] = useState(false);
+  const { info } = userStore();
   const { minMaxMsgUpvotes, setMinMaxUpvotes } = settingsStore();
 
   const handleUpvotesChange = (e) => {
-    setMinMaxUpvotes(e.target.value);
+    setMinMaxUpvotes(info.uid, e.target.value);
   };
 
   function valuetext(value) {

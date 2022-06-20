@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useOnHover from "../hooks/useOnHover";
 import chatStore from "../stores/chatStore";
 
@@ -9,6 +9,9 @@ const RessourceImage = ({ ressource, onClick, selectedRessources }) => {
     imageSelected: `/images/ressources/res_${ressource}.png`,
     imageUnselected: `/images/ressources/res_${ressource}_unselected.png`,
   });
+  useEffect(() => {
+    console.log("hover.activeImage - ", hover.activeImage);
+  }, [hover.activeImage, ressource]);
   return (
     <div
       onClick={() => onClick(ressource)}

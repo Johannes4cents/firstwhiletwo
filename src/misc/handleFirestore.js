@@ -274,23 +274,25 @@ async function getFireItems(local, uid, setFireItems) {
   const events = lootDoc.data()["events"] ?? [];
 
   if (localItems.length < 1) {
-    let firestoreItems = await getCustomUserList(uid, "fireItems");
-    firestoreItems.forEach((i) => localItems.push(i));
+    await getCustomUserList(uid, "fireItems", (firestoreItems) => {
+      firestoreItems.forEach((i) => localItems.push(i));
+
+      const localIds = localItems.map((i) => i.id);
+
+      const list = items
+        .concat(spells)
+        .concat(creatures)
+        .concat(buildings)
+        .concat(events);
+      for (let i = 0; i < list.length; i++) {
+        let item = list[i];
+        if (!localIds.includes(item.id)) localItems.push(item);
+      }
+      setFireItems(uid, localItems);
+    });
+  } else {
+    setFireItems(uid, localItems);
   }
-
-  const localIds = localItems.map((i) => i.id);
-
-  const list = items
-    .concat(spells)
-    .concat(creatures)
-    .concat(buildings)
-    .concat(events);
-  for (let i = 0; i < list.length; i++) {
-    let item = list[i];
-    if (!localIds.includes(item.id)) localItems.push(item);
-  }
-
-  setFireItems(uid, localItems);
 }
 
 async function getCustomUserList(uid, collection, onCollectionRetrieved) {
@@ -302,7 +304,22 @@ async function getCustomUserList(uid, collection, onCollectionRetrieved) {
   });
 }
 
+async function getUserLoot(uid, onListRetrieved) {
+  const userDocRef = doc(db, "users/", uid);
+  await getDoc(userDocRef).then((doc) => {
+    const listObj = doc.data()["loot"];
+    let list = (listObj["items"] ?? [])
+      .concat(listObj["spells"] ?? [])
+      .concat(listObj["buildings"] ?? [])
+      .concat(listObj["events"] ?? [])
+      .concat(listObj["creatures"] ?? []);
+    onListRetrieved(list ?? []);
+    return list ?? [];
+  });
+}
+
 export {
+  getUserLoot,
   addLootInFirestore,
   getCustomUserList,
   getFireItems,

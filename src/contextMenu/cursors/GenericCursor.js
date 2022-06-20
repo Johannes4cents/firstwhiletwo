@@ -8,7 +8,8 @@ const GenericCursor = ({ text, image, minLength = "0" }) => {
     if (imageRef != null) {
       if (!image.startsWith("images")) {
         getDownloadURL(ref(storage, image)).then((url) => {
-          imageRef.current.setAttribute("src", url);
+          if (imageRef.current != null)
+            imageRef.current.setAttribute("src", url);
         });
       } else imageRef.current.setAttribute("src", image);
     }

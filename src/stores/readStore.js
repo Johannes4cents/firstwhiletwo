@@ -5,6 +5,7 @@ import {
   forArrayLength,
   umlautFix,
 } from "../misc/helperFuncs";
+import alphabet from "../misc/lists/alphabet";
 import resTriggerWords from "../misc/lists/resTriggerWords";
 
 const resetResTrigger = {
@@ -25,8 +26,44 @@ const resetResTrigger = {
   religion: [],
 };
 
+const resetTriggerWords = {
+  a: { loot: [], profile: [], ressources: [] },
+  b: { loot: [], profile: [], ressources: [] },
+  c: { loot: [], profile: [], ressources: [] },
+  d: { loot: [], profile: [], ressources: [] },
+  e: { loot: [], profile: [], ressources: [] },
+  f: { loot: [], profile: [], ressources: [] },
+  g: { loot: [], profile: [], ressources: [] },
+  h: { loot: [], profile: [], ressources: [] },
+  i: { loot: [], profile: [], ressources: [] },
+  j: { loot: [], profile: [], ressources: [] },
+  k: { loot: [], profile: [], ressources: [] },
+  l: { loot: [], profile: [], ressources: [] },
+  m: { loot: [], profile: [], ressources: [] },
+  n: { loot: [], profile: [], ressources: [] },
+  o: { loot: [], profile: [], ressources: [] },
+  p: { loot: [], profile: [], ressources: [] },
+  q: { loot: [], profile: [], ressources: [] },
+  r: { loot: [], profile: [], ressources: [] },
+  s: { loot: [], profile: [], ressources: [] },
+  t: { loot: [], profile: [], ressources: [] },
+  u: { loot: [], profile: [], ressources: [] },
+  v: { loot: [], profile: [], ressources: [] },
+  w: { loot: [], profile: [], ressources: [] },
+  x: { loot: [], profile: [], ressources: [] },
+  y: { loot: [], profile: [], ressources: [] },
+  z: { loot: [], profile: [], ressources: [] },
+};
+
 const readStore = create((set) => ({
   fireItems: [],
+  addFireItem: (uid, fireItem) => {
+    set((state) => {
+      let newList = [...state.fireItems, fireItem];
+      localStorage.setItem(uid + "fireItems", JSON.stringify(newList));
+      return { fireItems: newList };
+    });
+  },
   setFireItems: (uid, items, onItemsNull) => {
     set((state) => {
       if (items != null) {
@@ -125,37 +162,13 @@ const readStore = create((set) => ({
     });
   },
 
-  triggerWords: {
-    a: { loot: [], profile: [], ressources: [] },
-    b: { loot: [], profile: [], ressources: [] },
-    c: { loot: [], profile: [], ressources: [] },
-    d: { loot: [], profile: [], ressources: [] },
-    e: { loot: [], profile: [], ressources: [] },
-    f: { loot: [], profile: [], ressources: [] },
-    g: { loot: [], profile: [], ressources: [] },
-    h: { loot: [], profile: [], ressources: [] },
-    i: { loot: [], profile: [], ressources: [] },
-    j: { loot: [], profile: [], ressources: [] },
-    k: { loot: [], profile: [], ressources: [] },
-    l: { loot: [], profile: [], ressources: [] },
-    m: { loot: [], profile: [], ressources: [] },
-    n: { loot: [], profile: [], ressources: [] },
-    o: { loot: [], profile: [], ressources: [] },
-    p: { loot: [], profile: [], ressources: [] },
-    q: { loot: [], profile: [], ressources: [] },
-    r: { loot: [], profile: [], ressources: [] },
-    s: { loot: [], profile: [], ressources: [] },
-    t: { loot: [], profile: [], ressources: [] },
-    u: { loot: [], profile: [], ressources: [] },
-    v: { loot: [], profile: [], ressources: [] },
-    w: { loot: [], profile: [], ressources: [] },
-    x: { loot: [], profile: [], ressources: [] },
-    y: { loot: [], profile: [], ressources: [] },
-    z: { loot: [], profile: [], ressources: [] },
-  },
+  triggerWords: { ...resetTriggerWords },
   setTriggerWords: (items, type) => {
     set((state) => {
-      let wordsObj = { ...state.triggerWords };
+      let wordsObj = {};
+      forArrayLength(alphabet, (char) => {
+        wordsObj[char] = { loot: [], profile: [], ressources: [] };
+      });
       let triggerNames = Object.keys(resTriggerWords);
       forArrayLength(triggerNames, (name) => {
         forArrayLength(resTriggerWords[name], (string) => {
@@ -165,11 +178,7 @@ const readStore = create((set) => ({
       });
       forArrayLength(items, (item) => {
         let firstChar = item.string[0].toLowerCase();
-        wordsObj[firstChar][type].push({
-          string: item.string,
-          item: item.item,
-          language: item.language,
-        });
+        wordsObj[firstChar][type].push(item);
       });
       return { triggerWords: wordsObj };
     });

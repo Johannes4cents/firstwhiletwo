@@ -1,11 +1,13 @@
 import { capitalize } from "@mui/material";
 import React from "react";
 import settingsStore from "../../stores/settingsStore";
+import userStore from "../../stores/userStore";
 
 const PeopleFilterHolder = ({ people }) => {
   const { showCelebs, showAllies, showFoes, showAlike, switchShowPeople } =
     settingsStore();
 
+  const { info } = userStore();
   const peopleObj = {
     celebs: showCelebs,
     allies: showAllies,
@@ -14,7 +16,7 @@ const PeopleFilterHolder = ({ people }) => {
   };
 
   const onClick = () => {
-    switchShowPeople(people);
+    switchShowPeople(info.uid, people);
   };
 
   return (

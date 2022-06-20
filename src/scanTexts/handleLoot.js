@@ -15,10 +15,10 @@ import {
 import veryCommonEnglish from "../misc/lists/veryCommonEnglish";
 import veryCommonGerman from "../misc/lists/veryCommonGerman";
 
-function createLootObject(uid, fireItem, string, setFireItems, messageId) {
+function createLootObject(uid, fireItem, string, addFireItem, messageId) {
   let concatList = fireItemAttributes.concat(specialAttributes);
 
-  updateItemInStorageAndState(uid, "fireItems", fireItem, setFireItems);
+  addFireItem(uid, fireItem);
   if (fireItem.firstFound == null) {
     fireItem.firstFound = dateToTimestamp(new Date());
     addCustomItemToUserList(uid, fireItem, "fireItems");

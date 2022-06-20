@@ -18,11 +18,13 @@ import useCheckArraysForResTrigger from "./scanTexts/useCheckArraysForResTrigger
 import useScanChatMessages from "./scanTexts/useScanChatMessages";
 import AdminTriggerWordsPage from "./AdminStuff/AdminMakeTriggerWords/AdminTriggerWordsPage";
 import AdminCreateFireItems from "./AdminStuff/AdminLootStuff/AdminCreateFireItems";
+import triggerStore from "./stores/triggerStore";
 
 function App() {
   const { info, setInfo } = userStore();
   const { setDragCursor } = miscStore();
   const { activeStrains } = listsStore();
+  const { loginTrigger } = triggerStore();
   const { displayedMessages } = chatStore();
   const { setActiveChat, setDisplayedMessages } = chatStore();
   const [subscriptions, setSubscriptions] = useState([]);
@@ -79,7 +81,7 @@ function App() {
     } else {
       clearOnLogOut();
     }
-  }, [info]);
+  }, [triggerStore]);
 
   return (
     <div className="App" onMouseUp={() => setDragCursor(null)}>

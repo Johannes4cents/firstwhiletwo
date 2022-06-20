@@ -64,10 +64,11 @@ const UpvotesBar = ({ pickedUpvotes, onUpvoteClicked, fireItem }) => {
 
 const UpvoteHolder = ({ fireItem, pickedUpvotes, upvote, onClick }) => {
   const [payload, setPayload] = useState(0);
-  const [firstLoadSafety, setFirstLoadSafety] = useState("");
+  const [firstLoadSafety, setFirstLoadSafety] = useState(true);
 
   useEffect(() => {
     if (!firstLoadSafety) {
+      console.log("payload is - ", payload);
       onClick({ id: upvote, payload, update: true });
     } else setFirstLoadSafety(false);
   }, [payload]);
@@ -80,7 +81,7 @@ const UpvoteHolder = ({ fireItem, pickedUpvotes, upvote, onClick }) => {
     if (fireItem != null) {
       if (fireItem.upvotes != null) {
         let foundUpvote = fireItem.upvotes.find((u) => u.id == upvote);
-
+        console.log("fireItem is - ", fireItem);
         if (foundUpvote != null) {
           setPayload(foundUpvote.payload);
         } else setPayload(0);

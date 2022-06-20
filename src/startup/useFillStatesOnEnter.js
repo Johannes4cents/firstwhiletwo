@@ -3,16 +3,19 @@ import changeInfoObject from "../fixStuff/changeInfoObject";
 import {
   getCollectionFromUserFirestore,
   getGeneralList,
-  getFireItems,
   getCustomUserList,
+  getUserLoot,
+  getFireItems,
 } from "../misc/handleFirestore";
 import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import readStore from "../stores/readStore";
+import settingsStore from "../stores/settingsStore";
 
 const useFillStatesOnEnter = () => {
   const { setMyStrains, setActiveStrains, setStrainWords, setLoot } =
     listsStore();
+  const { setMinMaxUpvotes, setShowPeople } = settingsStore();
   const { setLastUpdates } = miscStore();
   const { setFireItems, setScannedMessages } = readStore();
 
@@ -41,7 +44,7 @@ const useFillStatesOnEnter = () => {
 
   function storageListToState(uid, list, setFunc) {
     let localList = JSON.parse(localStorage.getItem(uid + list));
-    if (localList != null) setFunc(uid, localList);
+    if (localList) setFunc(uid, localList);
   }
 
   function generalListToState(listName, onRetrievedFunc) {
@@ -52,12 +55,24 @@ const useFillStatesOnEnter = () => {
     getCollectionFromUser(uid, "myStrains", setMyStrains);
     storageListToState(uid, "activeStrains", setActiveStrains);
     storageListToState(uid, "scannedMessages", setScannedMessages);
+    storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
     generalListToState("strainWords", setStrainWords);
-    getListFromUser(uid, "loot", setLoot);
+
+    // loot
+    let loot = JSON.parse(localStorage.getItem(uid + "loot"));
+    if (loot != null && loot != undefined) setLoot(uid, loot);
+    else
+      getUserLoot(uid, (list) => {
+        setLoot(uid, list);
+      });
 
     // fireItems
     let fireitems = JSON.parse(localStorage.getItem(uid + "fireItems"));
     getFireItems(fireitems, uid, setFireItems);
+
+    //
+    let showPeopleFilter = JSON.parse(localStorage.getItem(uid + "showPeople"));
+    if (showPeopleFilter) setShowPeople(showPeopleFilter);
   }
 
   return fillStates;

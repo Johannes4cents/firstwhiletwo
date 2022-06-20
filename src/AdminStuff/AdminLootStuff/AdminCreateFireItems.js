@@ -122,7 +122,9 @@ const AdminCreateFireItems = () => {
         ]);
       }
     } else {
+      console.log("obj is - ", obj, " | upvotes - ", upvotes);
       let filterList = upvotes.filter((o) => o.id != obj.id);
+      console.log("filterList is - ", filterList);
       setUpvotes([
         ...filterList,
         {

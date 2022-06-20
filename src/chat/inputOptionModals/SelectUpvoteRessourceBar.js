@@ -23,9 +23,9 @@ const SelectUpvoteRessourceBar = () => {
   ];
 
   const { closeModal } = miscStore();
-  const { setMsgRessource } = chatStore();
+  const { setMsgRessources } = chatStore();
   const selectRessource = (ressource) => {
-    setMsgRessource(ressource);
+    setMsgRessources([ressource]);
     closeModal();
   };
 

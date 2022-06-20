@@ -36,6 +36,7 @@ async function getPureFirestoreFireItems(info, onItemsRetrieved) {
 }
 
 async function getFireItems(info, onItemsRetrieved) {
+  console.log("getFireItems called");
   const lootDocRef = doc(db, "general/", "fireItems");
   const lootDoc = await getDoc(lootDocRef);
   const items = lootDoc.data()["items"] ?? [];
@@ -48,21 +49,24 @@ async function getFireItems(info, onItemsRetrieved) {
   const localIds = localList.map((i) => i.id);
 
   if (localList.length < 1) {
-    let firestoreItems = await getGeneralList(info, "fireItems");
-    firestoreItems.forEach((i) => localList.push(i));
-  }
-  const list = items
-    .concat(spells)
-    .concat(creatures)
-    .concat(buildings)
-    .concat(events);
+    getGeneralList("fireItems", (firestoreItems) => {
+      const list = items
+        .concat(spells)
+        .concat(creatures)
+        .concat(buildings)
+        .concat(events);
 
-  for (let i = 0; i < list.length; i++) {
-    let item = list[i];
-    if (!localIds.includes(item.id)) localList.push(item);
-  }
+      console.log("fireStoreItems are - ", firestoreItems);
+      firestoreItems.forEach((i) => localList.push(i));
 
-  onItemsRetrieved(localList);
+      for (let i = 0; i < list.length; i++) {
+        let item = list[i];
+        if (!localIds.includes(item.id)) localList.push(item);
+      }
+
+      onItemsRetrieved(localList);
+    });
+  }
 }
 
 async function addItemToFireItemsList(item, collection) {

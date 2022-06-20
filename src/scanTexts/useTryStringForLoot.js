@@ -9,6 +9,7 @@ import {
   umlautFix,
   objectToArray,
   updateItemInStorageAndState,
+  forArrayLength,
 } from "../misc/helperFuncs";
 import readStore from "../stores/readStore";
 import userStore from "../stores/userStore";
@@ -41,34 +42,41 @@ function useTryStringForLoot(onRessourcesFound, onFireItemFound) {
     let firstChar = umlautFix(string[0].toLowerCase());
     let lootStrings = firstChar ? triggerWords[firstChar].loot : [];
 
-    const foundFireItem = lootStrings.find((s) => s.string == string);
+    const foundFireItems = lootStrings.filter(
+      (s) => s.string == string && s.language == (info.language ?? "english")
+    );
     var lucky = false;
-    if (foundFireItem != null) {
-      let itemTriggerWords = foundFireItem.item.triggerWords;
-      const triggerWord = itemTriggerWords.find((tw) =>
-        tw.obj.words[info.language].includes(string.toLowerCase())
-      );
-      if (triggerWord.firstFound == null) {
-        lucky = testChance(triggerWord.chance, 10000);
-        if (lucky) {
-          triggerWord.firstFound = dateToTimestamp(new Date());
-          triggerWord.lastFound = dateToTimestamp(new Date());
+    console.log("string - ", string, " | foundFireItems - ", foundFireItems);
+    forArrayLength(foundFireItems, (foundFireItem) => {
+      console.log("foundFireItem is - ", foundFireItem);
+      if (lucky) return;
+      if (foundFireItem != null) {
+        let itemTriggerWords = foundFireItem.item.triggerWords;
+        const triggerWord = itemTriggerWords.find((tw) =>
+          tw.obj.words[info.language].includes(string.toLowerCase())
+        );
+        if (triggerWord.firstFound == null) {
+          lucky = testChance(triggerWord.chance, 10000);
+          if (lucky) {
+            triggerWord.firstFound = dateToTimestamp(new Date());
+            triggerWord.lastFound = dateToTimestamp(new Date());
+          }
+        } else {
+          lucky = testChance(triggerWord.chance / 2, 10000);
+          if (lucky) triggerWord.lastFound = dateToTimestamp(new Date());
         }
-      } else {
-        lucky = testChance(triggerWord.chance / 2, 10000);
-        if (lucky) triggerWord.lastFound = dateToTimestamp(new Date());
-      }
-      if (lucky) {
-        onFireItemFound(foundFireItem.item, string);
-      }
+        if (lucky) {
+          onFireItemFound(foundFireItem.item, string);
+        }
 
-      let checkedString = {
-        string: string,
-        timestamp: dateToTimestamp(new Date()),
-        id: getRandomId(),
-      };
-      addToRecentlyTyped(info.uid, checkedString);
-    }
+        let checkedString = {
+          string: string,
+          timestamp: dateToTimestamp(new Date()),
+          id: getRandomId(),
+        };
+        addToRecentlyTyped(info.uid, checkedString);
+      }
+    });
   }
 
   function getModificator() {

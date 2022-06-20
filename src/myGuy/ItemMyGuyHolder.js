@@ -3,12 +3,17 @@ import React from "react";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { storage } from "../firebase/fireInit";
-import useDragDrop from "../hooks/useDragDrop";
+import useMouseHandling from "../hooks/useMouseHandling";
 import useOnHover from "../hooks/useOnHover";
 import userStore from "../stores/userStore";
 
 const ItemMyGuyHolder = ({ item }) => {
-  const dragDrop = useDragDrop({ onClick: onItemClicked, type: "loot", item });
+  const dragDrop = useMouseHandling({
+    onOneClick: onItemClicked,
+    type: "loot",
+    item,
+    onDoubleClick: handleDoubleClick,
+  });
   const image = useRef();
   const hover = useOnHover({
     item,
@@ -18,7 +23,11 @@ const ItemMyGuyHolder = ({ item }) => {
   const { info } = userStore();
 
   function onItemClicked() {
-    console.log("item is - ", item);
+    console.log("singleClick");
+  }
+
+  function handleDoubleClick() {
+    console.log("doubleClick");
   }
 
   useEffect(() => {
@@ -32,7 +41,6 @@ const ItemMyGuyHolder = ({ item }) => {
   return (
     <div
       {...dragDrop}
-      onClick={onItemClicked}
       className="divRowColored"
       style={{
         width: "100%",
@@ -52,7 +60,7 @@ const ItemMyGuyHolder = ({ item }) => {
         className="textBoldWhite"
         style={{ flex: 1, textAlign: "center", color: hover.textColor }}
       >
-        {item.name[info.language]}
+        {item.name[info.language ?? "english"]}
       </div>
       <img ref={image} className="icon20" style={{ marginRight: "5px" }} />
     </div>

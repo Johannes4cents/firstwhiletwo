@@ -7,28 +7,15 @@ import chatStore from "../stores/chatStore";
 import readStore from "../stores/readStore";
 
 const AdminBar = () => {
-  const { info, setInfo, loggedIn } = userStore();
-  const { activeStrains, myStrains, loot } = listsStore();
-  const {
-    clearRecentlyTyped,
-    scanArrays,
-    scanArraysIndex,
-    scanningArrays,
-    resTrigger,
-    triggerWords,
-    fireItems,
-    scannedMessages,
-  } = readStore();
+  const { info, setInfo } = userStore();
+
+  const { triggerWords, clearRecentlyTyped } = readStore();
   const { activeChat } = chatStore();
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const checkStuff = () => {
-    clearRecentlyTyped();
-    console.log("scanArrays - ", scanArrays);
-    console.log("fireItems are -", fireItems);
-    console.log("loot - ", loot);
-    console.log("scannedMessages - ", scannedMessages);
+    console.log("triggerWords - ", triggerWords);
   };
 
   const clearStorage = () => {

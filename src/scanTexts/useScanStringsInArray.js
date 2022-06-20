@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { updateTimeCheck } from "../misc/handleUpdates";
-import { minutesToSeconds, newTrim } from "../misc/helperFuncs";
+import { getItemById, minutesToSeconds, newTrim } from "../misc/helperFuncs";
 import userStore from "../stores/userStore";
 import useTryStringForLoot from "./useTryStringForLoot";
 import miscStore from "../stores/miscStore";
@@ -14,9 +14,8 @@ const useScanStringsInArray = (onScanFinnished) => {
   const scanString = useTryStringForLoot(onRessourceFound, onFireItemFound);
   const { info, setInfo } = userStore();
   const { setLastUpdates } = miscStore();
-  const { setFireItems } = readStore();
-  const { addItemToMessage } = chatStore();
-  const { addLoot } = listsStore();
+  const { addFireItem } = readStore();
+  const { addItemToMessage, displayedMessages } = chatStore();
   const [currentArray, setCurrentArray] = useState(null);
   const [stringIndex, setStringIndex] = useState(0);
   function onFireItemFound(fireItem) {
@@ -24,10 +23,13 @@ const useScanStringsInArray = (onScanFinnished) => {
       info.uid,
       fireItem,
       fireItem.string,
-      setFireItems,
+      addFireItem,
       currentArray.msg
     );
-    addItemToMessage(loot, currentArray.msg);
+    const msg = getItemById(currentArray.msg, displayedMessages);
+    if (!msg.spawnedItems.length > 0) {
+      addItemToMessage(loot, currentArray.msg);
+    }
   }
 
   function onRessourceFound(ressource) {
