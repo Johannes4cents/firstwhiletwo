@@ -46,9 +46,7 @@ function useTryStringForLoot(onRessourcesFound, onFireItemFound) {
       (s) => s.string == string && s.language == (info.language ?? "english")
     );
     var lucky = false;
-    console.log("string - ", string, " | foundFireItems - ", foundFireItems);
     forArrayLength(foundFireItems, (foundFireItem) => {
-      console.log("foundFireItem is - ", foundFireItem);
       if (lucky) return;
       if (foundFireItem != null) {
         let itemTriggerWords = foundFireItem.item.triggerWords;

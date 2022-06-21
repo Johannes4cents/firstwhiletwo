@@ -1,7 +1,13 @@
 import React from "react";
 import create from "zustand";
 import { docsToLoot } from "../fire_classes/Loot";
-import { addItemToUserList, addLootInFirestore } from "../misc/handleFirestore";
+import {
+  addItemToUserList,
+  addLootInFirestore,
+  updateItemInUserList,
+  updateLootItemInUserList,
+} from "../misc/handleFirestore";
+import { forArrayLength } from "../misc/helperFuncs";
 
 const listsStore = create((set) => ({
   loot: [],
@@ -9,6 +15,16 @@ const listsStore = create((set) => ({
     localStorage.setItem(uid + "loot", JSON.stringify(docsToLoot(loot)));
     set(() => {
       return { loot: docsToLoot(loot) };
+    });
+  },
+  updateLootItem: (uid, item) => {
+    set((state) => {
+      let newList = [...state.loot];
+      let index = state.loot.map((l) => l.id).indexOf(item.id);
+      newList[index] = item;
+      updateLootItemInUserList(uid, item);
+      localStorage.setItem(uid + "loot", JSON.stringify(newList));
+      return { loot: newList };
     });
   },
   addLoot: (uid, item) => {
@@ -139,6 +155,25 @@ const listsStore = create((set) => ({
       return {
         activeStrains: list.sort((a, b) => (a.text > b.text ? 1 : -1)),
       };
+    });
+  },
+  fireFlags: [],
+  statements: [],
+  setFireFlags: (uid, flags) => {
+    set((state) => {
+      let fireStatements = [];
+      forArrayLength(flags, (flag) => {
+        let statementIds = flag.statements.map((s) => s.id);
+        forArrayLength(flag.statements, (statement) => {
+          statement.competitors = statementIds.filter(
+            (id) => id != statement.id
+          );
+          fireStatements.push(statement);
+        });
+      });
+
+      localStorage.setItem(uid + "fireFlags", JSON.stringify(flags));
+      return { fireFlags: flags, statements: fireStatements };
     });
   },
 }));

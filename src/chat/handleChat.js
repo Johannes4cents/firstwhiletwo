@@ -1,5 +1,4 @@
 import {
-  collection,
   doc,
   getDoc,
   onSnapshot,
@@ -7,11 +6,12 @@ import {
   query,
   where,
   collectionGroup,
+  getDocs,
 } from "@firebase/firestore";
 import db from "../firebase/fireInit";
 import Turf from "../fire_classes/Turf";
 import { setDocInFirestore } from "../misc/handleFirestore";
-import { dateToTimestamp } from "../misc/helperFuncs";
+import { dateToTimestamp, forArrayLength } from "../misc/helperFuncs";
 
 function getChatListener(chat, onCollection) {
   const q = query(
@@ -26,6 +26,17 @@ function getChatListener(chat, onCollection) {
     onCollection(docs, unsubscribe);
   });
   return unsubscribe;
+}
+
+async function getChatMessage(id, onRetrieved) {
+  const q = query(collectionGroup(db, "messages"), where("id", "==", id));
+  getDocs(q).then((snapshot) => {
+    var message = null;
+    snapshot.forEach((doc) => {
+      message = doc.data();
+    });
+    onRetrieved(message);
+  });
 }
 
 async function checkIfTurfChatExists(chatName, uid, username) {
@@ -48,7 +59,13 @@ function makeChatDoc(chatName, uid, username, chats) {
   };
 }
 
-function checkMessagesForUpdate(messages) {}
+function checkMessagesForUpdate(messages, updateMessage) {
+  forArrayLength(messages, (message) => {
+    getChatMessage(message.id, (msg) => {
+      updateMessage(msg);
+    });
+  });
+}
 
 function sendMessageToTurfChats(chat, msg) {
   msg.collection = "turfChats/" + chat + "/messages";
@@ -84,4 +101,5 @@ export {
   getChatList,
   sendMessageToTurfChats,
   checkMessagesForUpdate,
+  getChatMessage,
 };

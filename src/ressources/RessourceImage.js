@@ -9,9 +9,7 @@ const RessourceImage = ({ ressource, onClick, selectedRessources }) => {
     imageSelected: `/images/ressources/res_${ressource}.png`,
     imageUnselected: `/images/ressources/res_${ressource}_unselected.png`,
   });
-  useEffect(() => {
-    console.log("hover.activeImage - ", hover.activeImage);
-  }, [hover.activeImage, ressource]);
+
   return (
     <div
       onClick={() => onClick(ressource)}

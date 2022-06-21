@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { capitalize } from "@mui/material";
 import bg from "../../images/bg_tab.png";
+import miscStore from "../../stores/miscStore";
 
 const TabButton = ({ tab, setActiveTab, activeTab }) => {
   const [entered, setEntered] = useState(false);
+  const { updateLastActive } = miscStore();
+
+  const clickTab = () => {
+    updateLastActive();
+    setActiveTab(tab);
+  };
   return (
     <div
       className="divRow"
@@ -14,7 +21,7 @@ const TabButton = ({ tab, setActiveTab, activeTab }) => {
         setEntered(false);
       }}
       style={{ flex: 1, textAlign: "center", backgroundImage: `url(${bg})` }}
-      onClick={() => setActiveTab(tab)}
+      onClick={clickTab}
     >
       <div
         className="textWhite"

@@ -12,6 +12,7 @@ export default class Loot {
     fireItemId,
     upvotes = ["cash"],
     message = null,
+    attached = null,
     id = getRandomId(),
     locked = true
   ) {
@@ -25,6 +26,7 @@ export default class Loot {
     this.fireItemId = fireItemId;
     this.upvotes = upvotes;
     this.locked = locked;
+    this.attached = attached;
   }
 
   toObj() {
@@ -39,6 +41,7 @@ export default class Loot {
       fireItemId: this.fireItemId,
       upvotes: this.upvotes,
       locked: this.locked,
+      attached: this.attached,
     };
   }
 }
@@ -53,6 +56,7 @@ function docToLoot(data) {
     data.fireItemId,
     data.upvotes,
     data.message,
+    data.attached,
     data.id,
     data.locked
   );

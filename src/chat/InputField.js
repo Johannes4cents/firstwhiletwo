@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChatMessage from "../fire_classes/ChatMessage";
 import { setDocInFirestore } from "../misc/handleFirestore";
-import { getRandomId } from "../misc/helperFuncs";
+import { getRandomId, newTrim } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
+import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import userStore from "../stores/userStore";
 import { sendMessageToTurfChats } from "./handleChat";
@@ -12,8 +13,15 @@ const InputField = () => {
   const heightSpan = useRef(null);
   const inputWidth = useRef(null);
   const [focusColor, setFocusColor] = useState("rgb(82, 82, 82)");
-  const { activeChat, activeChats, selectedMsgRessources } = chatStore();
-  const { setInputHeight } = miscStore();
+  const {
+    activeChat,
+    activeChats,
+    selectedMsgRessources,
+    attachedItem,
+    setAttachedItem,
+  } = chatStore();
+  const { updateLootItem } = listsStore();
+  const { setInputHeight, updateLastActive } = miscStore();
   const { info } = userStore();
   const [content, setContent] = useState("");
   const [height, setHeight] = useState();
@@ -30,11 +38,29 @@ const InputField = () => {
   };
 
   const submitMsg = () => {
-    const msg = ChatMessage(selectedMsgRessources, activeChats, content, {
-      nickname: info.nickname,
-      id: info.uid,
-      imgUrl: info.profilePicUrl,
-    });
+    updateLastActive();
+    const contentArray = newTrim(content).split(" ");
+    var attachCheck = false;
+    if (attachedItem)
+      attachCheck = contentArray.includes(attachedItem.connectedString);
+    const msg = ChatMessage(
+      attachCheck ? selectedMsgRessources : ["cash"],
+      activeChats,
+      content,
+      {
+        nickname: info.nickname,
+        id: info.uid,
+        imgUrl: info.profilePicUrl,
+      },
+      activeChat,
+      attachCheck ? [attachedItem.toObj()] : []
+    );
+    console.log("msg is - ", msg);
+    if (attachCheck) {
+      attachedItem.attached = msg.id;
+      updateLootItem(info.uid, attachedItem);
+      setAttachedItem(null);
+    }
     sendMessageToTurfChats(activeChat, msg);
     setContent("");
   };

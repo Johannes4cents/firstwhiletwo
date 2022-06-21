@@ -6,6 +6,7 @@ import LootPage from "./LootPage";
 import StatementsPage from "./StatementsPage";
 import AlliesPage from "./AlliesPage";
 import StatsPageGuy from "./StatsPageGuy";
+import MediaPage from "./MediaPage";
 
 const MyGuySection = () => {
   const [activeTab, setActiveTab] = useState("Item");
@@ -35,7 +36,7 @@ const MyGuySection = () => {
         </div>
       </div>
       <TabBar
-        tabs={["Item", "Loot", "Statements", "Allies", "Stats"]}
+        tabs={["Item", "Loot", "Statements", "Allies", "Stats", "Media"]}
         setActiveTab={setActiveTab}
         activeTab={activeTab}
       />
@@ -44,6 +45,7 @@ const MyGuySection = () => {
       {activeTab == "Statements" && <StatementsPage />}
       {activeTab == "Allies" && <AlliesPage />}
       {activeTab == "Stats" && <StatsPageGuy />}
+      {activeTab == "Media" && <MediaPage />}
     </div>
   );
 };

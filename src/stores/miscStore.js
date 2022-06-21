@@ -1,5 +1,6 @@
 import React from "react";
 import create from "zustand";
+import { dateToTimestamp } from "../misc/helperFuncs";
 
 const miscStore = create((set) => ({
   inputHeight: 0,
@@ -37,11 +38,17 @@ const miscStore = create((set) => ({
       return { dragCursor: cursor };
     });
   },
-  lastUpdates: { info: {}, votes: {} },
+  lastUpdates: { info: null, votes: null, fireFlags: null },
   setLastUpdates: (lastUpdates) => {
     localStorage.setItem("lastUpdates", JSON.stringify(lastUpdates));
     set(() => {
       return { lastUpdates };
+    });
+  },
+  lastActive: null,
+  updateLastActive: () => {
+    set(() => {
+      return { lastActive: dateToTimestamp(new Date()) };
     });
   },
 }));

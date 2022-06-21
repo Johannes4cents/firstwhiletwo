@@ -3,18 +3,20 @@ import { checkTimeDiff, dateToTimestamp } from "./helperFuncs";
 function handleTimecheck(lastUpdates, setLastUpdates, cat, newTimestamp) {
   let newUpdates = {
     ...lastUpdates,
-    [cat]: { ...lastUpdates[cat], timestamp: newTimestamp },
+    [cat]: newTimestamp,
   };
   setLastUpdates(newUpdates);
 }
 
 function updateTimeCheck(cat, minDiff, setLastUpdates) {
   const lastUpdates = JSON.parse(localStorage.getItem("lastUpdates")) ?? {
-    info: {},
-    votes: {},
+    info: null,
+    votes: null,
+    fireFlags: null,
+    lastActive: null,
   };
   let newTimestamp = dateToTimestamp(new Date());
-  const oldTimestamp = lastUpdates[cat].timestamp;
+  const oldTimestamp = lastUpdates[cat];
   if (oldTimestamp != null) {
     let timeDiff = checkTimeDiff(oldTimestamp, newTimestamp);
     if (timeDiff > minDiff) {

@@ -30,10 +30,7 @@ const VoteRessourceArrows = ({
   }
   return (
     <div className="divColumn">
-      <div
-        className="divRow"
-        style={{ width: "100%", justifyContent: "center" }}
-      >
+      <div className="divRow" style={{ justifyContent: "center" }}>
         <div
           className="textBoldWhite"
           style={{ borderBottom: "1px solid grey" }}

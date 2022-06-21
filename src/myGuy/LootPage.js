@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
 import listsStore from "../stores/listsStore";
 import DescriptionsBar from "./DescriptionsBar";
+import ItemAttachedHolder from "./ItemAttachedHolder";
 import ItemMyGuyHolder from "./ItemMyGuyHolder";
 import SubOptionsBar from "./SubOptionsBar";
 
@@ -39,10 +40,14 @@ const LootPage = () => {
         sorting={sorting}
         setSorting={setSorting}
       />
-      <div className="divColumn" style={{ overflow: "auto" }}>
-        {displayedItems.map((i) => (
-          <ItemMyGuyHolder key={i.id} item={i} />
-        ))}
+      <div className="divColumn" style={{ overflow: "auto", width: "100%" }}>
+        {displayedItems.map((i) =>
+          i.attached ? (
+            <ItemAttachedHolder key={i.id} item={i} />
+          ) : (
+            <ItemMyGuyHolder key={i.id} item={i} />
+          )
+        )}
       </div>
     </div>
   );

@@ -6,15 +6,23 @@ import {
   getCustomUserList,
   getUserLoot,
   getFireItems,
+  getBaseCollection,
 } from "../misc/handleFirestore";
+import { updateTimeCheck } from "../misc/handleUpdates";
 import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import readStore from "../stores/readStore";
 import settingsStore from "../stores/settingsStore";
 
 const useFillStatesOnEnter = () => {
-  const { setMyStrains, setActiveStrains, setStrainWords, setLoot } =
-    listsStore();
+  const {
+    setMyStrains,
+    setActiveStrains,
+    setStrainWords,
+    setLoot,
+    setFireFlags,
+  } = listsStore();
+
   const { setMinMaxUpvotes, setShowPeople } = settingsStore();
   const { setLastUpdates } = miscStore();
   const { setFireItems, setScannedMessages } = readStore();
@@ -25,6 +33,21 @@ const useFillStatesOnEnter = () => {
       setFunc(uid, localList);
     } else {
       getCollectionFromUserFirestore(uid, collection, (list) => {
+        setFunc(uid, list);
+      });
+    }
+  }
+
+  function getMainCollection(uid, collection, setFunc, timecheck) {
+    const localList = JSON.parse(localStorage.getItem(uid + collection)) ?? [];
+    if (localList.length > 0) {
+      if (timecheck && updateTimeCheck(collection, timecheck, setLastUpdates)) {
+        getBaseCollection(collection, (list) => {
+          setFunc(uid, list);
+        });
+      } else setFunc(uid, localList);
+    } else {
+      getBaseCollection(collection, (list) => {
         setFunc(uid, list);
       });
     }
@@ -57,6 +80,7 @@ const useFillStatesOnEnter = () => {
     storageListToState(uid, "scannedMessages", setScannedMessages);
     storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
     generalListToState("strainWords", setStrainWords);
+    getMainCollection(uid, "fireFlags", setFireFlags, 24 * 60);
 
     // loot
     let loot = JSON.parse(localStorage.getItem(uid + "loot"));

@@ -5,9 +5,10 @@ export default function ChatMessage(
   chats,
   msg,
   author,
-  id,
+  postedIn = "",
   attachedItems = [],
-  spawnedItems = []
+  spawnedItems = [],
+  id
 ) {
   const timestamp = dateToTimestamp(new Date());
   const rId = timestamp.msTime + getRandomId();
@@ -27,6 +28,7 @@ export default function ChatMessage(
     id: id ?? rId,
     attachedItems,
     spawnedItems,
+    postedIn,
     timestamp,
   };
 }

@@ -1,27 +1,5 @@
 import { getRandomId } from "../misc/helperFuncs";
 
-export default class Flag {
-  constructor(
-    questiobObj,
-    affirmativeStatementObj,
-    negativeStatement,
-    id,
-    customRessources
-  ) {
-    this.id = id ?? getRandomId();
-    this.question = questiobObj ?? {
-      english: "",
-      german: "",
-    };
-    this.affirmativeStatement = affirmativeStatementObj ?? {
-      english: "",
-      german: "",
-    };
-    this.negativeStatement = negativeStatement ?? { english: "", german: "" };
-    this.customRessources = customRessources;
-  }
-}
-
 function makeFireFlag() {
   const id = getRandomId();
   return {

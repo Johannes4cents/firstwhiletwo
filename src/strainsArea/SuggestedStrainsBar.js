@@ -3,17 +3,22 @@ import React, { useEffect, useState } from "react";
 import SearchStrainsBar from "../misc/elements/SearchStrainsBar";
 import listsStore from "../stores/listsStore";
 import StrainSuggestionHolder from "./holder/StrainSuggestionHolder";
+import StrainSectionBar from "./StrainSectionBar";
 
 const SuggestedStrainsBar = () => {
   const { strainWords } = listsStore();
-
+  const [activeSection, setActiveSection] = useState("Hot");
   const [displayedStrains, setDisplayedStrains] = useState([]);
+  const sections = ["Hot", "For You", "All TIme"];
 
   useEffect(() => {
     setDisplayedStrains(strainWords);
   }, [strainWords]);
   return (
-    <div className="divColumn" style={{ flex: 1, overflow: "auto" }}>
+    <div
+      className="divColumn"
+      style={{ flex: 1, overflow: "auto", marginTop: "4px" }}
+    >
       <div
         className="bgSection"
         style={{
@@ -26,13 +31,18 @@ const SuggestedStrainsBar = () => {
         setDisplayedStrains={setDisplayedStrains}
         displayedStrains={displayedStrains}
       />
+      <StrainSectionBar
+        activeSection={activeSection}
+        setActiveSection={setActiveSection}
+        sections={sections}
+      />
       <div
         className="divColumn"
         style={{
           width: "100%",
           height: "100%",
           flex: 1,
-          maxHeight: "380px",
+          maxHeight: "360px",
           overflow: "auto",
         }}
       >

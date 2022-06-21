@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import SubOptionsBar from "./SubOptionsBar";
 
 const StatementsPage = () => {
-  return <div className="sectionBg"></div>;
+  const catList = ["Statements", "Answer Questions"];
+  const [selectedCat, setSelectedCat] = useState("Statements");
+  return (
+    <div className="sectionBg">
+      <SubOptionsBar
+        catList={catList}
+        setSelectedCat={setSelectedCat}
+        selectedCat={selectedCat}
+      />
+    </div>
+  );
 };
 
 export default StatementsPage;

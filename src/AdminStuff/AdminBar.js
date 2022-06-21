@@ -10,12 +10,15 @@ const AdminBar = () => {
   const { info, setInfo } = userStore();
 
   const { triggerWords, clearRecentlyTyped } = readStore();
-  const { activeChat } = chatStore();
+  const { displayedMessages } = chatStore();
+  const { fireFlags, statements } = listsStore();
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const checkStuff = () => {
-    console.log("triggerWords - ", triggerWords);
+    console.log("fireFlags - ", fireFlags);
+    console.log("statements - ", statements);
+    console.log("displayedMessages are - ", displayedMessages);
   };
 
   const clearStorage = () => {

@@ -6,8 +6,10 @@ import { timestampToChatDate } from "../../misc/helperFuncs";
 import VoteRessourceArrows from "../VoteRessourceArrows";
 import ItemMessageHolder from "./ItemMessageHolder";
 import { getConnectedStringFromMessage } from "../../scanTexts/handleLoot";
+import AttachedItemHolder from "./AttachedMessageHolder";
 
 const MessageHolder = ({ message }) => {
+  const messageDiv = useRef();
   const profilePic = useRef(null);
 
   const [hover, setHover] = useState(false);
@@ -23,7 +25,9 @@ const MessageHolder = ({ message }) => {
     }
   }, [profilePic]);
 
-  const onTextClicked = () => {};
+  const onTextClicked = () => {
+    console.log("message - ", message);
+  };
 
   return (
     <div
@@ -42,38 +46,82 @@ const MessageHolder = ({ message }) => {
         className="icon30"
         style={{ marginRight: "10px" }}
       />
+
       <div
+        ref={messageDiv}
         className="divColumn"
-        style={{ width: "100%", alignItems: "baseline" }}
+        style={{ flex: 1, alignItems: "baseline" }}
       >
         <div className="divRow" style={{ marginBottom: "3px", width: "100%" }}>
           <div className="textBoldWhite">{message.author.nickname}</div>
+          <div className="divRow" style={{ marginLeft: "5px" }}>
+            <div
+              className="textWhite"
+              style={{
+                fontSize: "11px",
+                color: "lightgray",
+                fontStyle: "italic",
+              }}
+            >
+              {timestampToChatDate(message.timestamp)}
+            </div>
+          </div>
+
           <div
-            className="textWhite"
+            className="divRow"
             style={{
               marginLeft: "5px",
-              fontSize: "11px",
-              color: "lightgray",
-              fontStyle: "italic",
+              backgroundColor: "lightgray",
+              borderRadius: "0.5rem/1rem",
+              display: "flex",
+              height: "100%",
             }}
           >
-            {timestampToChatDate(message.timestamp)}
+            <div
+              style={{
+                color: "grey",
+                fontSize: "12px",
+                height: "auto",
+              }}
+            >
+              {message.postedIn}
+            </div>
           </div>
         </div>
-        <div className="textWhite" onClick={onTextClicked}>
+        <div className="divColumn" style={{ width: "100%" }}>
+          {(message.attachedItems ?? []).length > 0 &&
+            message.attachedItems.map((i) => (
+              <AttachedItemHolder key={i.id} item={i} />
+            ))}
+        </div>
+
+        <div className="textWhite" onClick={onTextClicked} style={{ flex: 1 }}>
           {message.msg}
         </div>
       </div>
-      <div style={{ flex: 1 }} />
+
+      {(message.spawnedItems ?? []).length > 0 && (
+        <div
+          className="divRow"
+          style={{ justifyContent: "center", marginRight: "20px" }}
+        >
+          {(message.spawnedItems ?? []).map((i) => {
+            return <ItemMessageHolder item={i} key={i.id} message={message} />;
+          })}
+        </div>
+      )}
+
       <div
-        className="divRow"
-        style={{ justifyContent: "center", marginRight: "20px" }}
+        className="ressourceContainer"
+        style={{
+          height: messageDiv.current
+            ? messageDiv.current.offsetHeight + 15
+            : "",
+          width: `${
+            (message.ressources ? message.ressources.length : 1) * 115
+          }px`,
+        }}
       >
-        {(message.spawnedItems ?? []).map((i) => {
-          return <ItemMessageHolder item={i} key={i.id} message={message} />;
-        })}
-      </div>
-      <div className="divColumn">
         {(message.ressources ?? []).map((r) => {
           return (
             <VoteRessourceArrows

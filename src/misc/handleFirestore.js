@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import db, { storage } from "../firebase/fireInit";
+import { forArrayLength } from "./helperFuncs";
 
 async function getInfoFromRawId(rawId, afterFunc) {
   var fireInfo = null;
@@ -233,6 +234,21 @@ async function updateItemInUserList(
   });
 }
 
+async function updateLootItemInUserList(uid, item) {
+  const docRef = doc(db, "users/", uid);
+  await getDoc(docRef).then((snapshot) => {
+    let lootObj = snapshot.data().loot ?? {};
+
+    let newList = [...lootObj[item.type]];
+    let index = newList.map((i) => i.d).indexOf(item.id);
+    newList[index] = item;
+
+    lootObj[item.type] = newList;
+    console.log("lootObj  - ", lootObj);
+    updateDoc(docRef, { loot: lootObj });
+  });
+}
+
 function uploadImageToStorage(path, image, thenFunc) {
   const imageStorageRef = ref(storage, path + "/" + image.name);
   uploadBytes(imageStorageRef, image).then((snapshot) => {
@@ -296,6 +312,7 @@ async function getFireItems(local, uid, setFireItems) {
 }
 
 async function getCustomUserList(uid, collection, onCollectionRetrieved) {
+  console.log("getCustomUserList called");
   const userDocRef = doc(db, "users/", uid);
   await getDoc(userDocRef).then((doc) => {
     const list = doc.data()[collection];
@@ -318,7 +335,20 @@ async function getUserLoot(uid, onListRetrieved) {
   });
 }
 
+async function getBaseCollection(col, onRetrieved) {
+  const colRef = collection(db, col);
+  await getDocs(colRef).then((docs) => {
+    const list = [];
+    docs.forEach((doc) => {
+      list.push(doc.data());
+    });
+    onRetrieved(list);
+  });
+}
+
 export {
+  getBaseCollection,
+  updateLootItemInUserList,
   getUserLoot,
   addLootInFirestore,
   getCustomUserList,

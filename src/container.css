@@ -369,3 +369,10 @@
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
 }
+
+.ressourceContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-self: center;
+}

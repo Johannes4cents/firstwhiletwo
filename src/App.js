@@ -40,12 +40,6 @@ function App() {
   useScanChatMessages();
 
   useEffect(() => {
-    setInterval(() => {
-      checkMessagesForUpdate(displayedMessages);
-    }, 5000);
-  }, []);
-
-  useEffect(() => {
     var unsubscribe = () => {};
     if (activeStrains.length > 0) {
       unsubscribe = listenToChats();

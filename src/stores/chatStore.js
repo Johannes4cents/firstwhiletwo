@@ -41,6 +41,14 @@ const chatStore = create((set) => ({
       return { displayedMessages: dms.concat(newMessages) };
     });
   },
+  updateDisplayedMessage: (message) => {
+    set((state) => {
+      let index = state.displayedMessages.map((m) => m.id).indexOf(message.id);
+      let newList = [...state.displayedMessages];
+      newList[index] = message;
+      return { displayedMessages: newList };
+    });
+  },
   resetDisplayedMessages: () => {
     set(() => {
       return { displayedMessages: [] };
