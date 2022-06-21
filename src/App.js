@@ -19,6 +19,8 @@ import useScanChatMessages from "./scanTexts/useScanChatMessages";
 import AdminTriggerWordsPage from "./AdminStuff/AdminMakeTriggerWords/AdminTriggerWordsPage";
 import AdminCreateFireItems from "./AdminStuff/AdminLootStuff/AdminCreateFireItems";
 import triggerStore from "./stores/triggerStore";
+import { setDocInFirestore } from "./misc/handleFirestore";
+import { getRandomId } from "./misc/helperFuncs";
 
 function App() {
   const { info, setInfo } = userStore();

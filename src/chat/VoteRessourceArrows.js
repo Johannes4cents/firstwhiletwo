@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { incrementField } from "../misc/handleFirestore";
+import miscStore from "../stores/miscStore";
 
 const VoteRessourceArrows = ({
   ressource,
@@ -17,13 +18,14 @@ const VoteRessourceArrows = ({
   const [votes, setVotes] = useState({ up: 0, down: 0 });
   const [fireUpvotes, setFireUpvotes] = useState();
   const [fireDownvotes, setFireDownvotes] = useState();
-
+  const { updateLastActive } = miscStore();
   useEffect(() => {
     setFireUpvotes(message[`upvotes${indexObj[index]}`]);
     setFireDownvotes(message[`downvotes${indexObj[index]}`]);
   }, [message]);
 
   function vote(vote) {
+    updateLastActive();
     setVotes({ ...votes, [vote]: votes[vote] + 1 });
     let key = `${vote}vote${indexObj[index]}`;
     incrementField(message.collection, message.id, key, 1);

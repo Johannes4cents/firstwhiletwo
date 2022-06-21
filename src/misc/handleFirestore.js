@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import {
   increment,
   collection,
@@ -14,7 +13,6 @@ import {
 } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import db, { storage } from "../firebase/fireInit";
-import { forArrayLength } from "./helperFuncs";
 
 async function getInfoFromRawId(rawId, afterFunc) {
   var fireInfo = null;
@@ -346,7 +344,20 @@ async function getBaseCollection(col, onRetrieved) {
   });
 }
 
+function getCreateUserListener(col, identifier, operator, value, onRetrieved) {
+  const collectionRef = collection(db, col);
+  const q = query(collectionRef, where(identifier, operator, value));
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    var info = null;
+    snapshot.forEach((doc) => {
+      info = doc.data();
+    });
+    onRetrieved(unsubscribe, info);
+  });
+}
+
 export {
+  getCreateUserListener,
   getBaseCollection,
   updateLootItemInUserList,
   getUserLoot,

@@ -81,7 +81,11 @@ const StrainSuggestionHolder = ({ strain }) => {
       </div>
       <img
         style={{ marginRight: "5px" }}
-        src={hover.activeImage}
+        src={
+          myStrains.map((s) => s.id).includes(strain.id)
+            ? hover.activeImage
+            : "/images/icons/icon_strain_unselected.png"
+        }
         className="icon20"
       />
     </div>

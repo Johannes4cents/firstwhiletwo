@@ -1,16 +1,16 @@
 import { signInWithGoogle } from "../../firebase/fireAuth";
-import {
-  createNewUserInFirestore,
-  onInfoFound,
-} from "../../firebase/handleLogin";
 
-import { getInfoFromRawId } from "../../misc/handleFirestore";
+import {
+  getCreateUserListener,
+  getInfoFromRawId,
+  getQueryListener,
+} from "../../misc/handleFirestore";
 import userStore from "../../stores/userStore";
 import UserButton from "./UserButton";
 import AdminBar from "../../AdminStuff/AdminBar";
 
 const SignInBar = () => {
-  const { loggedIn, setInfo, info } = userStore();
+  const { loggedIn, setInfo } = userStore();
 
   // after successfully logging into the account
 
@@ -19,20 +19,38 @@ const SignInBar = () => {
     let foundInfo = JSON.parse(localStorage.getItem("info"));
     // if there is no localInfo try to get localInfo from firestore
     if (foundInfo == null) {
-      let rawId = user.providerData[0].uid;
-      getInfoFromRawId(rawId, (fireInfo) => {
-        if (fireInfo == null) createNewUserInFirestore(rawId, setInfo);
-        else onInfoFound(fireInfo, setInfo, user.uid);
-      });
+      getCreateUserListener(
+        "users",
+        "uid",
+        "==",
+        user.uid,
+        (unsubscribe, result) => {
+          if (result != null) {
+            setInfo(result);
+            unsubscribe();
+          }
+        }
+      );
     } else {
       // localInfo was found
-      onInfoFound(foundInfo, setInfo, user.uid);
+      setInfo(foundInfo);
     }
   }
 
   return (
     <div className="divRowColored" style={{ marginRight: "10px" }}>
-      <AdminBar />
+      <img
+        className="icon40"
+        style={{
+          marginRight: "25px",
+          alignSelf: "center",
+        }}
+        src="/images/drawable/icon_delete.png"
+        onClick={() => {
+          localStorage.clear();
+          setInfo(null);
+        }}
+      />
       {loggedIn && <UserButton />}
       {!loggedIn && (
         <div className="signInButtons">

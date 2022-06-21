@@ -22,9 +22,10 @@ const SelectUpvoteRessourceBar = () => {
     "weapons",
   ];
 
-  const { closeModal } = miscStore();
+  const { closeModal, updateLastActive } = miscStore();
   const { setMsgRessources } = chatStore();
   const selectRessource = (ressource) => {
+    updateLastActive();
     setMsgRessources([ressource]);
     closeModal();
   };

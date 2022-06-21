@@ -34,9 +34,7 @@ const ChatArea = () => {
       setActive((state) => {
         if (state != null) {
           let timeDiff = checkTimeDiff(state, dateToTimestamp(new Date()));
-          console.log("timeDiff is - ", timeDiff);
           if (timeDiff < 1) {
-            console.log("updating messages");
             setUpdateMessages((state) => {
               checkMessagesForUpdate(state, updateDisplayedMessage);
               return state;
