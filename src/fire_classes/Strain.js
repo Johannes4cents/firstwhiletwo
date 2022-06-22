@@ -1,30 +1,27 @@
 import {
   addItemToGeneralList,
   getGeneralList,
+  getSingleDocFromFirestore,
   setDocInFirestore,
 } from "../misc/handleFirestore";
 import { getRandomId } from "../misc/helperFuncs";
 
-export default function Strain(id, text) {
+export default function Strain(id, factions) {
   return {
     id,
-    text,
+    factions,
   };
 }
 
 function makeStrain(uid, strainText, addMyStrain, addRemoveStrainWord) {
-  getGeneralList("strainWords", (strains) => {
-    var strain = strains.find(
-      (s) => s.text.toLowerCase() == strainText.toLowerCase()
-    );
-    if (strain == null) {
-      strain = Strain(getRandomId(), strainText);
-      addItemToGeneralList("strainWords", strain);
-      setDocInFirestore("strains/", strain.id, strain);
+  getSingleDocFromFirestore("strains", strainText.toLowerCase(), (doc) => {
+    console.log("doc is - ", doc);
+    if (!doc) {
+      const strain = Strain(strainText.toLowerCase());
       addRemoveStrainWord(uid, strain);
+      addMyStrain(uid, strain);
+      setDocInFirestore("strains/", strain.id, strain);
     }
-    addMyStrain(uid, strain);
-    setDocInFirestore("users/" + uid + "/myStrains", strain.id, strain);
   });
 }
 

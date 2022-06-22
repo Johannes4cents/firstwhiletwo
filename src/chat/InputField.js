@@ -22,10 +22,11 @@ const InputField = () => {
   } = chatStore();
   const { updateLootItem } = listsStore();
   const { setInputHeight, updateLastActive } = miscStore();
-  const { info } = userStore();
+  const { info, loggedIn } = userStore();
   const [content, setContent] = useState("");
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
+  const [sendingPossible, setSendingPossible] = useState(false);
 
   const onEnter = (e) => {
     if (e.key == "Enter" && !e.shiftKey && content.length > 0) {
@@ -43,8 +44,15 @@ const InputField = () => {
     var attachCheck = false;
     if (attachedItem)
       attachCheck = contentArray.includes(attachedItem.connectedString);
+
+    //make ressourceObject
+    const resObj = {};
+    let res = attachCheck ? selectedMsgRessources : ["cash"];
+    res.map((r) => {
+      resObj[r] = { upvotes: 0, downvotes: 0 };
+    });
     const msg = ChatMessage(
-      attachCheck ? selectedMsgRessources : ["cash"],
+      resObj,
       activeChats,
       content,
       {
@@ -113,6 +121,7 @@ const InputField = () => {
             setFocusColor("rgb(82, 82, 82)");
           }}
           ref={inputWidth}
+          disabled={!loggedIn}
           onKeyDown={onEnter}
           type={"textarea"}
           className="inputField"
@@ -129,7 +138,7 @@ const InputField = () => {
           }}
         />
       </div>
-      <InputOptionsBar height={height} />
+      {sendingPossible && <InputOptionsBar height={height} />}
     </div>
   );
 };

@@ -10,6 +10,7 @@ import {
   setDoc,
   deleteDoc,
   onSnapshot,
+  collectionGroup,
 } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
 import db, { storage } from "../firebase/fireInit";
@@ -30,6 +31,28 @@ async function getSingleDocFromFirestore(collection, docId, thenFunc, payload) {
   let docRef = doc(db, collection, docId);
   const result = await getDoc(docRef);
   thenFunc(result.data(), payload);
+}
+
+async function queryCollectionGroup(group, field, operator, value) {
+  const colGroupRef = collectionGroup(db, group);
+  let q = query(colGroupRef, where(field, operator, value));
+  const snapshot = await getDocs(q);
+  let docs = [];
+  snapshot.forEach((d) => {
+    docs.push(d.data());
+  });
+  return docs;
+}
+
+async function queryCollection(collection, field, operator, value) {
+  const colRef = collection(db, collection);
+  let q = query(colRef, where(field, operator, value));
+  const snapshot = await getDocs(q);
+  let docs = [];
+  snapshot.forEach((d) => {
+    docs.push(d.data());
+  });
+  return docs;
 }
 
 async function getCollectionFromUserFirestore(
@@ -357,6 +380,8 @@ function getCreateUserListener(col, identifier, operator, value, onRetrieved) {
 }
 
 export {
+  queryCollectionGroup,
+  queryCollection,
   getCreateUserListener,
   getBaseCollection,
   updateLootItemInUserList,

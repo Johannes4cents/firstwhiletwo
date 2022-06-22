@@ -1,34 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { incrementField } from "../misc/handleFirestore";
 import miscStore from "../stores/miscStore";
+import userStore from "../stores/userStore";
 
 const VoteRessourceArrows = ({
   ressource,
   hover,
   setHover,
   message,
-  index,
+  dbVotes,
 }) => {
-  const indexObj = {
-    0: "First",
-    1: "Second",
-    2: "Third",
-  };
   const [voteHover, setVoteHover] = useState({ up: false, down: false });
-  const [votes, setVotes] = useState({ up: 0, down: 0 });
-  const [fireUpvotes, setFireUpvotes] = useState();
-  const [fireDownvotes, setFireDownvotes] = useState();
-  const { updateLastActive } = miscStore();
+  const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 });
+  const [firevotes, setFireVotes] = useState({ upvotes: 0, downvotes: 0 });
+
+  const { updateLastActive, addToUpdateList } = miscStore();
+  const { info } = userStore();
+
   useEffect(() => {
-    setFireUpvotes(message[`upvotes${indexObj[index]}`]);
-    setFireDownvotes(message[`downvotes${indexObj[index]}`]);
+    setFireVotes(dbVotes);
   }, [message]);
+
+  useEffect(() => {
+    let interval = setInterval(() => {
+      if (votes.upvotes != 0 || votes.downvotes != 0) {
+        incrementField();
+      }
+    }, 5000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   function vote(vote) {
     updateLastActive();
-    setVotes({ ...votes, [vote]: votes[vote] + 1 });
-    let key = `${vote}vote${indexObj[index]}`;
-    incrementField(message.collection, message.id, key, 1);
+    setVotes((state) => {
+      let newVotes = { ...votes, [vote]: votes[vote] + 1 };
+      addToUpdateList(info.uid, {
+        id: message.id,
+        path: message.path,
+        votes: newVotes,
+        ressource,
+      });
+    });
   }
   return (
     <div className="divColumn">
@@ -37,7 +51,12 @@ const VoteRessourceArrows = ({
           className="textBoldWhite"
           style={{ borderBottom: "1px solid grey" }}
         >
-          {(fireUpvotes - fireDownvotes - votes.down + votes.up).toString()}
+          {(
+            firevotes.upvotes -
+            firevotes.downvotes -
+            votes.downvotes +
+            votes.upvotes
+          ).toString()}
         </div>
       </div>
       <div className="divRow">
@@ -68,7 +87,7 @@ const VoteRessourceArrows = ({
         >
           <img src="/images/icons/icon_downvote.png" className="icon20" />
           <div className="textBoldWhite">
-            {ressource && (fireDownvotes + votes.down).toString()}
+            {ressource && (firevotes.downvotes + votes.downvotes).toString()}
           </div>
         </div>
         <img
@@ -110,7 +129,7 @@ const VoteRessourceArrows = ({
             className="textBoldWhite"
             style={{ backgroundColor: "4f4f4f", borderRadius: "2px" }}
           >
-            {ressource && (fireUpvotes + votes.up).toString()}
+            {ressource && (firevotes.upvotes + votes.upvotes).toString()}
           </div>
           <img src="/images/icons/icon_upvote.png" className="icon20" />
         </div>

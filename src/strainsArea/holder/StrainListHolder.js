@@ -71,7 +71,7 @@ const StrainListHolder = ({ strain }) => {
           color: hover.textColor,
         }}
       >
-        {strain.text}
+        {strain.id}
       </div>
       <img
         onClick={onClick}

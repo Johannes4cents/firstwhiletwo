@@ -2,23 +2,32 @@ import React, { useEffect, useState } from "react";
 import userStore from "../stores/userStore";
 import { useNavigate } from "react-router";
 import listsStore from "../stores/listsStore";
-import { dateToTimestamp, objectToArray } from "../misc/helperFuncs";
+import { dateToTimestamp, objectToArray, timeToMs } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import readStore from "../stores/readStore";
+import { queryCollectionGroup } from "../misc/handleFirestore";
 
 const AdminBar = () => {
   const { info, setInfo } = userStore();
 
   const { triggerWords, clearRecentlyTyped } = readStore();
   const { displayedMessages } = chatStore();
-  const { fireFlags, statements } = listsStore();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { fireFlags, statements, myStrains } = listsStore();
   const navigate = useNavigate();
 
   const checkStuff = () => {
-    console.log("fireFlags - ", fireFlags);
-    console.log("statements - ", statements);
-    console.log("displayedMessages are - ", displayedMessages);
+    console.log("myStrains - ", myStrains);
+    console.log("info - ", info);
+  };
+
+  const queryTest = () => {
+    const twoDays = new Date().getTime() + timeToMs(0, 0, 0, 2);
+    console.log("twoDays - ", twoDays);
+    queryCollectionGroup("messages", "timestamp.msTime", ">", twoDays).then(
+      (docs) => {
+        console.log("docs are - ", docs);
+      }
+    );
   };
 
   const clearStorage = () => {
@@ -26,74 +35,29 @@ const AdminBar = () => {
     setInfo(null);
   };
 
-  useEffect(() => {
-    if (info != null) {
-      if (info.admin) setIsAdmin(true);
-      else setIsAdmin(false);
-    } else setIsAdmin(false);
-  }, [info]);
-
   return (
     <div className="divRow">
-      {isAdmin && (
-        <div>
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/icons/icon_word_cat.png"
-            onClick={(e) => navigate("create_word_cats")}
-          />
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/icons/icon_loot.png"
-            onClick={(e) => navigate("create_fire_items")}
-          />
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/pageFlags/icon_flag.png"
-            onClick={(e) => navigate("create_flags")}
-          />
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/drawable/event_shield.png"
-            onClick={(e) => navigate("admin")}
-          />
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/drawable/icon_event.png"
-            onClick={checkStuff}
-          />
+      <div>
+        <img
+          className="icon40"
+          style={{
+            marginRight: "25px",
+            alignSelf: "center",
+          }}
+          src="/images/drawable/icon_event.png"
+          onClick={checkStuff}
+        />
 
-          <img
-            className="icon40"
-            style={{
-              marginRight: "25px",
-              alignSelf: "center",
-            }}
-            src="/images/drawable/icon_delete.png"
-            onClick={clearStorage}
-          />
-        </div>
-      )}
+        <img
+          className="icon40"
+          style={{
+            marginRight: "25px",
+            alignSelf: "center",
+          }}
+          src="/images/drawable/icon_delete.png"
+          onClick={clearStorage}
+        />
+      </div>
     </div>
   );
 };

@@ -77,7 +77,7 @@ const StrainSuggestionHolder = ({ strain }) => {
           color: hover.textColor,
         }}
       >
-        {strain.text}
+        {strain.id}
       </div>
       <img
         style={{ marginRight: "5px" }}

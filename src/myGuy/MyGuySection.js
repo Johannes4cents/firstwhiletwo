@@ -16,6 +16,8 @@ const MyGuySection = () => {
       style={{
         flex: 1,
         width: "100%",
+        overflow: "auto",
+        overflowX: "hidden",
       }}
     >
       <div

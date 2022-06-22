@@ -2,7 +2,7 @@ import { getDownloadURL, ref } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
 import { useSpring } from "react-spring";
 import { storage } from "../../firebase/fireInit";
-import { timestampToChatDate } from "../../misc/helperFuncs";
+import { objectToArray, timestampToChatDate } from "../../misc/helperFuncs";
 import VoteRessourceArrows from "../VoteRessourceArrows";
 import ItemMessageHolder from "./ItemMessageHolder";
 import { getConnectedStringFromMessage } from "../../scanTexts/handleLoot";
@@ -122,15 +122,15 @@ const MessageHolder = ({ message }) => {
           }px`,
         }}
       >
-        {(message.ressources ?? []).map((r) => {
+        {objectToArray(message.ressources).map((r) => {
           return (
             <VoteRessourceArrows
-              key={r.ressource}
-              ressource={r.ressource}
+              key={r.key}
+              dbVotes={r.value}
+              ressource={r.key}
               message={message}
               hover={hover}
               setHover={setHover}
-              index={r.index}
             />
           );
         })}

@@ -51,6 +51,33 @@ const miscStore = create((set) => ({
       return { lastActive: dateToTimestamp(new Date()) };
     });
   },
+  toUpdateStuff: { votes: [] },
+  setToUpdateStuff: (uid, stuff) => {
+    localStorage.setItem(uid + "toUpdateStuff", JSON.stringify(stuff));
+    set((state) => {
+      return { toUpdateStuff: stuff };
+    });
+  },
+  addToUpdateList: (uid, list, item) => {
+    set((state) => {
+      let newList = [...state.toUpdateStuff[list]];
+      let index = newList.map((i) => i.id).indexOf(item.id);
+      newList[index] = item;
+      let newStuff = {
+        ...state.toUpdateStuff,
+        [list]: newList,
+      };
+      localStorage.setItem(uid + "toUpdateStuff", JSON.stringify(list));
+      return { toUpdateStuff: newStuff };
+    });
+  },
+  clearUpdateList: (uid, list) => {
+    set((state) => {
+      let newStuff = { ...state.toUpdateStuff, [list]: [] };
+      localStorage.setItem(uid + "toUpdateStuff", JSON.stringify(list));
+      return { toUpdateStuff: newStuff };
+    });
+  },
 }));
 
 export default miscStore;

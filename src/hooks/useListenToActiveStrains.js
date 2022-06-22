@@ -22,7 +22,7 @@ const useListenToActiveStrains = (subscriptions, setSubscriptions) => {
     }
 
     const strains = activeStrains
-      .map((s) => s.text)
+      .map((s) => s.id)
       .sort((a, b) => (a > b ? 1 : -1));
 
     setActiveChats(getChatList(strains));

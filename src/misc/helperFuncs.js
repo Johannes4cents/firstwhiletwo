@@ -65,6 +65,10 @@ function minutesToSeconds(minutes) {
   return minutes / 0.016;
 }
 
+function msTimeToTimestamp(msTime) {
+  return dateToTimestamp(new Date(msTime));
+}
+
 function dateToTimestamp(date) {
   const dateArray = date.toString().split(" ");
 
@@ -265,7 +269,12 @@ function getNumberInBetweenRange(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+function timeToMs(seconds = 0, minutes = 0, hours = 0, days = 0) {
+  return seconds * 1000 + minutes * 60000 + hours * 3600000 + days * 8640000;
+}
+
 export {
+  timeToMs,
   getNumberInBetweenRange,
   capitalize,
   objectsListToIdList,
@@ -288,4 +297,5 @@ export {
   forArrayLength,
   objectToArray,
   updateItemInStorageAndState,
+  msTimeToTimestamp,
 };

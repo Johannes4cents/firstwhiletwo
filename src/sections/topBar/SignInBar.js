@@ -39,18 +39,7 @@ const SignInBar = () => {
 
   return (
     <div className="divRowColored" style={{ marginRight: "10px" }}>
-      <img
-        className="icon40"
-        style={{
-          marginRight: "25px",
-          alignSelf: "center",
-        }}
-        src="/images/drawable/icon_delete.png"
-        onClick={() => {
-          localStorage.clear();
-          setInfo(null);
-        }}
-      />
+      <AdminBar />
       {loggedIn && <UserButton />}
       {!loggedIn && (
         <div className="signInButtons">
