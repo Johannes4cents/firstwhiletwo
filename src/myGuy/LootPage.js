@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes } from "react-router-dom";
+import { makeDescriptionField } from "../misc/helperFuncs";
 import listsStore from "../stores/listsStore";
 import DescriptionsBar from "./DescriptionsBar";
 import ItemAttachedHolder from "./ItemAttachedHolder";
@@ -8,7 +9,7 @@ import SubOptionsBar from "./SubOptionsBar";
 
 const LootPage = () => {
   const catList = ["Items", "Spells", "events", "creatures", "buildings"];
-  const [sorting, setSorting] = useState({ field: "", ascending: true });
+
   const [selectedLootCat, setSelectedLootCat] = useState("Items");
   const [displayedItems, setDisplayedItems] = useState([]);
   const { loot } = listsStore();
@@ -19,15 +20,6 @@ const LootPage = () => {
     );
   }, [selectedLootCat, loot]);
 
-  const descriptionFields = [
-    {
-      text: "Locked",
-      width: "45px",
-      textSize: "11px",
-    },
-    { text: "Name", flex: 1 },
-  ];
-
   return (
     <div className="sectionBg">
       <SubOptionsBar
@@ -36,9 +28,13 @@ const LootPage = () => {
         selectedCat={selectedLootCat}
       />
       <DescriptionsBar
-        fields={descriptionFields}
-        sorting={sorting}
-        setSorting={setSorting}
+        sortingList={displayedItems}
+        setSortingList={setDisplayedItems}
+        fields={[
+          makeDescriptionField("Locked", null, "45px"),
+          makeDescriptionField("Name", null, null, 1),
+        ]}
+        startField={"name"}
       />
       <div className="divColumn" style={{ overflow: "auto", width: "100%" }}>
         {displayedItems.map((i) =>

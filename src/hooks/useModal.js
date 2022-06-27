@@ -29,6 +29,7 @@ const useModal = ({
                 left: `${openPos.x - offsetX}px`,
                 top: `${openPos.y - offsetY}px`,
                 zIndex: 1,
+                backgroundColor: "#00000000",
               }}
             >
               {extraOpen && modalContent}

@@ -72,6 +72,25 @@ function sendMessageToTurfChats(chat, msg) {
   setDocInFirestore("turfChats/" + chat + "/messages", msg.id, msg);
 }
 
+function checkCorrectChatDepth(levels, activeStrains) {
+  let activeAmount = activeStrains.length;
+  let schools = ["top_left", "bottom_left", "bottom_left", "bottom_right"];
+  var state = true;
+  function checkSchools(school) {
+    let amount = activeStrains.filter((s) => s.school == school).length;
+    if (levels[school].depth > activeAmount) {
+      if (amount < levels[school].depth && amount != 0) state = false;
+    }
+  }
+
+  forArrayLength(schools, (school) => {
+    const schoolCheck = checkSchools(school);
+    if (schoolCheck) return schoolCheck;
+  });
+
+  return activeAmount > 0 ? state : false;
+}
+
 function getChatList(activeStrains) {
   const constellations = [];
   const chats = [];
@@ -96,6 +115,7 @@ function getChatList(activeStrains) {
 }
 
 export {
+  checkCorrectChatDepth,
   getChatListener,
   checkIfTurfChatExists,
   getChatList,

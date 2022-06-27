@@ -1,13 +1,9 @@
 import { signInWithGoogle } from "../../firebase/fireAuth";
+import AdminBar from "../../misc/elements/AdminBar";
 
-import {
-  getCreateUserListener,
-  getInfoFromRawId,
-  getQueryListener,
-} from "../../misc/handleFirestore";
+import { getCreateUserListener } from "../../misc/handleFirestore";
 import userStore from "../../stores/userStore";
 import UserButton from "./UserButton";
-import AdminBar from "../../AdminStuff/AdminBar";
 
 const SignInBar = () => {
   const { loggedIn, setInfo } = userStore();

@@ -1,11 +1,9 @@
 import React from "react";
-import changeInfoObject from "../fixStuff/changeInfoObject";
 import {
   getCollectionFromUserFirestore,
-  getGeneralList,
   getCustomUserList,
   getUserLoot,
-  getFireItems,
+  getGeneralStuff,
   getBaseCollection,
 } from "../misc/handleFirestore";
 import { updateTimeCheck } from "../misc/handleUpdates";
@@ -18,14 +16,14 @@ const useFillStatesOnEnter = () => {
   const {
     setMyStrains,
     setActiveStrains,
-    setStrainWords,
     setLoot,
     setFireFlags,
+    setSuggestedStrains,
   } = listsStore();
 
   const { setMinMaxUpvotes, setShowPeople } = settingsStore();
   const { setLastUpdates } = miscStore();
-  const { setFireItems, setScannedMessages } = readStore();
+  const { setFireStuff, setScannedMessages } = readStore();
 
   function getCollectionFromUser(uid, collection, setFunc) {
     const localList = JSON.parse(localStorage.getItem(uid + collection));
@@ -70,16 +68,11 @@ const useFillStatesOnEnter = () => {
     if (localList) setFunc(uid, localList);
   }
 
-  function generalListToState(listName, onRetrievedFunc) {
-    getGeneralList(listName, onRetrievedFunc);
-  }
-
   function fillStates(uid) {
     getCollectionFromUser(uid, "myStrains", setMyStrains);
     storageListToState(uid, "activeStrains", setActiveStrains);
     storageListToState(uid, "scannedMessages", setScannedMessages);
     storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
-    generalListToState("strainWords", setStrainWords);
     getMainCollection(uid, "fireFlags", setFireFlags, 24 * 60);
 
     // loot
@@ -90,9 +83,9 @@ const useFillStatesOnEnter = () => {
         setLoot(uid, list);
       });
 
-    // fireItems
+    // generalStuff
     let fireitems = JSON.parse(localStorage.getItem(uid + "fireItems"));
-    getFireItems(fireitems, uid, setFireItems);
+    getGeneralStuff(fireitems, uid, setFireStuff, setSuggestedStrains);
 
     //
     let showPeopleFilter = JSON.parse(localStorage.getItem(uid + "showPeople"));

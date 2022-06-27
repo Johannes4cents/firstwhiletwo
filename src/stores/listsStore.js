@@ -2,9 +2,7 @@ import React from "react";
 import create from "zustand";
 import { docsToLoot } from "../fire_classes/Loot";
 import {
-  addItemToUserList,
   addLootInFirestore,
-  updateItemInUserList,
   updateLootItemInUserList,
 } from "../misc/handleFirestore";
 import { forArrayLength } from "../misc/helperFuncs";
@@ -50,21 +48,21 @@ const listsStore = create((set) => ({
       return { dismissedStrains: newList };
     });
   },
-  strainWords: [],
-  setStrainWords: (list) => {
+  suggestedStrains: [],
+  setSuggestedStrains: (list) => {
     set((state) => {
-      return { strainWords: list };
+      return { suggestedStrains: list };
     });
   },
-  addRemoveStrainWord: (uid, strain) => {
+  changeSuggestedStrains: (uid, strain) => {
     set((state) => {
       var list = [];
-      if (!state.strainWords.map((s) => s.id).includes(strain.id))
-        list = [...state.strainWords, strain];
-      else list = state.strainWords.filter((s) => s.id != strain.id);
-      localStorage.setItem(uid + "strainWords", JSON.stringify(list));
+      if (!state.suggestedStrains.map((s) => s.id).includes(strain.id))
+        list = [...state.suggestedStrains, strain];
+      else list = state.suggestedStrains.filter((s) => s.id != strain.id);
+      localStorage.setItem(uid + "suggestedStrains", JSON.stringify(list));
       return {
-        strainWords: list.sort((a, b) => (a.text > b.text ? 1 : -1)),
+        suggestedStrains: list.sort((a, b) => (a.text > b.text ? 1 : -1)),
       };
     });
   },
@@ -106,8 +104,10 @@ const listsStore = create((set) => ({
   addMyStrain: (uid, strain) => {
     set((state) => {
       const newList = [...state.myStrains, strain];
+      const activeList = [...state.activeStrains, strain];
       localStorage.setItem(uid + "myStrains", JSON.stringify(newList));
-      return { myStrains: newList };
+      localStorage.setItem(uid + "activeStrains", JSON.stringify(activeList));
+      return { myStrains: newList, activeStrains: activeList };
     });
   },
   removeMyStrain: (uid, strain) => {

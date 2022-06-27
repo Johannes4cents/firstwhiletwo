@@ -13,7 +13,9 @@ import {
   collectionGroup,
 } from "firebase/firestore";
 import { ref, uploadBytes } from "firebase/storage";
-import db, { storage } from "../firebase/fireInit";
+import db, { storage, functions } from "../firebase/fireInit";
+import { httpsCallable } from "firebase/functions";
+import { forArrayLength } from "./helperFuncs";
 
 async function getInfoFromRawId(rawId, afterFunc) {
   var fireInfo = null;
@@ -206,9 +208,9 @@ async function addItemToUserList(uid, list, item) {
 async function addLootInFirestore(uid, item) {
   const docRef = doc(db, "users/", uid);
   await getDoc(docRef).then((snapshot) => {
-    let lootObject = { ...snapshot.data()["loot"] };
-    lootObject[item.type].push(item);
-    updateDoc(docRef, { loot: lootObject });
+    let lootArray = snapshot.data()["loot"];
+    lootArray.push(item);
+    updateDoc(docRef, { loot: lootArray });
   });
 }
 
@@ -300,15 +302,37 @@ function getSuggestedStrains(category) {
   }
 }
 
-async function getFireItems(local, uid, setFireItems) {
+async function getGeneralStuff(local, uid, setFireItems, setSuggestedStrains) {
   let localItems = local ?? [];
   const lootDocRef = doc(db, "general/", "fireItems");
+  const listsDocRef = doc(db, "general", "lists");
+  const listsDoc = await getDoc(listsDocRef);
   const lootDoc = await getDoc(lootDocRef);
   const items = lootDoc.data()["items"] ?? [];
   const spells = lootDoc.data()["spells"] ?? [];
   const creatures = lootDoc.data()["creatures"] ?? [];
   const buildings = lootDoc.data()["buildings"] ?? [];
   const events = lootDoc.data()["events"] ?? [];
+
+  // get resWords and transform them to multiple string objects
+  const resWords = listsDoc.data()["resWords"];
+  const allStrings = [];
+  forArrayLength(resWords, (word) => {
+    let combinedList = word.texts.english.concat(word.texts.german);
+    forArrayLength(combinedList, (string) => {
+      let stringObj = {
+        string,
+        weight: word.weight,
+        id: word.id,
+        maxOccurences: word.maxOccurences,
+        ressource: word.ressource,
+      };
+      allStrings.push(stringObj);
+    });
+  });
+
+  // setSuggestedStrains
+  setSuggestedStrains(uid, listsDoc.data()["strainList"]);
 
   if (localItems.length < 1) {
     await getCustomUserList(uid, "fireItems", (firestoreItems) => {
@@ -325,10 +349,10 @@ async function getFireItems(local, uid, setFireItems) {
         let item = list[i];
         if (!localIds.includes(item.id)) localItems.push(item);
       }
-      setFireItems(uid, localItems);
+      setFireItems(uid, localItems, allStrings);
     });
   } else {
-    setFireItems(uid, localItems);
+    setFireItems(uid, localItems, allStrings);
   }
 }
 
@@ -345,14 +369,11 @@ async function getCustomUserList(uid, collection, onCollectionRetrieved) {
 async function getUserLoot(uid, onListRetrieved) {
   const userDocRef = doc(db, "users/", uid);
   await getDoc(userDocRef).then((doc) => {
-    const listObj = doc.data()["loot"];
-    let list = (listObj["items"] ?? [])
-      .concat(listObj["spells"] ?? [])
-      .concat(listObj["buildings"] ?? [])
-      .concat(listObj["events"] ?? [])
-      .concat(listObj["creatures"] ?? []);
-    onListRetrieved(list ?? []);
-    return list ?? [];
+    console.log("users - ", doc.data());
+    const lootList = doc.data()["loot"];
+
+    onListRetrieved(lootList ?? []);
+    return lootList ?? [];
   });
 }
 
@@ -379,7 +400,19 @@ function getCreateUserListener(col, identifier, operator, value, onRetrieved) {
   });
 }
 
+function cloudFunc(name, data, onResult, onError) {
+  const func = httpsCallable(functions, name);
+  func(data)
+    .then((result) => {
+      onResult(result);
+    })
+    .catch((error) => {
+      onError(error);
+    });
+}
+
 export {
+  cloudFunc,
   queryCollectionGroup,
   queryCollection,
   getCreateUserListener,
@@ -388,7 +421,7 @@ export {
   getUserLoot,
   addLootInFirestore,
   getCustomUserList,
-  getFireItems,
+  getGeneralStuff,
   getSuggestedStrains,
   addCustomItemToUserList,
   updateItemInUserList,

@@ -6,7 +6,7 @@ import { showImagePreviewWithFileReader } from "../helperFuncs";
 
 const PickImageImage = ({
   imgUrl,
-  imgSize,
+  imgSize = "icon20",
   storagePath,
   changeable = true,
   onImageChanged,
@@ -57,14 +57,14 @@ const PickImageImage = ({
         />
       </form>
       <img
-        style={{ maxHeight: "25px", maxWidth: "25px" }}
+        className={imgSize}
+        style={{ maxHeight: "25px", maxWidth: "25px", objectFit: "contain" }}
         ref={image}
         id="target"
         onClick={() => {
           inputFile.current.click();
         }}
         src={"/images/drawable/icon_question_mark.png"}
-        className="icon25"
       />
     </div>
   );

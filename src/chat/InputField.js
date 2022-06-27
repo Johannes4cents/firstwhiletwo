@@ -6,7 +6,7 @@ import chatStore from "../stores/chatStore";
 import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import userStore from "../stores/userStore";
-import { sendMessageToTurfChats } from "./handleChat";
+import { checkCorrectChatDepth, sendMessageToTurfChats } from "./handleChat";
 import InputOptionsBar from "./InputOptionsBar";
 
 const InputField = () => {
@@ -20,13 +20,27 @@ const InputField = () => {
     attachedItem,
     setAttachedItem,
   } = chatStore();
-  const { updateLootItem } = listsStore();
+  const { updateLootItem, activeStrains } = listsStore();
   const { setInputHeight, updateLastActive } = miscStore();
   const { info, loggedIn } = userStore();
   const [content, setContent] = useState("");
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
-  const [sendingPossible, setSendingPossible] = useState(false);
+  const [sendingPossible, setSendingPossible] = useState({
+    state: false,
+    loggedIn: false,
+  });
+
+  useEffect(() => {
+    if (info != null) {
+      let depthCheck = checkCorrectChatDepth(info.stats.levels, activeStrains);
+      setSendingPossible({ ...sendingPossible, state: depthCheck });
+    }
+  }, [activeStrains, info]);
+
+  useEffect(() => {
+    setSendingPossible({ state: loggedIn, loggedIn });
+  }, [loggedIn]);
 
   const onEnter = (e) => {
     if (e.key == "Enter" && !e.shiftKey && content.length > 0) {
@@ -63,7 +77,6 @@ const InputField = () => {
       activeChat,
       attachCheck ? [attachedItem.toObj()] : []
     );
-    console.log("msg is - ", msg);
     if (attachCheck) {
       attachedItem.attached = msg.id;
       updateLootItem(info.uid, attachedItem);
@@ -90,7 +103,7 @@ const InputField = () => {
         width: "100%",
         marginBottom: "5px",
         marginTop: "10px",
-        backgroundColor: focusColor,
+        backgroundColor: sendingPossible.state ? focusColor : "#6f6f6f",
         borderRadius: "3em/5em",
       }}
     >
@@ -120,8 +133,16 @@ const InputField = () => {
           onBlur={() => {
             setFocusColor("rgb(82, 82, 82)");
           }}
+          id="chatInput"
           ref={inputWidth}
-          disabled={!loggedIn}
+          disabled={!sendingPossible.state}
+          placeholder={
+            !sendingPossible.state
+              ? sendingPossible.loggedIn
+                ? "Wrong strains for your level"
+                : "Sign in to chat"
+              : ""
+          }
           onKeyDown={onEnter}
           type={"textarea"}
           className="inputField"
@@ -130,7 +151,7 @@ const InputField = () => {
             height,
             textAlign: "center",
             overflow: "hidden",
-            backgroundColor: focusColor,
+            backgroundColor: sendingPossible.state ? focusColor : "#6f6f6f",
           }}
           value={content}
           onChange={(e) => {

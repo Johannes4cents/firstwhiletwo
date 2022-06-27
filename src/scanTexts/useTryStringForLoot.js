@@ -39,6 +39,7 @@ function useTryStringForLoot(onRessourcesFound, onFireItemFound) {
   }
 
   function findFireItem(string) {
+    console.log("string - ", string);
     let firstChar = umlautFix(string[0].toLowerCase());
     let lootStrings = firstChar ? triggerWords[firstChar].loot : [];
 
@@ -128,9 +129,9 @@ function useTryStringForLoot(onRessourcesFound, onFireItemFound) {
     return obj;
   }
 
-  function tryStringForRessource(string, fromReading) {
+  function tryStringForRessource(string, baseChance = 100) {
     if (!recentlyTyped.includes(string)) {
-      const bagFound = fromReading ? testChance(10, 100) : testChance(10, 100);
+      const bagFound = testChance(10, baseChance);
       if (bagFound) {
         let ressource = getRightRessource(tryForRessource(getModificator()));
         if (ressource != null) onRessourcesFound(ressource);

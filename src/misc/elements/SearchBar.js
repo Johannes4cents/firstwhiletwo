@@ -7,6 +7,8 @@ const SearchBar = ({
   onlyTitle,
   setOnlyTitle,
   resetSearchTrigger,
+  noSpace,
+  maxLength,
   onEnter = () => {},
 }) => {
   const [search, setSearch] = useState("");
@@ -14,6 +16,15 @@ const SearchBar = ({
   useEffect(() => {
     if (resetSearchTrigger != null) setSearch("");
   }, [resetSearchTrigger]);
+
+  const onInput = (e) => {
+    if (
+      (noSpace && e.target.value.includes(" ")) ||
+      (maxLength && e.target.value.length > maxLength)
+    )
+      return;
+    setSearch(e.target.value);
+  };
 
   useEffect(() => {
     onSearchFunc(search);
@@ -39,7 +50,7 @@ const SearchBar = ({
         className="textBlackCenter"
         value={search}
         placeholder="search"
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={onInput}
       />
 
       <img src="/images/drawable/icon_search.png" className="icon25" />

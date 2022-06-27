@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { makeStrain } from "../../fire_classes/Strain";
+import { toast } from "react-toastify";
 import listsStore from "../../stores/listsStore";
 import userStore from "../../stores/userStore";
+import { addItemToUserList, cloudFunc } from "../handleFirestore";
+import PickSchoolButton from "./PickSchoolButton";
+
 import SearchBar from "./SearchBar";
 
 const SearchStrainsBar = ({ displayedStrains, setDisplayedStrains }) => {
-  const { addMyStrain, strainWords, addRemoveStrainWord } = listsStore();
-  const { info } = userStore();
+  const { addMyStrain, suggestedStrains } = listsStore();
+  const [pickedSchool, setPickedSchool] = useState();
+  const { info, changeChips } = userStore();
   const [strainInput, setStrainInput] = useState("");
   const [resetSearchTrigger, setResetSearchTrigger] = useState(null);
 
@@ -14,23 +18,54 @@ const SearchStrainsBar = ({ displayedStrains, setDisplayedStrains }) => {
     setStrainInput(result);
     if (result.length > 0)
       setDisplayedStrains(
-        strainWords.filter((s) =>
+        suggestedStrains.filter((s) =>
           s.text.toLowerCase().startsWith(result.toLowerCase())
         )
       );
-    else setDisplayedStrains(strainWords);
+    else setDisplayedStrains(suggestedStrains);
   };
 
   const makeNewStrain = () => {
+    function afterUpload(data) {
+      toast(`Strain "${data.data.strain}" injected into firstwhile`, {
+        position: "top-left",
+        autoClose: "2000",
+      });
+
+      if (data.data.strain) {
+        addMyStrain(info.uid, data.data.strain);
+        addItemToUserList(info.uid, "myStrains", data.data.strain);
+        changeChips("strains", -10);
+      }
+    }
+
+    function onError(error) {
+      toast(error.message, {
+        position: "top-left",
+        autoClose: "1000",
+        pauseOnHover: false,
+      });
+    }
+
     if (displayedStrains.length < 1 && strainInput.length > 0) {
-      makeStrain(info.uid, strainInput, addMyStrain, addRemoveStrainWord);
+      cloudFunc(
+        "addNewStrain",
+        {
+          school: pickedSchool.id,
+          strain: strainInput.toLocaleLowerCase(),
+        },
+        afterUpload,
+        onError
+      );
     }
   };
 
   const onInputEnter = (e) => {
     if (e.key == "Enter") {
-      makeNewStrain();
-      setStrainInput("");
+      if (info.chips.strains >= 10) {
+        makeNewStrain();
+        setStrainInput("");
+      } else toast("Not enough chips to create a new strain");
       setResetSearchTrigger({});
     }
   };
@@ -38,18 +73,20 @@ const SearchStrainsBar = ({ displayedStrains, setDisplayedStrains }) => {
   return (
     <div className="divRow">
       <SearchBar
+        noSpace={true}
+        maxLength={20}
         onSearchFunc={onSearchFunc}
         onEnter={onInputEnter}
         resetSearchTrigger={resetSearchTrigger}
       />
-      <img
-        src={
-          displayedStrains.length < 1 && strainInput.length > 0
-            ? "/images/icons/icon_strain_green.png"
-            : "/images/icons/icon_strain_unselected.png"
-        }
-        className="icon20"
-      />
+      {displayedStrains.length < 1 && strainInput.length > 0 ? (
+        <PickSchoolButton
+          pickedSchool={pickedSchool}
+          setPickedSchool={setPickedSchool}
+        />
+      ) : (
+        <div className="divRow" style={{ width: "20px" }} />
+      )}
     </div>
   );
 };

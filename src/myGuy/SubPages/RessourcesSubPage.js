@@ -1,26 +1,18 @@
-import React, { useState } from "react";
-import { objectToArray } from "../../misc/helperFuncs";
+import React, { useEffect, useState } from "react";
+import { makeDescriptionField, objectToArray } from "../../misc/helperFuncs";
 import userStore from "../../stores/userStore";
 import DescriptionsBar from "../DescriptionsBar";
 import RessourceHolderList from "./RessourceHolderList";
 
 const RessourcesSubPage = () => {
-  const [sorting, setSorting] = useState({ field: "Name", ascending: true });
+  const [displayedList, setDisplayedList] = useState([]);
   const { info } = userStore();
-  const descriptionFields = [
-    {
-      text: "Amount",
-      width: "50px",
-      textSize: "11px",
-    },
 
-    { text: "Name", flex: 1 },
-    {
-      text: "DropChance",
-      width: "100px",
-      textSize: "11px",
-    },
-  ];
+  useEffect(() => {
+    if (info != null) {
+      setDisplayedList(objectToArray(info.ressources));
+    }
+  }, [info]);
   return (
     <div
       className="divColumn"
@@ -28,16 +20,21 @@ const RessourcesSubPage = () => {
     >
       <div style={{ width: "100%" }}>
         <DescriptionsBar
-          fields={descriptionFields}
-          sorting={sorting}
-          setSorting={setSorting}
+          fields={[
+            makeDescriptionField("amount", "11px", "50px"),
+            makeDescriptionField("name", null, null, 1),
+            makeDescriptionField("dropChance", "11px", "100px"),
+          ]}
+          startField={"name"}
+          sortingList={displayedList}
+          setSortingList={setDisplayedList}
         />
       </div>
       <div
         className="divColumn"
         style={{ overflow: "auto", width: "100%", height: "100%" }}
       >
-        {objectToArray(info.ressources).map((r, index) => {
+        {displayedList.map((r, index) => {
           return (
             <RessourceHolderList
               key={r.key}

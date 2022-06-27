@@ -1,26 +1,24 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
+
 import ContextMenu from "./contextMenu/ContextMenu";
 import DragCursor from "./contextMenu/DragCursor";
 import HoverBox from "./contextMenu/HoverBox";
-import SignInBar from "./sections/topBar/SignInBar";
 import useClearOnLogOut from "./startup/useClearOnLogOut";
 import miscStore from "./stores/miscStore";
 import userStore from "./stores/userStore";
-import MakeFlagsPage from "./AdminStuff/AdminMakeFlags/MakeFlagsPage";
 import MainPage from "./sections/main/MainPage";
 import useFillStatesOnEnter from "./startup/useFillStatesOnEnter";
 import useListenToActiveStrains from "./hooks/useListenToActiveStrains";
 import listsStore from "./stores/listsStore";
 import chatStore from "./stores/chatStore";
-import { checkMessagesForUpdate } from "./chat/handleChat";
 import useCheckArraysForResTrigger from "./scanTexts/useCheckArraysForResTrigger";
 import useScanChatMessages from "./scanTexts/useScanChatMessages";
-import AdminTriggerWordsPage from "./AdminStuff/AdminMakeTriggerWords/AdminTriggerWordsPage";
-import AdminCreateFireItems from "./AdminStuff/AdminLootStuff/AdminCreateFireItems";
 import triggerStore from "./stores/triggerStore";
-import { setDocInFirestore } from "./misc/handleFirestore";
-import { getRandomId } from "./misc/helperFuncs";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
+import useHandleUpdating from "./hooks/useHandleUpdating";
 
 function App() {
   const { info, setInfo } = userStore();
@@ -32,6 +30,7 @@ function App() {
   const [subscriptions, setSubscriptions] = useState([]);
   const fillStorage = useFillStatesOnEnter();
   const clearOnLogOut = useClearOnLogOut();
+  const handleUpdating = useHandleUpdating();
 
   const listenToChats = useListenToActiveStrains(
     subscriptions,
@@ -68,12 +67,9 @@ function App() {
 
   useEffect(() => {
     let localInfo = JSON.parse(localStorage.getItem("info"));
+    console.log("localInfo - ", localInfo);
     if (localInfo != null) {
-      if (localInfo.loggedIn) {
-        fillStorage(localInfo.uid);
-      } else {
-        clearOnLogOut();
-      }
+      fillStorage(localInfo.uid);
     } else {
       clearOnLogOut();
     }
@@ -81,15 +77,13 @@ function App() {
 
   return (
     <div className="App" onMouseUp={() => setDragCursor(null)}>
+      <ToastContainer />
       <ContextMenu />
       <HoverBox />
       <DragCursor />
       <BrowserRouter>
         <Routes>
           <Route path="/*" element={<MainPage />} />
-          <Route path="/create_flags" element={<MakeFlagsPage />} />
-          <Route path="/create_fire_items" element={<AdminCreateFireItems />} />
-          <Route path="/create_word_cats" element={<AdminTriggerWordsPage />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -2,13 +2,17 @@ import React, { useEffect, useState } from "react";
 import { checkMessagesForUpdate } from "../chat/handleChat";
 import { incrementField, updateDocInFirestore } from "../misc/handleFirestore";
 import { checkTimeDiff, dateToTimestamp } from "../misc/helperFuncs";
+import { realDb } from "../firebase/fireInit";
+
 import chatStore from "../stores/chatStore";
 import miscStore from "../stores/miscStore";
 import userStore from "../stores/userStore";
+import { onDisconnect, onValue, ref, set } from "firebase/database";
 
 const useHandleUpdating = () => {
   const { displayedMessages, updateDisplayedMessage } = chatStore();
-  const { info } = userStore();
+  const { info, loggedIn } = userStore();
+  const [updateMessages, setUpdateMessages] = useState([]);
   const [updateStuff, setUpdateStuff] = useState();
   const { lastActive, toUpdateStuff, clearUpdateList } = miscStore();
   const [active, setActive] = useState(null);
@@ -24,6 +28,24 @@ const useHandleUpdating = () => {
   useEffect(() => {
     setUpdateMessages(displayedMessages);
   }, [displayedMessages]);
+
+  useEffect(() => {
+    // set user as online in realtime db
+    if (info != null) {
+      const onlineRef = ref(realDb, ".info/connected");
+      const userRef = ref(realDb, `/status/${info.uid}`);
+      if (loggedIn) {
+        onValue(onlineRef, (snapshot) => {
+          onDisconnect(userRef)
+            .set("offline")
+            .then((bla) => {
+              updateDocInFirestore("users/", info.uid, "online", true);
+              set(userRef, "online");
+            });
+        });
+      }
+    }
+  }, [loggedIn, info]);
 
   // update toUpdateStuff
   useEffect(() => {

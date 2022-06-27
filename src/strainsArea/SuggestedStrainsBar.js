@@ -6,14 +6,14 @@ import StrainSuggestionHolder from "./holder/StrainSuggestionHolder";
 import StrainSectionBar from "./StrainSectionBar";
 
 const SuggestedStrainsBar = () => {
-  const { strainWords } = listsStore();
+  const { suggestedStrains } = listsStore();
   const [activeSection, setActiveSection] = useState("Hot");
   const [displayedStrains, setDisplayedStrains] = useState([]);
-  const sections = ["Hot", "For You", "All TIme"];
+  const sections = ["Hot", "Personal", "All TIme"];
 
   useEffect(() => {
-    setDisplayedStrains(strainWords);
-  }, [strainWords]);
+    setDisplayedStrains(suggestedStrains);
+  }, [suggestedStrains]);
   return (
     <div
       className="divColumn"

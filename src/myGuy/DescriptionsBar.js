@@ -1,23 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import useOnHover from "../hooks/useOnHover";
 
-const DescriptionsBar = ({ fields, sorting, setSorting }) => {
-  function clickSorting(field) {
-    console.log(
-      "sorting - ",
-      sorting,
-      " | sorting.field != field - ",
-      sorting.field != field
-    );
+const DescriptionsBar = ({
+  fields,
+  sortingList,
+  setSortingList,
+  startIdentifier,
+}) => {
+  const [sorting, setSorting] = useState({
+    identifier: startIdentifier ?? "",
+    ascending: true,
+  });
+
+  const clickSorting = (field) => {
     if (
-      sorting.field != field ||
-      (sorting.field == field && !sorting.ascending)
+      sorting.identifier.toLowerCase() != field.identifier.toLowerCase() ||
+      (sorting.identifier.toLowerCase() == field.identifier.toLowerCase() &&
+        !sorting.ascending)
     ) {
-      console.log("firstSort");
-      setSorting({ field: field, ascending: true });
-    } else setSorting({ field: field, ascending: false });
-  }
+      setSorting({
+        identifier: field.identifier.toLowerCase(),
+        ascending: true,
+      });
+    } else
+      setSorting({
+        identifier: field.identifier.toLowerCase(),
+        ascending: false,
+      });
+  };
+
+  useEffect(() => {
+    if (sorting.identifier != "") {
+      setSortingList(
+        [...sortingList].sort((a, b) =>
+          sorting.ascending
+            ? a[sorting.identifier.toLowerCase()] >
+              b[sorting.identifier.toLowerCase()]
+              ? 1
+              : -1
+            : a[sorting.identifier.toLowerCase()] <
+              b[sorting.identifier.toLowerCase()]
+            ? 1
+            : -1
+        )
+      );
+    }
+  }, [sorting]);
+
   return (
     <div
       className="divRow"
@@ -27,9 +56,9 @@ const DescriptionsBar = ({ fields, sorting, setSorting }) => {
         return (
           <DescriptionField
             clickSorting={clickSorting}
+            sorting={sorting}
             key={f.text}
             field={f}
-            sorting={sorting}
             width={f.width}
             flex={f.flex}
           />
@@ -47,21 +76,27 @@ const DescriptionField = ({ clickSorting, field, sorting }) => {
         width: field.width ?? null,
         flex: field.flex ?? null,
         textAlign: "center",
-        color: sorting.field == field.text ? "gold" : "gray",
+        color:
+          sorting.identifier.toLowerCase() == field.identifier.toLowerCase()
+            ? "gold"
+            : "gray",
       }}
-      onClick={() => clickSorting(field.text)}
+      onClick={() => clickSorting(field)}
     >
-      {field.text}
-      <img
-        src="/images/icons/icon_up_down_arrow.png"
-        className="icon15"
-        style={{
-          transform:
-            sorting.field == field.text && !sorting.ascending
-              ? "scaleY(-1)"
-              : "",
-        }}
-      />
+      {!field.hidden && field.text}
+      {!field.hidden && (
+        <img
+          src="/images/icons/icon_up_down_arrow.png"
+          className="icon15"
+          style={{
+            transform:
+              sorting.identifier.toLowerCase() ==
+                field.identifier.toLowerCase() && !sorting.ascending
+                ? "scaleY(-1)"
+                : "",
+          }}
+        />
+      )}
     </div>
   );
 };

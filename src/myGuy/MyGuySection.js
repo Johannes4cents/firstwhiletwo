@@ -7,9 +7,12 @@ import StatementsPage from "./StatementsPage";
 import AlliesPage from "./AlliesPage";
 import StatsPageGuy from "./StatsPageGuy";
 import MediaPage from "./MediaPage";
+import userStore from "../stores/userStore";
+import PleaseLogInField from "../sections/main/PleaseLogInField";
 
 const MyGuySection = () => {
   const [activeTab, setActiveTab] = useState("Item");
+  const { loggedIn } = userStore();
   return (
     <div
       className="divColumn"
@@ -42,12 +45,13 @@ const MyGuySection = () => {
         setActiveTab={setActiveTab}
         activeTab={activeTab}
       />
-      {activeTab == "Item" && <ItemPage />}
-      {activeTab == "Loot" && <LootPage />}
-      {activeTab == "Statements" && <StatementsPage />}
-      {activeTab == "Allies" && <AlliesPage />}
-      {activeTab == "Stats" && <StatsPageGuy />}
-      {activeTab == "Media" && <MediaPage />}
+      {!loggedIn && <PleaseLogInField />}
+      {activeTab == "Item" && loggedIn && <ItemPage />}
+      {activeTab == "Loot" && loggedIn && <LootPage />}
+      {activeTab == "Statements" && loggedIn && <StatementsPage />}
+      {activeTab == "Allies" && loggedIn && <AlliesPage />}
+      {activeTab == "Stats" && loggedIn && <StatsPageGuy />}
+      {activeTab == "Media" && loggedIn && <MediaPage />}
     </div>
   );
 };

@@ -6,53 +6,14 @@ import {
   umlautFix,
 } from "../misc/helperFuncs";
 import alphabet from "../misc/lists/alphabet";
-import resTriggerWords from "../misc/lists/resTriggerWords";
+import { ressources } from "../misc/lists/otherLists";
 
-const resetResTrigger = {
-  mana: [],
-  oil: [],
-  food: [],
-  knowledge: [],
-  rage: [],
-  happiness: [],
-  weapons: [],
-  energy: [],
-  diplomacy: [],
-  fear: [],
-  science: [],
-  health: [],
-  love: [],
-  cash: [],
-  religion: [],
-};
-
-const resetTriggerWords = {
-  a: { loot: [], profile: [], ressources: [] },
-  b: { loot: [], profile: [], ressources: [] },
-  c: { loot: [], profile: [], ressources: [] },
-  d: { loot: [], profile: [], ressources: [] },
-  e: { loot: [], profile: [], ressources: [] },
-  f: { loot: [], profile: [], ressources: [] },
-  g: { loot: [], profile: [], ressources: [] },
-  h: { loot: [], profile: [], ressources: [] },
-  i: { loot: [], profile: [], ressources: [] },
-  j: { loot: [], profile: [], ressources: [] },
-  k: { loot: [], profile: [], ressources: [] },
-  l: { loot: [], profile: [], ressources: [] },
-  m: { loot: [], profile: [], ressources: [] },
-  n: { loot: [], profile: [], ressources: [] },
-  o: { loot: [], profile: [], ressources: [] },
-  p: { loot: [], profile: [], ressources: [] },
-  q: { loot: [], profile: [], ressources: [] },
-  r: { loot: [], profile: [], ressources: [] },
-  s: { loot: [], profile: [], ressources: [] },
-  t: { loot: [], profile: [], ressources: [] },
-  u: { loot: [], profile: [], ressources: [] },
-  v: { loot: [], profile: [], ressources: [] },
-  w: { loot: [], profile: [], ressources: [] },
-  x: { loot: [], profile: [], ressources: [] },
-  y: { loot: [], profile: [], ressources: [] },
-  z: { loot: [], profile: [], ressources: [] },
+const getResTrigger = () => {
+  let obj = {};
+  forArrayLength(ressources, (ressource) => {
+    obj[ressource] = { weight: 0, ids: {} };
+  });
+  return obj;
 };
 
 const readStore = create((set) => ({
@@ -64,7 +25,7 @@ const readStore = create((set) => ({
       return { fireItems: newList };
     });
   },
-  setFireItems: (uid, items, onItemsNull) => {
+  setFireStuff: (uid, items, resWords, onItemsNull) => {
     set((state) => {
       if (items != null) {
         localStorage.setItem(uid + "fireItems", JSON.stringify(items));
@@ -90,7 +51,7 @@ const readStore = create((set) => ({
             });
           });
         });
-        state.setTriggerWords(triggerWords, "loot");
+        state.setTriggerWords(triggerWords, resWords);
         return { fireItems: items };
       } else {
         if (onItemsNull != null) onItemsNull();
@@ -98,7 +59,7 @@ const readStore = create((set) => ({
     });
   },
 
-  resTrigger: { ...resetResTrigger },
+  resTrigger: getResTrigger(),
   setResTrigger: (resTrigger) => {
     set(() => {
       return { resTrigger };
@@ -162,23 +123,22 @@ const readStore = create((set) => ({
     });
   },
 
-  triggerWords: { ...resetTriggerWords },
-  setTriggerWords: (items, type) => {
+  triggerWords: {},
+  setTriggerWords: (items, resWords) => {
     set((state) => {
       let wordsObj = {};
       forArrayLength(alphabet, (char) => {
         wordsObj[char] = { loot: [], profile: [], ressources: [] };
       });
-      let triggerNames = Object.keys(resTriggerWords);
-      forArrayLength(triggerNames, (name) => {
-        forArrayLength(resTriggerWords[name], (string) => {
-          var firstChar = umlautFix(string[0].toLowerCase());
-          wordsObj[firstChar].ressources.push({ string, ressource: name });
-        });
+
+      forArrayLength(resWords, (resWord) => {
+        let firstChar = umlautFix(resWord.string[0]).toLowerCase();
+        wordsObj[firstChar].ressources.push(resWord);
       });
+
       forArrayLength(items, (item) => {
-        let firstChar = item.string[0].toLowerCase();
-        wordsObj[firstChar][type].push(item);
+        let firstChar = umlautFix(item.string[0]).toLowerCase();
+        wordsObj[firstChar]["loot"].push(item);
       });
       return { triggerWords: wordsObj };
     });

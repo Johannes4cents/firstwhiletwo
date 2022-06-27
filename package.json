@@ -2,6 +2,7 @@
   "name": "firstwhiletwo",
   "version": "0.1.0",
   "private": true,
+  "build": "react-scripts --max_old_space_size=4096 build",
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
@@ -17,7 +18,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-spring": "^9.4.5",
-    "react-toastify": "^9.0.4",
+    "react-toastify": "^9.0.5",
     "web-vitals": "^2.1.4",
     "zustand": "^4.0.0-rc.1"
   },

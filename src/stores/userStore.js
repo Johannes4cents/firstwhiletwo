@@ -7,9 +7,17 @@ const userStore = create((set) => ({
   equipped: "fist",
   setInfo: (info) => {
     localStorage.setItem("info", JSON.stringify(info));
+
     set((state) => {
-      if (info != null) if (info.uid == "6eJVKujMhkp6M1") info.admin = true;
       return { info: info, loggedIn: info == null ? false : true };
+    });
+  },
+  changeChips: (cat, amount) => {
+    set((state) => {
+      let newInfo = { ...state.info };
+      newInfo.chips[cat] += amount;
+      localStorage.setItem("info", JSON.stringify(newInfo));
+      return { info: newInfo };
     });
   },
 }));

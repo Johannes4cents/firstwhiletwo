@@ -51,7 +51,7 @@ const useScanStringsInArray = (onScanFinnished) => {
   function checkString(index) {
     setTimeout(() => {
       const string = currentArray.array[index];
-      if (string != "" && string != " ") {
+      if (string != "" && string != " " && string) {
         scanString.tryStringForLoot(string);
         scanString.tryStringForRessource(string);
       }

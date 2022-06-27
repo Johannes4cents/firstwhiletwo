@@ -4,21 +4,23 @@ import {
   getSingleDocFromFirestore,
   setDocInFirestore,
 } from "../misc/handleFirestore";
-import { getRandomId } from "../misc/helperFuncs";
 
-export default function Strain(id, factions) {
+export default function Strain(id, faction, school) {
   return {
     id,
-    factions,
+    faction,
+    school,
+    special: false,
+    conditions: [],
   };
 }
 
-function makeStrain(uid, strainText, addMyStrain, addRemoveStrainWord) {
+function makeStrain(uid, strainText, addMyStrain, changeSuggestedStrains) {
   getSingleDocFromFirestore("strains", strainText.toLowerCase(), (doc) => {
     console.log("doc is - ", doc);
     if (!doc) {
       const strain = Strain(strainText.toLowerCase());
-      addRemoveStrainWord(uid, strain);
+      changeSuggestedStrains(uid, strain);
       addMyStrain(uid, strain);
       setDocInFirestore("strains/", strain.id, strain);
     }

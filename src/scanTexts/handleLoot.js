@@ -1,5 +1,3 @@
-import { fireItemAttributes } from "../AdminStuff/AdminLootStuff/fireItemAttributes";
-import { specialAttributes } from "../AdminStuff/AdminLootStuff/specialAttributes";
 import Loot from "../fire_classes/Loot";
 import {
   addCustomItemToUserList,
@@ -10,8 +8,9 @@ import {
   getItemById,
   getRandomNumber,
   newTrim,
-  updateItemInStorageAndState,
 } from "../misc/helperFuncs";
+import { fireItemAttributes } from "../misc/lists/fireItemAttributes";
+import { specialAttributes } from "../misc/lists/specialAttributes";
 import veryCommonEnglish from "../misc/lists/veryCommonEnglish";
 import veryCommonGerman from "../misc/lists/veryCommonGerman";
 

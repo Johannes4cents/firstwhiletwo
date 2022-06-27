@@ -30,6 +30,10 @@ function getRandomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
+function getRandomItem(list) {
+  return list[getRandomNumber(0, list.length - 1)];
+}
+
 function checkTimeDiff(older, newer) {
   function yearsToMinutes(years) {
     return years * 525600;
@@ -167,6 +171,23 @@ function testChance(chance, maxChance) {
   return randomNumber < chance;
 }
 
+function makeDescriptionField(
+  text,
+  textSize,
+  width,
+  flex,
+  identifier,
+  hidden = false
+) {
+  return {
+    text,
+    textSize: textSize ?? "11px",
+    width,
+    flex,
+    identifier: identifier ?? text,
+    hidden,
+  };
+}
 function umlautFix(char) {
   if (
     ![
@@ -273,7 +294,13 @@ function timeToMs(seconds = 0, minutes = 0, hours = 0, days = 0) {
   return seconds * 1000 + minutes * 60000 + hours * 3600000 + days * 8640000;
 }
 
+function clamp(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
+
 export {
+  clamp,
+  makeDescriptionField,
   timeToMs,
   getNumberInBetweenRange,
   capitalize,
@@ -298,4 +325,5 @@ export {
   objectToArray,
   updateItemInStorageAndState,
   msTimeToTimestamp,
+  getRandomItem,
 };

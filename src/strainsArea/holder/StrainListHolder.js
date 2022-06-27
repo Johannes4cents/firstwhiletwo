@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import useOnHover from "../../hooks/useOnHover";
 import bgImg from "../../images/bg_strain.png";
-import { deleteDocInFirestore } from "../../misc/handleFirestore";
+import { deleteItemInUserList } from "../../misc/handleFirestore";
 import chatStore from "../../stores/chatStore";
 import listsStore from "../../stores/listsStore";
 import readStore from "../../stores/readStore";
 import userStore from "../../stores/userStore";
+import { toast } from "react-toastify";
 
 const StrainListHolder = ({ strain }) => {
   const [deleteHover, setDeleteHover] = useState(false);
   const { info } = userStore();
-
+  const { myStrains } = listsStore();
   const { addRemoveActiveStrain, removeMyStrain, activeStrains } = listsStore();
   const { resetDisplayedMessages } = chatStore();
   const { resetScanArraysIndex, resetScanArrays, setScanningArrays } =
@@ -31,7 +32,7 @@ const StrainListHolder = ({ strain }) => {
   };
 
   const removeStrain = () => {
-    deleteDocInFirestore("users/" + info.uid + "/myStrains", strain.id);
+    deleteItemInUserList(info.uid, "myStrains", "id", strain.id);
     removeMyStrain(info.uid, strain);
   };
   return (
