@@ -87,6 +87,19 @@ const InputField = () => {
     currentMessage.postedIn = activeChat;
     currentMessage.attachedItems = attachedItems;
 
+    var tries = 0;
+    if (currentMessage.attachedImages.length > 0) {
+      while (
+        currentMessage.imgUrls.length != currentMessage.attachedImages.length ||
+        tries > 20
+      ) {
+        setTimeout(() => {
+          console.log("uploading images");
+          tries++;
+        }, 100);
+      }
+    }
+    delete currentMessage.attachedImages;
     console.log("currentMessage - ", currentMessage);
     sendMessageToTurfChats(activeChat, currentMessage);
     resetCurrentMessage();

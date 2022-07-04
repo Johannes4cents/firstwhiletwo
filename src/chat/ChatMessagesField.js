@@ -3,15 +3,16 @@ import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import useWindowSize from "../hooks/useWindowSize";
 import DragDropDiv from "../misc/elements/DragDropDiv";
+import { forArrayLength } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import miscStore from "../stores/miscStore";
 import MessageHolder from "./holder/MessageHolder";
 
 const ChatMessagesField = () => {
   const scrollDiv = useRef(null);
-  const { displayedMessages } = chatStore();
+  const { displayedMessages, addAttachedImages } = chatStore();
   const windowSize = useWindowSize();
-  const { inputHeight, attachedItemHeight } = miscStore();
+  const { inputHeight, attachedItemHeight, attachedImagesHeight } = miscStore();
   const [customPosition, setCustomPosition] = useState(false);
   const [wheel, setWheel] = useState(false);
 
@@ -41,10 +42,16 @@ const ChatMessagesField = () => {
     }, 100);
   }
 
-  function handleDrop(file) {
+  function handleDrop(files) {
     const imageEndings = ["png", "jpg", "jpeg", "gif"];
-    if (imageEndings.some((ending) => file[0].name.endsWith(ending))) {
-    }
+    const imageFiles = [];
+    forArrayLength(files, (file) => {
+      if (imageEndings.some((ending) => file.name.endsWith(ending))) {
+        imageFiles.push(file);
+      }
+    });
+    console.log("imageFiles - ", imageFiles);
+    if (imageFiles.length > 0) addAttachedImages(imageFiles);
   }
 
   return (
@@ -66,7 +73,11 @@ const ChatMessagesField = () => {
         style={{
           width: "100%",
           maxHeight: `${
-            windowSize.height - inputHeight - attachedItemHeight - 95
+            windowSize.height -
+            inputHeight -
+            attachedImagesHeight -
+            attachedItemHeight -
+            95
           }px`,
           overflow: "auto",
         }}

@@ -11,7 +11,7 @@ import { checkMessagesForUpdate } from "./handleChat";
 import InputField from "./InputField";
 
 const ChatArea = () => {
-  const { addAttachedItem, attachedImages, currentMessage } = chatStore();
+  const { addAttachedItem, currentMessage } = chatStore();
 
   const mouseEvents = useMouseHandling({ onDrop });
 

@@ -5,10 +5,15 @@ import ChatMessage from "../fire_classes/ChatMessage";
 import { forArrayLength } from "../misc/helperFuncs";
 
 const chatStore = create((set) => ({
+  lastMsgRessources: ["cash"],
   setMsgRessources: (ressource) => {
     set((state) => {
       return {
-        currentMessage: { ...state.currentMessage, ressources: [ressource] },
+        currentMessage: {
+          ...state.currentMessage,
+          ressources: [ressource],
+        },
+        lastMsgRessources: [ressource],
       };
     });
   },
@@ -66,7 +71,8 @@ const chatStore = create((set) => ({
   },
   resetCurrentMessage: () => {
     set((state) => {
-      return { currentMessage: ChatMessage() };
+      console.log("state.lastMsgRessources - ", state.lastMsgRessources);
+      return { currentMessage: ChatMessage(state.lastMsgRessources) };
     });
   },
   addItemToMessage: (item, msgId) => {
@@ -118,6 +124,17 @@ const chatStore = create((set) => ({
           attachedImages: newImageArray,
         },
       };
+    });
+  },
+  addImgUrlToMsg: (path) => {
+    set((state) => {
+      if (![...(state.currentMessage.imgUrls ?? [])].includes(path))
+        return {
+          currentMessage: {
+            ...state.currentMessage,
+            imgUrls: [...(state.currentMessage.imgUrls ?? []), path],
+          },
+        };
     });
   },
   removeAttachedImage: (image) => {

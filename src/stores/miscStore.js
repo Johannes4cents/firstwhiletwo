@@ -15,6 +15,12 @@ const miscStore = create((set) => ({
       return { attachedItemHeight: height };
     });
   },
+  attachedImagesHeight: 0,
+  setAttachedImagesHeight: (height) => {
+    set(() => {
+      return { attachedImagesHeight: height };
+    });
+  },
   modalOpen: false,
   closeModal: () => {
     set(() => {

@@ -9,6 +9,7 @@ export default function ChatMessage(
   attachedItems = [],
   spawnedItems = [],
   attachedImages = [],
+  imgUrls = [],
   id
 ) {
   const timestamp = dateToTimestamp(new Date());
@@ -22,6 +23,7 @@ export default function ChatMessage(
     attachedItems,
     spawnedItems,
     attachedImages,
+    imgUrls,
     postedIn,
     timestamp,
   };
