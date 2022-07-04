@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import miscStore from "../stores/miscStore";
+import CustomContextMenu from "./CustomContextMenu";
 import useLongPress from "./useLongPress";
 
 const useMouseHandling = ({
@@ -8,8 +9,10 @@ const useMouseHandling = ({
   item,
   onDoubleClick,
   onDrop,
+  onMouseUp,
+  rightClickOptions,
 }) => {
-  const { dragCursor, setDragCursor } = miscStore();
+  const { setDragCursor, setContextContent } = miscStore();
   const [clickCount, setClickCount] = useState(0);
   const defaultOptions = {
     shouldPreventDefault: true,
@@ -20,7 +23,7 @@ const useMouseHandling = ({
   };
 
   const onClick = (e) => {
-    setClickCount((state) => state + 1);
+    if (e.button == 0) setClickCount((state) => state + 1);
     setTimeout(() => {
       setClickCount((state) => {
         if (state == 1) {
@@ -32,14 +35,20 @@ const useMouseHandling = ({
         return 0;
       });
     }, 250);
+    if (e.button == 2) {
+      if (rightClickOptions) {
+        setContextContent(<CustomContextMenu options={rightClickOptions} />);
+      }
+    }
   };
 
-  const onMouseUp = () => {
-    if (dragCursor != null && onDrop != null) onDrop(dragCursor);
-  };
-
-  const mouseEvents = useLongPress(onLongPress, onClick, defaultOptions);
-  mouseEvents.onMouseUp = onMouseUp;
+  const mouseEvents = useLongPress(
+    onLongPress,
+    onClick,
+    defaultOptions,
+    onMouseUp,
+    onDrop
+  );
 
   return mouseEvents;
 };

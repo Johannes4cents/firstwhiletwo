@@ -1,12 +1,15 @@
 import { useCallback, useRef, useState } from "react";
+import miscStore from "../stores/miscStore";
 
 const useLongPress = (
   onLongPress,
   onClick,
   { shouldPreventDefault = true, delay = 300 } = {},
-  onMouseUpFunc = null
+  onMouseUpFunc = null,
+  onDrop = null
 ) => {
   const [longPressTriggered, setLongPressTriggered] = useState(false);
+  const { dragCursor } = miscStore();
   const timeout = useRef();
   const target = useRef();
 
@@ -39,10 +42,15 @@ const useLongPress = (
   );
 
   return {
-    onMouseDown: (e) => start(e),
+    onMouseDown: (e) => {
+      if (e.button != 0) return;
+      start(e);
+    },
     onTouchStart: (e) => start(e),
     onMouseUp: (e) => {
       clear(e);
+      if (e.button != 0) return;
+      if (dragCursor != null && onDrop != null) onDrop(dragCursor);
       if (onMouseUpFunc != null) onMouseUpFunc();
     },
     onMouseLeave: (e) => clear(e, false),

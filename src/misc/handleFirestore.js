@@ -160,6 +160,7 @@ async function deleteItemInGeneralList(
 
 function incrementField(path, docId, key, inc) {
   const docRef = doc(db, path, docId);
+  console.log("path - ", path, " | key - ", key, " | inc - ", inc);
   updateDoc(docRef, { [key]: increment(inc) });
 }
 

@@ -1,32 +1,15 @@
 import React from "react";
+import { ressources } from "../../misc/lists/otherLists";
 import RessourceImage from "../../ressources/RessourceImage";
 import chatStore from "../../stores/chatStore";
 import miscStore from "../../stores/miscStore";
 
 const SelectUpvoteRessourceBar = () => {
-  const ressourceList = [
-    "cash",
-    "diplomacy",
-    "energy",
-    "fear",
-    "food",
-    "happiness",
-    "health",
-    "knowledge",
-    "love",
-    "mana",
-    "oil",
-    "rage",
-    "religion",
-    "science",
-    "weapons",
-  ];
-
   const { closeModal, updateLastActive } = miscStore();
   const { setMsgRessources } = chatStore();
   const selectRessource = (ressource) => {
     updateLastActive();
-    setMsgRessources([ressource]);
+    setMsgRessources(ressource);
     closeModal();
   };
 
@@ -42,7 +25,7 @@ const SelectUpvoteRessourceBar = () => {
         paddingRight: "5px",
       }}
     >
-      {ressourceList.map((r) => {
+      {ressources.map((r) => {
         return (
           <div
             className="divRow"

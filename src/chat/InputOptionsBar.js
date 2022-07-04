@@ -5,28 +5,23 @@ import chatStore from "../stores/chatStore";
 import SelectUpvoteRessourceBar from "./inputOptionModals/SelectUpvoteRessourceBar";
 
 const InputOptionsBar = ({ height }) => {
-  const { attachedItem } = chatStore();
+  const { currentMessage } = chatStore();
   const modal = useModal({
     modalContent: <SelectUpvoteRessourceBar />,
     translate: "(-100% -100%)",
     offsetY: 30,
   });
-  const { selectedMsgRessources, setMsgRessources } = chatStore();
   const onRessourceClicked = () => {
-    if (attachedItem == null) modal.open();
-    else setMsgRessources(attachedItem.upvotes[0] ?? "cash");
+    if (currentMessage.attachedItems.length < 1) modal.open();
   };
 
-  useEffect(() => {
-    console.log("selectedMsgRessources are -", selectedMsgRessources);
-  }, [selectedMsgRessources]);
   return (
     <div className="divRow" style={{ marginRight: "5px" }}>
-      {selectedMsgRessources.map((r) => {
+      {currentMessage.ressources.map((r) => {
         return (
           <div key={r} style={{ marginRight: "5px" }}>
             <RessourceImage
-              selectedRessources={selectedMsgRessources}
+              selectedRessources={currentMessage.ressources}
               ressource={r}
               onClick={onRessourceClicked}
             />

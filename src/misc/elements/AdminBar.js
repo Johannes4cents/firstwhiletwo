@@ -11,7 +11,7 @@ const AdminBar = () => {
   const { info, setInfo, changeChips } = userStore();
 
   const { triggerWords, clearRecentlyTyped, resTrigger } = readStore();
-  const { displayedMessages } = chatStore();
+  const { displayedMessages, currentMessage } = chatStore();
   const { fireFlags, statements, myStrains, suggestedStrains } = listsStore();
   const navigate = useNavigate();
 
@@ -20,9 +20,8 @@ const AdminBar = () => {
   }
 
   const checkStuff = () => {
-    console.log("resTrigger - ", resTrigger);
-    console.log("triggerWords", triggerWords);
-    console.log("info - ", info);
+    console.log("currentMessage - ", currentMessage);
+    console.log("suggestedStrains - ", suggestedStrains);
   };
 
   const queryTest = () => {

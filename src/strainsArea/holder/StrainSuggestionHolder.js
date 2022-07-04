@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import useOnHover from "../../hooks/useOnHover";
 import bgImg from "../../images/bg_strain.png";
 import {
+  addItemToUserList,
   deleteDocInFirestore,
   deleteItemInUserList,
   setDocInFirestore,
@@ -32,7 +33,7 @@ const StrainSuggestionHolder = ({ strain }) => {
     if (myStrains.map((s) => s.id).includes(strain.id))
       addRemoveActiveStrain(info.uid, strain);
     else {
-      setDocInFirestore("users/" + info.uid + "/myStrains", strain.id, strain);
+      addItemToUserList(info.uid, "myStrains", strain);
       addRemoveMyStrain(info.uid, strain);
     }
   };

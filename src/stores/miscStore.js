@@ -29,7 +29,7 @@ const miscStore = create((set) => ({
   contextContent: null,
   setContextContent: (menu) => {
     set((state) => {
-      return { contextMenu: menu };
+      return { contextContent: menu };
     });
   },
   dragCursor: null,

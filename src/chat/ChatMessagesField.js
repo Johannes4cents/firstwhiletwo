@@ -2,6 +2,7 @@ import { toBeEmptyDOMElement } from "@testing-library/jest-dom/dist/matchers";
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import useWindowSize from "../hooks/useWindowSize";
+import DragDropDiv from "../misc/elements/DragDropDiv";
 import chatStore from "../stores/chatStore";
 import miscStore from "../stores/miscStore";
 import MessageHolder from "./holder/MessageHolder";
@@ -16,7 +17,6 @@ const ChatMessagesField = () => {
 
   useEffect(() => {
     if (scrollDiv) {
-      console.log("customPosition - ", customPosition);
       if (!customPosition) {
         scrollDiv.current.scrollIntoView();
         setCustomPosition(false);
@@ -28,10 +28,8 @@ const ChatMessagesField = () => {
     const bottomReached =
       e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
     if (bottomReached) {
-      console.log("bottomReached");
       setCustomPosition(false);
     } else if (!bottomReached && wheel) {
-      console.log("customScroll");
       setCustomPosition(true);
     }
   }
@@ -43,10 +41,18 @@ const ChatMessagesField = () => {
     }, 100);
   }
 
+  function handleDrop(file) {
+    const imageEndings = ["png", "jpg", "jpeg", "gif"];
+    if (imageEndings.some((ending) => file[0].name.endsWith(ending))) {
+    }
+  }
+
   return (
-    <div
+    <DragDropDiv
+      handleDrop={handleDrop}
       className="divColumn"
       style={{
+        display: "flex",
         height: "100%",
         justifyContent: "end",
         alignItems: "end",
@@ -72,7 +78,7 @@ const ChatMessagesField = () => {
           })}
         <div ref={scrollDiv} style={{ height: "0px" }} />
       </div>
-    </div>
+    </DragDropDiv>
   );
 };
 

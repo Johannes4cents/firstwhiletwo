@@ -114,6 +114,7 @@ const MessageHolder = ({ message }) => {
       <div
         className="ressourceContainer"
         style={{
+          marginRight: "5px",
           height: messageDiv.current
             ? messageDiv.current.offsetHeight + 15
             : "",

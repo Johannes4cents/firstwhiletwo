@@ -3,6 +3,7 @@ import create from "zustand";
 import { docsToLoot } from "../fire_classes/Loot";
 import {
   addLootInFirestore,
+  deleteItemInUserList,
   updateLootItemInUserList,
 } from "../misc/handleFirestore";
 import { forArrayLength } from "../misc/helperFuncs";
@@ -30,6 +31,14 @@ const listsStore = create((set) => ({
       localStorage.setItem(uid + "loot", JSON.stringify([...state.loot, item]));
       addLootInFirestore(uid, item);
       return { loot: [...state.loot, item] };
+    });
+  },
+  removeLoot: (uid, item) => {
+    set((state) => {
+      let newList = state.loot.filter((i) => i.id != item.id);
+      deleteItemInUserList(uid, "loot", "id", item.id, false);
+      localStorage.setItem(uid + "loot", JSON.stringify(newList));
+      return { loot: newList };
     });
   },
   dismissedStrains: [],

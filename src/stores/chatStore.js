@@ -1,11 +1,15 @@
 import React from "react";
+import { toast } from "react-toastify";
 import create from "zustand";
+import ChatMessage from "../fire_classes/ChatMessage";
+import { forArrayLength } from "../misc/helperFuncs";
 
 const chatStore = create((set) => ({
-  selectedMsgRessources: ["cash"],
   setMsgRessources: (ressource) => {
-    set(() => {
-      return { selectedMsgRessources: ressource };
+    set((state) => {
+      return {
+        currentMessage: { ...state.currentMessage, ressources: [ressource] },
+      };
     });
   },
   AddRemoveSelectedMsgRessource: (ressource) => {
@@ -54,6 +58,17 @@ const chatStore = create((set) => ({
       return { displayedMessages: [] };
     });
   },
+  currentMessage: ChatMessage(),
+  changeCurrentMessage: (message) => {
+    set((state) => {
+      return { currentMessage: { ...message } };
+    });
+  },
+  resetCurrentMessage: () => {
+    set((state) => {
+      return { currentMessage: ChatMessage() };
+    });
+  },
   addItemToMessage: (item, msgId) => {
     set((state) => {
       let newMessages = [...state.displayedMessages];
@@ -62,10 +77,59 @@ const chatStore = create((set) => ({
       return { displayedMessages: newMessages };
     });
   },
-  attachedItem: null,
-  setAttachedItem: (item) => {
-    set(() => {
-      return { attachedItem: item };
+  addAttachedItem: (info, item) => {
+    set((state) => {
+      return {
+        currentMessage: {
+          ...state.currentMessage,
+          attachedItems: [...state.currentMessage.attachedItems, item],
+        },
+      };
+    });
+  },
+  removeAttachedItem: (item) => {
+    set((state) => {
+      return {
+        currentMessage: {
+          ...state.currentMessage,
+          attachedItems: state.currentMessage.attachedItems.filter(
+            (i) => i != item
+          ),
+        },
+      };
+    });
+  },
+  setMessageContent: (content) => {
+    set((state) => {
+      let newMessage = { ...state.currentMessage, msg: content };
+      return { currentMessage: newMessage };
+    });
+  },
+  addAttachedImages: (images) => {
+    set((state) => {
+      let newImageArray = [...state.currentMessage.attachedImages];
+      forArrayLength(images, (image) => {
+        if (newImageArray.length < 4) newImageArray.push(image);
+        else toast("Only a maximum of 4 images per message");
+      });
+      return {
+        currentMessage: {
+          ...state.currentMessage,
+          attachedImages: newImageArray,
+        },
+      };
+    });
+  },
+  removeAttachedImage: (image) => {
+    set((state) => {
+      return {
+        currentMessage: {
+          ...state.currentMessage,
+          attachedImages: state.currentMessage.attachedImages.filter(
+            (i) => i != image
+          ),
+        },
+      };
     });
   },
 }));

@@ -14,18 +14,38 @@ const VoteRessourceArrows = ({
   const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 });
   const [firevotes, setFireVotes] = useState({ upvotes: 0, downvotes: 0 });
 
-  const { updateLastActive, addToUpdateList } = miscStore();
-  const { info } = userStore();
+  const { updateLastActive } = miscStore();
+  const { info, changeRessources } = userStore();
 
   useEffect(() => {
     setFireVotes(dbVotes);
   }, [message]);
 
+  const onIconClicked = () => {
+    console.log("ressource - ", ressource);
+  };
+
   useEffect(() => {
     let interval = setInterval(() => {
-      if (votes.upvotes != 0 || votes.downvotes != 0) {
-        incrementField();
-      }
+      setVotes((votes) => {
+        if (votes.downvotes != 0) {
+          incrementField(
+            `turfChats/${message.postedIn}/messages`,
+            message.id,
+            `ressources.${ressource}.downvotes`,
+            votes.downvotes
+          );
+        }
+        if (votes.upvotes != 0) {
+          incrementField(
+            `turfChats/${message.postedIn}/messages`,
+            message.id,
+            `ressources.${ressource}.upvotes`,
+            votes.upvotes
+          );
+        }
+        return { upvotes: 0, downvotes: 0 };
+      });
     }, 5000);
     return () => {
       clearInterval(interval);
@@ -34,15 +54,12 @@ const VoteRessourceArrows = ({
 
   function vote(vote) {
     updateLastActive();
-    setVotes((state) => {
-      let newVotes = { ...votes, [vote]: votes[vote] + 1 };
-      addToUpdateList(info.uid, {
-        id: message.id,
-        path: message.path,
-        votes: newVotes,
-        ressource,
+    if (info.ressources[ressource].amount > 0) {
+      setVotes((state) => {
+        return { ...state, [vote]: state[vote] + 1 };
       });
-    });
+      changeRessources(ressource, -1);
+    }
   }
   return (
     <div className="divColumn">
@@ -61,7 +78,7 @@ const VoteRessourceArrows = ({
       </div>
       <div className="divRow">
         <div
-          onClick={() => vote("down")}
+          onClick={() => vote("downvotes")}
           onMouseEnter={() => {
             setVoteHover({ down: true, up: false });
             setHover(false);
@@ -93,6 +110,7 @@ const VoteRessourceArrows = ({
         <img
           src={`/images/ressources/res_${ressource}.png`}
           className="icon30"
+          onClick={onIconClicked}
           style={{
             marginLeft: "5px",
             marginRight: "5px",
@@ -101,7 +119,7 @@ const VoteRessourceArrows = ({
           }}
         />
         <div
-          onClick={() => vote("up")}
+          onClick={() => vote("upvotes")}
           onMouseEnter={() => {
             setVoteHover({ down: false, up: true });
             setHover(false);

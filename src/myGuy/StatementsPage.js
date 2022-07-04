@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import AnswerQuestionSubPage from "./AnswerQuestionSubPage";
+import StatementSubPage from "./StatementSubPage";
 import SubOptionsBar from "./SubOptionsBar";
 
 const StatementsPage = () => {
@@ -11,6 +13,8 @@ const StatementsPage = () => {
         setSelectedCat={setSelectedCat}
         selectedCat={selectedCat}
       />
+      {selectedCat == "Statements" && <StatementSubPage />}
+      {selectedCat == "Answer Questions" && <AnswerQuestionSubPage />}
     </div>
   );
 };

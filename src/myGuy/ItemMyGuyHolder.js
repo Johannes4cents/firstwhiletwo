@@ -5,14 +5,23 @@ import { useRef } from "react";
 import { storage } from "../firebase/fireInit";
 import useMouseHandling from "../hooks/useMouseHandling";
 import useOnHover from "../hooks/useOnHover";
+import { deleteItemInUserList } from "../misc/handleFirestore";
+import listsStore from "../stores/listsStore";
 import userStore from "../stores/userStore";
 
 const ItemMyGuyHolder = ({ item }) => {
-  const dragDrop = useMouseHandling({
+  const mouseHandling = useMouseHandling({
     onOneClick: onItemClicked,
     type: "loot",
     item,
     onDoubleClick: handleDoubleClick,
+    rightClickOptions: [
+      {
+        text: "Delete Item",
+        imgUrl: "/images/drawable/icon_trashcan.png",
+        onClick: deleteItem,
+      },
+    ],
   });
   const image = useRef();
   const hover = useOnHover({
@@ -21,6 +30,7 @@ const ItemMyGuyHolder = ({ item }) => {
     normalBgColor: item.locked ? "#8f8f8f" : "#00000000",
   });
   const { info } = userStore();
+  const { removeLoot } = listsStore();
 
   function onItemClicked() {
     console.log("singleClick");
@@ -28,6 +38,10 @@ const ItemMyGuyHolder = ({ item }) => {
 
   function handleDoubleClick() {
     console.log("doubleClick");
+  }
+
+  function deleteItem() {
+    removeLoot(info.uid, item);
   }
 
   useEffect(() => {
@@ -40,7 +54,7 @@ const ItemMyGuyHolder = ({ item }) => {
 
   return (
     <div
-      {...dragDrop}
+      {...mouseHandling}
       className="divRowColored"
       style={{
         width: "100%",

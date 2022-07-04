@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChatMessage from "../fire_classes/ChatMessage";
 import { setDocInFirestore } from "../misc/handleFirestore";
-import { getRandomId, newTrim } from "../misc/helperFuncs";
+import { forArrayLength, getRandomId, newTrim } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
@@ -16,14 +16,13 @@ const InputField = () => {
   const {
     activeChat,
     activeChats,
-    selectedMsgRessources,
-    attachedItem,
-    setAttachedItem,
+    currentMessage,
+    setMessageContent,
+    resetCurrentMessage,
   } = chatStore();
   const { updateLootItem, activeStrains } = listsStore();
   const { setInputHeight, updateLastActive } = miscStore();
   const { info, loggedIn } = userStore();
-  const [content, setContent] = useState("");
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
   const [sendingPossible, setSendingPossible] = useState({
@@ -43,47 +42,54 @@ const InputField = () => {
   }, [loggedIn]);
 
   const onEnter = (e) => {
-    if (e.key == "Enter" && !e.shiftKey && content.length > 0) {
+    if (e.key == "Enter" && !e.shiftKey && currentMessage.msg.length > 0) {
       e.preventDefault();
       submitMsg();
     }
     if (e.key == "Enter" && e.shiftKey) {
-      setContent(content + "\n");
+      setMessageContent(currentMessage.msg + "\n");
     }
   };
 
   const submitMsg = () => {
     updateLastActive();
-    const contentArray = newTrim(content).split(" ");
-    var attachCheck = false;
-    if (attachedItem)
-      attachCheck = contentArray.includes(attachedItem.connectedString);
+    const contentArray = newTrim(currentMessage.msg).split(" ");
+    var attachedItems = [];
+    var ressources = [];
+
+    forArrayLength(currentMessage.attachedItems, (item) => {
+      if (contentArray.includes(item.connectedString)) {
+        ressources.concat(item.upvotes);
+        attachedItems.push(item);
+        item.attached = currentMessage.id;
+        updateLootItem(info.uid, item);
+      }
+    });
 
     //make ressourceObject
     const resObj = {};
-    let res = attachCheck ? selectedMsgRessources : ["cash"];
-    res.map((r) => {
+    let chatRessources =
+      [...new Set(ressources)].length > 0
+        ? [...new Set(ressources)]
+        : currentMessage.ressources;
+
+    chatRessources.map((r) => {
       resObj[r] = { upvotes: 0, downvotes: 0 };
     });
-    const msg = ChatMessage(
-      resObj,
-      activeChats,
-      content,
-      {
-        nickname: info.nickname,
-        id: info.uid,
-        imgUrl: info.profilePicUrl,
-      },
-      activeChat,
-      attachCheck ? [attachedItem.toObj()] : []
-    );
-    if (attachCheck) {
-      attachedItem.attached = msg.id;
-      updateLootItem(info.uid, attachedItem);
-      setAttachedItem(null);
-    }
-    sendMessageToTurfChats(activeChat, msg);
-    setContent("");
+
+    currentMessage.ressources = resObj;
+    currentMessage.chats = activeChats;
+    currentMessage.author = {
+      nickname: info.nickname,
+      id: info.uid,
+      imgUrl: info.profilePicUrl,
+    };
+    currentMessage.postedIn = activeChat;
+    currentMessage.attachedItems = attachedItems;
+
+    console.log("currentMessage - ", currentMessage);
+    sendMessageToTurfChats(activeChat, currentMessage);
+    resetCurrentMessage();
   };
 
   useEffect(() => {
@@ -95,7 +101,7 @@ const InputField = () => {
   useEffect(() => {
     setHeight(heightSpan.current.offsetHeight);
     setInputHeight(heightSpan.current.offsetHeight);
-  }, [content]);
+  }, [currentMessage.msg]);
   return (
     <div
       className="divRow"
@@ -124,7 +130,7 @@ const InputField = () => {
             borderRadius: "3em/5em",
           }}
         >
-          {content}
+          {currentMessage.msg}
         </span>
         <textarea
           onFocus={(e) => {
@@ -153,9 +159,9 @@ const InputField = () => {
             overflow: "hidden",
             backgroundColor: sendingPossible.state ? focusColor : "#6f6f6f",
           }}
-          value={content}
+          value={currentMessage.msg}
           onChange={(e) => {
-            setContent(e.target.value);
+            setMessageContent(e.target.value);
           }}
         />
       </div>

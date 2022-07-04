@@ -1,13 +1,14 @@
 import { dateToTimestamp, getRandomId } from "../misc/helperFuncs";
 
 export default function ChatMessage(
-  ressources,
+  ressources = ["cash"],
   chats,
-  msg,
+  msg = "",
   author,
   postedIn = "",
   attachedItems = [],
   spawnedItems = [],
+  attachedImages = [],
   id
 ) {
   const timestamp = dateToTimestamp(new Date());
@@ -20,6 +21,7 @@ export default function ChatMessage(
     id: id ?? rId,
     attachedItems,
     spawnedItems,
+    attachedImages,
     postedIn,
     timestamp,
   };

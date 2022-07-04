@@ -19,7 +19,7 @@ const SearchStrainsBar = ({ displayedStrains, setDisplayedStrains }) => {
     if (result.length > 0)
       setDisplayedStrains(
         suggestedStrains.filter((s) =>
-          s.text.toLowerCase().startsWith(result.toLowerCase())
+          s.id.toLowerCase().startsWith(result.toLowerCase())
         )
       );
     else setDisplayedStrains(suggestedStrains);

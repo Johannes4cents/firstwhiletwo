@@ -10,6 +10,8 @@ function makeFireFlag() {
     },
     statements: [makeStatement(id), makeStatement(id)],
     color: "blue",
+    category: "politics",
+    answer: "",
   };
 }
 
