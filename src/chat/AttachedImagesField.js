@@ -41,8 +41,10 @@ const AttachedImageHolder = ({ pcImage }) => {
         `msgImages/${currentMessage.id}`,
         pcImage,
         (path) => {
-          addImgUrlToMsg(path);
-          setUploadingImage(false);
+          getDownloadURL(ref(storage, path)).then((url) => {
+            addImgUrlToMsg(url);
+            setUploadingImage(false);
+          });
         }
       );
       showImagePreviewWithFileReader(pcImage, image.current);

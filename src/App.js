@@ -19,6 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 
 import useHandleUpdating from "./hooks/useHandleUpdating";
+import ClickedImageContainer from "./misc/elements/ClickedImageContainer";
 
 function App() {
   const { info, setInfo } = userStore();
@@ -77,6 +78,7 @@ function App() {
 
   return (
     <div className="App" onMouseUp={() => setDragCursor(null)}>
+      <ClickedImageContainer />
       <ToastContainer />
       <ContextMenu />
       <HoverBox />

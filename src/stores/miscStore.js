@@ -1,8 +1,14 @@
 import React from "react";
 import create from "zustand";
-import { dateToTimestamp } from "../misc/helperFuncs";
+import { clickThroughIndex, dateToTimestamp } from "../misc/helperFuncs";
 
 const miscStore = create((set) => ({
+  inputWidth: 0,
+  setInputWidth: (width) => {
+    set(() => {
+      return { inputWidth: width };
+    });
+  },
   inputHeight: 0,
   setInputHeight: (height) => {
     set(() => {
@@ -82,6 +88,33 @@ const miscStore = create((set) => ({
       let newStuff = { ...state.toUpdateStuff, [list]: [] };
       localStorage.setItem(uid + "toUpdateStuff", JSON.stringify(list));
       return { toUpdateStuff: newStuff };
+    });
+  },
+  clickedImages: { index: 0, images: [] },
+  setClickedImages: (images, index) => {
+    set((state) => {
+      return { clickedImages: { index, images } };
+    });
+  },
+  clearClickedImages: () => {
+    set((state) => {
+      return { clickedImages: { index: 0, images: [] } };
+    });
+  },
+
+  changeClickedImageIndex: (number) => {
+    set((state) => {
+      let newIndex = clickThroughIndex(
+        state.clickedImages.images,
+        state.clickedImages.images[state.clickedImages.index],
+        number
+      );
+      return {
+        clickedImages: {
+          ...state.clickedImages,
+          index: newIndex,
+        },
+      };
     });
   },
 }));

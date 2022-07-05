@@ -298,7 +298,17 @@ function clamp(num, min, max) {
   return Math.min(Math.max(num, min), max);
 }
 
+function clickThroughIndex(list, currentItem, upDown, identifier) {
+  let itemIndex = identifier
+    ? list.map((i) => i[identifier]).indexOf(currentItem[identifier])
+    : list.indexOf(currentItem);
+  var index = Math.abs((itemIndex + upDown) % list.length);
+  if (itemIndex + upDown < 0) index = list.length - 1;
+  return index;
+}
+
 export {
+  clickThroughIndex,
   clamp,
   makeDescriptionField,
   timeToMs,

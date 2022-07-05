@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChatMessage from "../fire_classes/ChatMessage";
+import useWindowSize from "../hooks/useWindowSize";
 import { setDocInFirestore } from "../misc/handleFirestore";
 import { forArrayLength, getRandomId, newTrim } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
@@ -21,7 +22,8 @@ const InputField = () => {
     resetCurrentMessage,
   } = chatStore();
   const { updateLootItem, activeStrains } = listsStore();
-  const { setInputHeight, updateLastActive } = miscStore();
+  const { setInputHeight, updateLastActive, setInputWidth } = miscStore();
+  const windowsize = useWindowSize();
   const { info, loggedIn } = userStore();
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
@@ -110,6 +112,10 @@ const InputField = () => {
       setWidth(inputWidth.current.offsetWidth);
     }
   }, [inputWidth]);
+
+  useEffect(() => {
+    setInputWidth(inputWidth.current.offsetWidth);
+  }, [windowsize]);
 
   useEffect(() => {
     setHeight(heightSpan.current.offsetHeight);

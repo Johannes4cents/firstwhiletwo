@@ -1,11 +1,10 @@
 import { getDownloadURL, ref } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
-import { useSpring } from "react-spring";
 import { storage } from "../../firebase/fireInit";
 import { objectToArray, timestampToChatDate } from "../../misc/helperFuncs";
 import VoteRessourceArrows from "../VoteRessourceArrows";
 import ItemMessageHolder from "./ItemMessageHolder";
-import { getConnectedStringFromMessage } from "../../scanTexts/handleLoot";
+
 import AttachedItemHolder from "./AttachedMessageHolder";
 import MessageImageField from "./MessageImageField";
 
@@ -19,6 +18,7 @@ const MessageHolder = ({ message }) => {
     if (profilePic != null) {
       if (message.author.imgUrl != null) {
         getDownloadURL(ref(storage, message.author.imgUrl)).then((url) => {
+          console.log("url is - ", url);
           if (profilePic.current != null)
             profilePic.current.setAttribute("src", url);
         });
@@ -106,7 +106,12 @@ const MessageHolder = ({ message }) => {
               ))}
           </div>
           {(message.imgUrls ?? []).length > 0 && (
-            <MessageImageField message={message} />
+            <MessageImageField
+              message={message}
+              upvoteAreaWidth={
+                (objectToArray(message.ressources) ?? []).length * 115
+              }
+            />
           )}
           <div
             className="textWhite"
@@ -138,7 +143,9 @@ const MessageHolder = ({ message }) => {
               ? messageDiv.current.offsetHeight + 15
               : "",
             width: `${
-              (message.ressources ? message.ressources.length : 1) * 115
+              (message.ressources
+                ? objectToArray(message.ressources).length
+                : 1) * 115
             }px`,
           }}
         >

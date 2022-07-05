@@ -1,32 +1,45 @@
-import { getDownloadURL, ref } from "firebase/storage";
-import React from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { storage } from "../../firebase/fireInit";
+import React, { useEffect } from "react";
+import miscStore from "../../stores/miscStore";
 
-const MessageImageField = ({ message }) => {
+const MessageImageField = ({ message, upvoteAreaWidth }) => {
+  const { inputWidth, setClickedImages } = miscStore();
+
   return (
-    <div className="divRow" style={{ minHeight: "100px" }}>
+    <div
+      className="divRow"
+      style={{
+        minHeight: "100px",
+        maxWidth: `${inputWidth - upvoteAreaWidth}px`,
+        overflow: "auto",
+      }}
+    >
       {message.imgUrls.map((imgUrl) => {
-        return <ImageHolder key={imgUrl} imageUrl={imgUrl} />;
+        return (
+          <ImageHolder
+            key={imgUrl}
+            imageUrl={imgUrl}
+            setClickedImages={setClickedImages}
+            imgUrls={message.imgUrls}
+          />
+        );
       })}
     </div>
   );
 };
 
-const ImageHolder = ({ imageUrl }) => {
-  const imageRef = useRef(null);
-
-  useEffect(() => {
-    if (imageRef) {
-      getDownloadURL(ref(storage, imageUrl)).then((url) => {
-        imageRef.current.setAttribute("src", url);
-      });
-    }
-  }, [imageUrl, imageRef]);
-
+const ImageHolder = ({ imageUrl, setClickedImages, imgUrls }) => {
   return (
-    <img ref={imageRef} style={{ objectFit: "contain", maxHeight: "200px" }} />
+    <img
+      onClick={() => {
+        setClickedImages(imgUrls, imgUrls.indexOf(imageUrl));
+      }}
+      src={imageUrl}
+      style={{
+        objectFit: "contain",
+        maxHeight: "250px",
+        marginRight: "30px",
+      }}
+    />
   );
 };
 
