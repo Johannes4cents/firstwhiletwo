@@ -307,7 +307,19 @@ function clickThroughIndex(list, currentItem, upDown, identifier) {
   return index;
 }
 
+function addRemoveItem(item, list, setFunc, identifier) {
+  if (identifier) {
+    if (list.map((i) => i[identifier]).includes(item[identifier])) {
+      setFunc(list.filter((i) => i[identifier] != item[identifier]));
+    } else setFunc([...list, item]);
+  } else {
+    if (list.includes(item)) setFunc(list.filter((i) => i != item));
+    else setFunc([...list, item]);
+  }
+}
+
 export {
+  addRemoveItem,
   clickThroughIndex,
   clamp,
   makeDescriptionField,

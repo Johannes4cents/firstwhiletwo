@@ -6,6 +6,35 @@ const userStore = create((set) => ({
   loggedIn: false,
   equipped: "fist",
   myStatements: [],
+  mediaFolder: [],
+  addMediaFolder: (info, name) => {
+    set((state) => {
+      if (
+        !state.mediaFolder
+          .map((s) => s.toLowerCase())
+          .includes(name.toLowerCase())
+      ) {
+        localStorage.setItem(
+          info + "mediaFolder",
+          JSON.stringify([...state.mediaFolder, name])
+        );
+        return { mediaFolder: [...state.mediaFolder, name] };
+      }
+    });
+  },
+  removeMediaFolder: (uid, folder) => {
+    set((state) => {
+      let newList = state.mediaFolder.filter((m) => m != folder);
+      localStorage.setItem(uid + "mediaFolder", JSON.stringify(newList));
+      return { mediaFolder: newList };
+    });
+  },
+  setMediaFolder: (uid, folder) => {
+    set((state) => {
+      console.log("folder - ", folder);
+      return { mediaFolder: folder };
+    });
+  },
   addStatement: (uid, statement) => {
     set((state) => {
       let newStatements = [

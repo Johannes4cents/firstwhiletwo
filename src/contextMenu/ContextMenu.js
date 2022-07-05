@@ -16,7 +16,7 @@ const ContextMenu = () => {
               left: `${xPos}`,
               top: `${yPos}`,
               position: "absolute",
-              zIndex: "1",
+              zIndex: 99999,
             }}
           >
             {contextContent}

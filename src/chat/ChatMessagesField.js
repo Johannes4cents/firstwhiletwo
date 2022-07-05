@@ -5,14 +5,16 @@ import useWindowSize from "../hooks/useWindowSize";
 import DragDropDiv from "../misc/elements/DragDropDiv";
 import { forArrayLength } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
+import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import MessageHolder from "./holder/MessageHolder";
 
 const ChatMessagesField = () => {
   const scrollDiv = useRef(null);
-  const { displayedMessages, addAttachedImages } = chatStore();
+  const { displayedMessages, addAttachedMedia } = chatStore();
   const windowSize = useWindowSize();
   const { inputHeight, attachedItemHeight, attachedImagesHeight } = miscStore();
+
   const [customPosition, setCustomPosition] = useState(false);
   const [wheel, setWheel] = useState(false);
 
@@ -50,8 +52,8 @@ const ChatMessagesField = () => {
         imageFiles.push(file);
       }
     });
-    console.log("imageFiles - ", imageFiles);
-    if (imageFiles.length > 0) addAttachedImages(imageFiles);
+
+    if (imageFiles.length > 0) addAttachedMedia(imageFiles, "image");
   }
 
   return (

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import miscStore from "../../stores/miscStore";
 
-const MessageImageField = ({ message, upvoteAreaWidth }) => {
+const MessageMediaField = ({ message, upvoteAreaWidth }) => {
   const { inputWidth, setClickedImages } = miscStore();
 
   return (
@@ -14,14 +14,16 @@ const MessageImageField = ({ message, upvoteAreaWidth }) => {
       }}
     >
       {message.imgUrls.map((imgUrl) => {
-        return (
-          <ImageHolder
-            key={imgUrl}
-            imageUrl={imgUrl}
-            setClickedImages={setClickedImages}
-            imgUrls={message.imgUrls}
-          />
-        );
+        if (imgUrl.type == "image") {
+          return (
+            <ImageHolder
+              key={imgUrl.url}
+              imageUrl={imgUrl.url}
+              setClickedImages={setClickedImages}
+              imgUrls={message.imgUrls.map((obj) => obj.url)}
+            />
+          );
+        }
       })}
     </div>
   );
@@ -43,4 +45,4 @@ const ImageHolder = ({ imageUrl, setClickedImages, imgUrls }) => {
   );
 };
 
-export default MessageImageField;
+export default MessageMediaField;

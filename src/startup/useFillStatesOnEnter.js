@@ -11,6 +11,7 @@ import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import readStore from "../stores/readStore";
 import settingsStore from "../stores/settingsStore";
+import userStore from "../stores/userStore";
 
 const useFillStatesOnEnter = () => {
   const {
@@ -24,6 +25,7 @@ const useFillStatesOnEnter = () => {
   const { setMinMaxUpvotes, setShowPeople } = settingsStore();
   const { setLastUpdates } = miscStore();
   const { setFireStuff, setScannedMessages } = readStore();
+  const { setMediaFolder } = userStore();
 
   function getCollectionFromUser(uid, collection, setFunc) {
     const localList = JSON.parse(localStorage.getItem(uid + collection));
@@ -72,6 +74,7 @@ const useFillStatesOnEnter = () => {
     getCollectionFromUser(uid, "myStrains", setMyStrains);
     storageListToState(uid, "activeStrains", setActiveStrains);
     storageListToState(uid, "scannedMessages", setScannedMessages);
+    storageListToState(uid, "mediaFolder", setMediaFolder);
     storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
     getMainCollection(uid, "fireFlags", setFireFlags, 24 * 60);
 

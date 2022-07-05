@@ -185,6 +185,29 @@ const listsStore = create((set) => ({
       return { fireFlags: flags, statements: fireStatements };
     });
   },
+  myMedia: [],
+  setMyMedia: (uid, media) => {
+    set((state) => {
+      localStorage.setItem(uid + "myMedia", JSON.stringify(media));
+      return { myMedia: media };
+    });
+  },
+  addMyMedia: (uid, item) => {
+    set((state) => {
+      if (!state.myMedia.map((s) => s.name).includes(item.name)) {
+        let newList = [...state.myMedia, item];
+        localStorage.setItem(uid + "myMedia", JSON.stringify(newList));
+        return { myMedia: newList };
+      }
+    });
+  },
+  removeMyMedia: (uid, item) => {
+    set((state) => {
+      let newList = state.myMedia.filter((m) => m.id != item.id);
+      localStorage.setItem(uid + "myMedia", JSON.stringify(newList));
+      return { myMedia: newList };
+    });
+  },
 }));
 
 export default listsStore;

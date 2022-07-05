@@ -90,9 +90,9 @@ const InputField = () => {
     currentMessage.attachedItems = attachedItems;
 
     var tries = 0;
-    if (currentMessage.attachedImages.length > 0) {
+    if (currentMessage.attachedMedia.length > 0) {
       while (
-        currentMessage.imgUrls.length != currentMessage.attachedImages.length ||
+        currentMessage.imgUrls.length != currentMessage.attachedMedia.length ||
         tries > 20
       ) {
         setTimeout(() => {
@@ -101,7 +101,7 @@ const InputField = () => {
         }, 100);
       }
     }
-    delete currentMessage.attachedImages;
+    delete currentMessage.attachedMedia;
     console.log("currentMessage - ", currentMessage);
     sendMessageToTurfChats(activeChat, currentMessage);
     resetCurrentMessage();

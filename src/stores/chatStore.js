@@ -111,22 +111,27 @@ const chatStore = create((set) => ({
       return { currentMessage: newMessage };
     });
   },
-  addAttachedImages: (images) => {
+  addAttachedMedia: (images, type) => {
     set((state) => {
-      let newImageArray = [...state.currentMessage.attachedImages];
-      forArrayLength(images, (image) => {
-        if (newImageArray.length < 4) newImageArray.push(image);
-        else toast("Only a maximum of 4 images per message");
+      let newMediaArray = [...state.currentMessage.attachedMedia];
+      let typedMedia = images.map((i) => {
+        return { file: i, type, favorite: false };
       });
+      forArrayLength(typedMedia, (media) => {
+        if (newMediaArray.length < 4) {
+          newMediaArray.push(media);
+        } else toast("Only a maximum of 4 images per message");
+      });
+
       return {
         currentMessage: {
           ...state.currentMessage,
-          attachedImages: newImageArray,
+          attachedMedia: newMediaArray,
         },
       };
     });
   },
-  addImgUrlToMsg: (path) => {
+  addMediaUrlToMsg: (path) => {
     set((state) => {
       if (![...(state.currentMessage.imgUrls ?? [])].includes(path))
         return {
@@ -142,7 +147,7 @@ const chatStore = create((set) => ({
       return {
         currentMessage: {
           ...state.currentMessage,
-          attachedImages: state.currentMessage.attachedImages.filter(
+          attachedMedia: state.currentMessage.attachedMedia.filter(
             (i) => i != image
           ),
         },

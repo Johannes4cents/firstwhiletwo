@@ -4,7 +4,7 @@ import { updateTimeCheck } from "../misc/handleUpdates";
 import { checkTimeDiff, dateToTimestamp } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import miscStore from "../stores/miscStore";
-import AttachedImagesField from "./AttachedImagesField";
+import AttachedMediaField from "./AttachedMediaField";
 import AttachedItemField from "./AttachedItemField";
 import ChatMessagesField from "./ChatMessagesField";
 import { checkMessagesForUpdate } from "./handleChat";
@@ -26,7 +26,7 @@ const ChatArea = () => {
       {...mouseEvents}
     >
       <ChatMessagesField />
-      {currentMessage.attachedImages.length > 0 && <AttachedImagesField />}
+      {currentMessage.attachedMedia.length > 0 && <AttachedMediaField />}
       {currentMessage.attachedItems.map((i) => {
         return <AttachedItemField key={i.id} item={i} />;
       })}

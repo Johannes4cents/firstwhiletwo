@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import CheckBox from "../misc/elements/CheckBox";
 const useOnHover = ({
   item = null,
   active = null,
@@ -11,6 +12,7 @@ const useOnHover = ({
   hoverColor = null,
   hoverBgColor = null,
   normalBgColor = null,
+  checkboxSize = null,
 }) => {
   const [hover, setHover] = useState(false);
   const [textColor, setTextColor] = useState("white");
@@ -76,6 +78,15 @@ const useOnHover = ({
     textColor,
     activeImage,
     bgColor,
+    checkbox: (
+      <CheckBox
+        item={item}
+        includeList={inclusionList}
+        identifier={identifier}
+        otherItem={active}
+        size={checkboxSize}
+      />
+    ),
   };
 };
 

@@ -6,7 +6,7 @@ import VoteRessourceArrows from "../VoteRessourceArrows";
 import ItemMessageHolder from "./ItemMessageHolder";
 
 import AttachedItemHolder from "./AttachedMessageHolder";
-import MessageImageField from "./MessageImageField";
+import MessageMediaField from "./MessageMediaField";
 
 const MessageHolder = ({ message }) => {
   const messageDiv = useRef();
@@ -106,7 +106,7 @@ const MessageHolder = ({ message }) => {
               ))}
           </div>
           {(message.imgUrls ?? []).length > 0 && (
-            <MessageImageField
+            <MessageMediaField
               message={message}
               upvoteAreaWidth={
                 (objectToArray(message.ressources) ?? []).length * 115

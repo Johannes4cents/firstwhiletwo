@@ -8,7 +8,7 @@ export default function ChatMessage(
   postedIn = "",
   attachedItems = [],
   spawnedItems = [],
-  attachedImages = [],
+  attachedMedia = [],
   imgUrls = [],
   id
 ) {
@@ -22,7 +22,7 @@ export default function ChatMessage(
     id: id ?? rId,
     attachedItems,
     spawnedItems,
-    attachedImages,
+    attachedMedia,
     imgUrls,
     postedIn,
     timestamp,

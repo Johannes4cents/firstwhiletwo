@@ -6,16 +6,19 @@ import LoadingSpinner from "../misc/elements/LoadingSpinner";
 import { uploadImageToStorage } from "../misc/handleFirestore";
 import { showImagePreviewWithFileReader } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
+import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
+import userStore from "../stores/userStore";
 
-const AttachedImagesField = () => {
+const AttachedMediaField = () => {
   const { currentMessage } = chatStore();
+  const { addMyMedia } = listsStore();
   const { setAttachedImagesHeight } = miscStore();
   const fieldDiv = useRef();
 
   useEffect(() => {
     if (fieldDiv != null) {
-      if (currentMessage.attachedImages.length > 0)
+      if (currentMessage.attachedMedia.length > 0)
         setAttachedImagesHeight(fieldDiv.current.offsetHeight);
       else setAttachedImagesHeight(0);
     } else setAttachedImagesHeight(0);
@@ -23,15 +26,17 @@ const AttachedImagesField = () => {
 
   return (
     <div ref={fieldDiv} className="divRow" style={{ width: "100%" }}>
-      {currentMessage.attachedImages.map((i) => {
-        return <AttachedImageHolder pcImage={i} key={i.name} />;
+      {currentMessage.attachedMedia.map((media) => {
+        return <AttachedMediaHolder media={media} key={media.file.name} />;
       })}
     </div>
   );
 };
 
-const AttachedImageHolder = ({ pcImage }) => {
-  const { currentMessage, addImgUrlToMsg } = chatStore();
+const AttachedMediaHolder = ({ media }) => {
+  const { currentMessage, addMediaUrlToMsg } = chatStore();
+  const { info } = userStore();
+  const { addMyMedia } = listsStore();
   const image = useRef();
   const [uploadingImage, setUploadingImage] = useState(true);
 
@@ -39,17 +44,28 @@ const AttachedImageHolder = ({ pcImage }) => {
     if (image) {
       uploadImageToStorage(
         `msgImages/${currentMessage.id}`,
-        pcImage,
+        media.file,
         (path) => {
           getDownloadURL(ref(storage, path)).then((url) => {
-            addImgUrlToMsg(url);
+            addMediaUrlToMsg({
+              url,
+              type: media.type,
+              author: { id: info.uid, name: info.nickname },
+            });
+            addMyMedia(info.uid, {
+              url,
+              type: media.type,
+              favorite: false,
+              name: media.file.name,
+              author: { id: info.uid, name: info.nickname },
+            });
             setUploadingImage(false);
           });
         }
       );
-      showImagePreviewWithFileReader(pcImage, image.current);
+      showImagePreviewWithFileReader(media.file, image.current);
     }
-  }, [image, pcImage]);
+  }, [image, media]);
 
   return (
     <div
@@ -75,4 +91,4 @@ const AttachedImageHolder = ({ pcImage }) => {
   );
 };
 
-export default AttachedImagesField;
+export default AttachedMediaField;
