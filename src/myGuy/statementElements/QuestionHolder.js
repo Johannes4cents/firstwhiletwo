@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 
 const QuestionHolder = ({ fireFlag, language }) => {
-  useEffect(() => {
+  const onClick = () => {
     console.log("fireFlag - ", fireFlag);
-  }, []);
+  };
   return (
-    <div className="divColumn">
+    <div className="divColumn" onClick={onClick}>
       <img
         src={`/images/pageFlags/page_flag_${fireFlag.color}.png`}
         className="icon25"

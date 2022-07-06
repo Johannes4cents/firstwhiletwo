@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useMousePosition from "../hooks/useMousPosition";
+import useMousePosition from "../hooks/useMousePosition";
 import hoverStore from "../stores/hoverStore";
 
 const HoverBox = () => {

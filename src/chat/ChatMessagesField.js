@@ -11,9 +11,10 @@ import MessageHolder from "./holder/MessageHolder";
 
 const ChatMessagesField = () => {
   const scrollDiv = useRef(null);
-  const { displayedMessages, addAttachedMedia } = chatStore();
+  const { displayedMessages, attachDroppedMeddia } = chatStore();
   const windowSize = useWindowSize();
   const { inputHeight, attachedItemHeight, attachedImagesHeight } = miscStore();
+  const { dragCursor } = miscStore();
 
   const [customPosition, setCustomPosition] = useState(false);
   const [wheel, setWheel] = useState(false);
@@ -53,12 +54,13 @@ const ChatMessagesField = () => {
       }
     });
 
-    if (imageFiles.length > 0) addAttachedMedia(imageFiles, "image");
+    if (imageFiles.length > 0) attachDroppedMeddia(imageFiles, "image");
   }
 
   return (
     <DragDropDiv
       handleDrop={handleDrop}
+      dragCursor={dragCursor}
       className="divColumn"
       style={{
         display: "flex",

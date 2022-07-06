@@ -11,13 +11,13 @@ import { checkMessagesForUpdate } from "./handleChat";
 import InputField from "./InputField";
 
 const ChatArea = () => {
-  const { addAttachedItem, currentMessage } = chatStore();
+  const { addAttachedItem, currentMessage, addMyMediaToMsg } = chatStore();
 
   const mouseEvents = useMouseHandling({ onDrop });
 
   function onDrop(dragCursor) {
-    console.log("dragCUrsor - ", dragCursor);
     if (dragCursor.type == "loot") addAttachedItem(dragCursor.item);
+    if (dragCursor.type == "media") addMyMediaToMsg(dragCursor.item);
   }
   return (
     <div

@@ -22,7 +22,7 @@ import useHandleUpdating from "./hooks/useHandleUpdating";
 import ClickedImageContainer from "./misc/elements/ClickedImageContainer";
 
 function App() {
-  const { info, setInfo } = userStore();
+  const { info, setInfo, loggedIn } = userStore();
   const { setDragCursor } = miscStore();
   const { activeStrains } = listsStore();
   const { loginTrigger } = triggerStore();
@@ -68,13 +68,12 @@ function App() {
 
   useEffect(() => {
     let localInfo = JSON.parse(localStorage.getItem("info"));
-    console.log("localInfo - ", localInfo);
     if (localInfo != null) {
       fillStorage(localInfo.uid);
     } else {
       clearOnLogOut();
     }
-  }, [triggerStore]);
+  }, [loggedIn]);
 
   return (
     <div className="App" onMouseUp={() => setDragCursor(null)}>

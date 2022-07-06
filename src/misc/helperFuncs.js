@@ -318,7 +318,13 @@ function addRemoveItem(item, list, setFunc, identifier) {
   }
 }
 
+function checkMsTimeDiff(msTime) {
+  let newMsTime = dateToTimestamp(new Date()).msTime;
+  return newMsTime - msTime;
+}
+
 export {
+  checkMsTimeDiff,
   addRemoveItem,
   clickThroughIndex,
   clamp,

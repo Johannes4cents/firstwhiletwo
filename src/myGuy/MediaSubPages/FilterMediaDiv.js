@@ -1,11 +1,7 @@
 import React from "react";
 import CheckBox from "../../misc/elements/CheckBox";
 
-const FilterMediaDiv = ({
-  filterOptions,
-  onOptionClicked,
-  selectedOptions,
-}) => {
+const FilterMediaDiv = ({ filterOptions, onTypeClicked, selectedTypes }) => {
   return (
     <div
       className="divRow"
@@ -19,8 +15,8 @@ const FilterMediaDiv = ({
           <FilterHolder
             key={o.name}
             option={o}
-            options={selectedOptions}
-            onOptionClicked={onOptionClicked}
+            selectedTypes={selectedTypes}
+            onTypeClicked={onTypeClicked}
           />
         );
       })}
@@ -28,10 +24,14 @@ const FilterMediaDiv = ({
   );
 };
 
-const FilterHolder = ({ option, options, onOptionClicked }) => {
+const FilterHolder = ({ option, selectedTypes, onTypeClicked }) => {
   return (
-    <div className="divRow" onClick={() => onOptionClicked(option)}>
-      <CheckBox item={option.name} includeList={options} size={"icon15"} />
+    <div className="divRow" onClick={() => onTypeClicked(option)}>
+      <CheckBox
+        item={option.name}
+        includeList={selectedTypes}
+        size={"icon15"}
+      />
       <div className="textWhiteSmall" style={{ flex: 1 }}>
         {option.name}
       </div>

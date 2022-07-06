@@ -1,11 +1,13 @@
 import React from "react";
+import { a } from "react-spring";
 import create from "zustand";
+import { updateDocInFirestore } from "../misc/handleFirestore";
 
 const userStore = create((set) => ({
   info: null,
   loggedIn: false,
   equipped: "fist",
-  myStatements: [],
+  myAnswers: [],
   mediaFolder: [],
   addMediaFolder: (info, name) => {
     set((state) => {
@@ -35,16 +37,43 @@ const userStore = create((set) => ({
       return { mediaFolder: folder };
     });
   },
-  addStatement: (uid, statement) => {
+  addAnswer: (uid, answer) => {
     set((state) => {
-      let newStatements = [
-        ...state.myStatements.filter(
-          (s) => !statement.competitors.includes(s.id)
+      let newAnswers = [
+        ...state.myAnswers.filter(
+          (a) =>
+            !answer.statement.competitors.includes(a.statement.id) &&
+            a.statement.id != answer.statement.id
         ),
-        statement,
+        answer,
       ];
-      localStorage.setItem(uid + "myStatements", JSON.stringify(newStatements));
-      return { myStatements: newStatements };
+      localStorage.setItem(uid + "myAnswers", JSON.stringify(newAnswers));
+      let newInfo = {
+        ...state.info,
+        updates: { ...(state.updates ?? {}), statements: true },
+      };
+      updateDocInFirestore(
+        "users/",
+        uid,
+        "statements",
+        newAnswers.map((a) => {
+          return {
+            ...a,
+            statement: {
+              statement: a.statement.id,
+              flagId: a.statement.flagId,
+            },
+          };
+        })
+      );
+      updateDocInFirestore("users/", uid, "updates", newInfo.updates);
+      return { myAnswers: newAnswers, info: newInfo };
+    });
+  },
+
+  setAnswers: (uid, answers) => {
+    set((state) => {
+      return { myAnswers: answers };
     });
   },
   setInfo: (info) => {

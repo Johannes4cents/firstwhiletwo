@@ -2,7 +2,7 @@ import useOnHover from "../../hooks/useOnHover";
 
 const AnyFolderHolder = ({ onAnyClicked, text }) => {
   const hover = useOnHover({
-    item: "none",
+    item: "any",
     active: text,
     checkboxSize: "icon15",
     imageSelected: "/images/icons/icon_folder.png",

@@ -7,11 +7,12 @@ const StatementHolder = ({
   onStatementClicked,
   language,
   index,
+  answer,
 }) => {
-  const { myStatements } = userStore();
+  const { myAnswers } = userStore();
   const hover = useOnHover({
     item: statement,
-    inclusionList: myStatements,
+    inclusionList: myAnswers.map((a) => a.statement),
     identifier: "id",
     normalBgColor: index % 2 ? "#4f4f4f" : "gray",
     hoverBgColor: "#4f5f9f",

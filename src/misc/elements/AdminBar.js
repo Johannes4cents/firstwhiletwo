@@ -8,11 +8,12 @@ import listsStore from "../../stores/listsStore";
 import userStore from "../../stores/userStore";
 
 const AdminBar = () => {
-  const { info, setInfo, changeChips } = userStore();
+  const { info, setInfo, changeChips, myAnswers } = userStore();
 
   const { triggerWords, clearRecentlyTyped, resTrigger } = readStore();
   const { displayedMessages, currentMessage } = chatStore();
-  const { fireFlags, statements, myStrains, suggestedStrains } = listsStore();
+  const { fireFlags, statements, myStrains, suggestedStrains, myMedia } =
+    listsStore();
   const navigate = useNavigate();
 
   function addChips() {
@@ -21,7 +22,7 @@ const AdminBar = () => {
 
   const checkStuff = () => {
     console.log("currentMessage - ", currentMessage);
-    console.log("suggestedStrains - ", suggestedStrains);
+    console.log("myAnswers - ", myAnswers);
   };
 
   const queryTest = () => {

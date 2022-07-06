@@ -5,6 +5,7 @@ import {
   getUserLoot,
   getGeneralStuff,
   getBaseCollection,
+  getUserListsOnStartUp,
 } from "../misc/handleFirestore";
 import { updateTimeCheck } from "../misc/handleUpdates";
 import listsStore from "../stores/listsStore";
@@ -20,12 +21,13 @@ const useFillStatesOnEnter = () => {
     setLoot,
     setFireFlags,
     setSuggestedStrains,
+    setMyMedia,
   } = listsStore();
 
   const { setMinMaxUpvotes, setShowPeople } = settingsStore();
   const { setLastUpdates } = miscStore();
   const { setFireStuff, setScannedMessages } = readStore();
-  const { setMediaFolder } = userStore();
+  const { setMediaFolder, setAnswers } = userStore();
 
   function getCollectionFromUser(uid, collection, setFunc) {
     const localList = JSON.parse(localStorage.getItem(uid + collection));
@@ -71,11 +73,15 @@ const useFillStatesOnEnter = () => {
   }
 
   function fillStates(uid) {
-    getCollectionFromUser(uid, "myStrains", setMyStrains);
+    getUserListsOnStartUp(uid, [
+      { list: "myStrains", set: setMyStrains },
+      { list: "myMedia", set: setMyMedia },
+    ]);
     storageListToState(uid, "activeStrains", setActiveStrains);
     storageListToState(uid, "scannedMessages", setScannedMessages);
     storageListToState(uid, "mediaFolder", setMediaFolder);
     storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
+    storageListToState(uid, "myAnswers", setAnswers);
     getMainCollection(uid, "fireFlags", setFireFlags, 24 * 60);
 
     // loot

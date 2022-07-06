@@ -2,6 +2,7 @@ import React from "react";
 import create from "zustand";
 import { docsToLoot } from "../fire_classes/Loot";
 import {
+  addItemToUserList,
   addLootInFirestore,
   deleteItemInUserList,
   updateLootItemInUserList,
@@ -197,6 +198,7 @@ const listsStore = create((set) => ({
       if (!state.myMedia.map((s) => s.name).includes(item.name)) {
         let newList = [...state.myMedia, item];
         localStorage.setItem(uid + "myMedia", JSON.stringify(newList));
+        addItemToUserList(uid, "myMedia", item);
         return { myMedia: newList };
       }
     });

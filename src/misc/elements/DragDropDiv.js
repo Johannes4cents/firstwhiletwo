@@ -1,4 +1,5 @@
 import React, { Component, useRef } from "react";
+import miscStore from "../../stores/miscStore";
 class DragDropDiv extends Component {
   dropRef = React.createRef();
   state = {
@@ -10,11 +11,23 @@ class DragDropDiv extends Component {
     e.stopPropagation();
   };
 
+  handleMouseIn = () => {
+    if (this.props.dragCursor) this.setState({ dragging: true });
+  };
+
+  onMouseUp = () => {
+    if (this.props.dragCursor) this.props.handleDrop(this.props.dragCursor);
+    this.setState({ dragging: false });
+  };
+
   handleDragIn = (e) => {
     e.preventDefault();
     e.stopPropagation();
     this.dragCounter++;
-    if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
+    if (
+      (e.dataTransfer.items && e.dataTransfer.items.length > 0) ||
+      this.props.dragCursor
+    ) {
       this.setState({ dragging: true });
     }
   };
@@ -55,6 +68,11 @@ class DragDropDiv extends Component {
   render() {
     return (
       <div
+        onMouseUp={this.onMouseUp}
+        onMouseEnter={this.handleMouseIn}
+        onMouseLeave={() => {
+          this.setState({ dragging: false });
+        }}
         style={{
           position: "relative",
           ...this.props.style,

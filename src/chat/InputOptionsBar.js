@@ -9,7 +9,7 @@ const InputOptionsBar = ({ height }) => {
   const modal = useModal({
     modalContent: <SelectUpvoteRessourceBar />,
     translate: "(-100% -100%)",
-    offsetY: 30,
+    position: "topLeft",
   });
   const onRessourceClicked = () => {
     if (currentMessage.attachedItems.length < 1) modal.open();

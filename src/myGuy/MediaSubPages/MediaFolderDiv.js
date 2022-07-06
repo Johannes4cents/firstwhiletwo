@@ -7,10 +7,9 @@ import userStore from "../../stores/userStore";
 import AnyFolderHolder from "./AnyFolderHolder";
 import FolderHolder from "./FolderHolder";
 
-const MediaFolderDiv = () => {
+const MediaFolderDiv = ({ selectedFolder, setSelectedFolder, any, setAny }) => {
   const { mediaFolder, addMediaFolder, info } = userStore();
-  const [selectedFolder, setSelectedFolder] = useState([]);
-  const [any, setAny] = useState("any");
+
   const modal = useModal({
     modalContent: (
       <SingleInputModal onSave={addFolder} title={"Enter Folder Name"} />
@@ -24,14 +23,18 @@ const MediaFolderDiv = () => {
   const onAnyClicked = () => {
     if (any == "any") {
       setAny("none");
-      setSelectedFolder(mediaFolder);
+      setSelectedFolder([]);
     } else {
       setAny("any");
-      setSelectedFolder([]);
+      setSelectedFolder(mediaFolder);
     }
   };
 
   const onFolderClicked = (folder) => {
+    if (selectedFolder.includes(folder)) setAny("none");
+    else {
+      if (selectedFolder.length + 1 == mediaFolder.length) setAny("any");
+    }
     addRemoveItem(folder, selectedFolder, setSelectedFolder);
   };
 
@@ -39,6 +42,7 @@ const MediaFolderDiv = () => {
     console.log("mediaFolder - ", mediaFolder);
     setSelectedFolder(mediaFolder);
   }, []);
+
   return (
     <div
       className="divRow"

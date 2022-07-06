@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CheckBox from "../misc/elements/CheckBox";
+import HoverMenu from "../misc/elements/HoverMenu";
+import { checkMsTimeDiff, dateToTimestamp } from "../misc/helperFuncs";
+import useMousePosition from "./useMousePosition";
 const useOnHover = ({
   item = null,
   active = null,
@@ -10,14 +13,41 @@ const useOnHover = ({
   selectedTextColor = null,
   unselectedTextColor = null,
   hoverColor = null,
-  hoverBgColor = null,
-  normalBgColor = null,
-  checkboxSize = null,
+  hoverBgColor = "#5f5f5f",
+  normalBgColor = "#4f4f4f",
+  checkboxSize = "icon20",
+  hoverElement = null,
+  hoverTimer = 2000,
+  hoverOptions = {
+    direction: "horizontal",
+    options: [],
+    size: "icon20",
+    inside: false,
+  },
 }) => {
   const [hover, setHover] = useState(false);
   const [textColor, setTextColor] = useState("white");
   const [activeImage, setActiveImage] = useState(imageUnselected);
-  const [bgColor, setBgColor] = useState("#000000");
+  const [bgColor, setBgColor] = useState("#4f4f4f");
+  const [hoverStarted, setHoverStarted] = useState(null);
+  const [showHoverMenu, setShowHoverMenu] = useState(false);
+  const [showHover, setShowHover] = useState(false);
+  const mousePosition = useMousePosition();
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHoverStarted((state) => {
+        if (state) {
+          let timePassed = checkMsTimeDiff(state);
+          if (timePassed > hoverTimer) setShowHover(true);
+        }
+        return state;
+      });
+    }, 200);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     if (hoverBgColor) {
@@ -62,11 +92,16 @@ const useOnHover = ({
   }, [active, hover, inclusionList, item]);
 
   const onMouseEnter = () => {
+    setHoverStarted(dateToTimestamp(new Date()).msTime);
     setHover(true);
+    setShowHoverMenu(true);
   };
 
   const onMouseLeave = () => {
     setHover(false);
+    setHoverStarted(null);
+    setShowHover(false);
+    setShowHoverMenu(false);
   };
 
   return {
@@ -76,6 +111,7 @@ const useOnHover = ({
       onMouseLeave: (e) => onMouseLeave(e),
     },
     textColor,
+    setShowHover,
     activeImage,
     bgColor,
     checkbox: (
@@ -86,6 +122,35 @@ const useOnHover = ({
         otherItem={active}
         size={checkboxSize}
       />
+    ),
+    infoBox: (
+      <div
+        className="modalContent"
+        onClick={() => {
+          setShowHover(false);
+        }}
+        style={{
+          left: `${mousePosition.x}px`,
+          top: `${mousePosition.y}px`,
+          pointerEvents: "none",
+          backgroundColor: "#ffffff00",
+        }}
+      >
+        {showHover && hoverElement}
+      </div>
+    ),
+    hoverMenu: (
+      <div style={{ position: "relative" }}>
+        {showHoverMenu && (
+          <HoverMenu
+            options={hoverOptions.options}
+            direction={hoverOptions.direction}
+            size={hoverOptions.size}
+            setShowHoverMenu={setShowHoverMenu}
+            inside={hoverOptions.inside}
+          />
+        )}
+      </div>
     ),
   };
 };

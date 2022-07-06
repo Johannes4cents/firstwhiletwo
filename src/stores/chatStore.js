@@ -105,17 +105,18 @@ const chatStore = create((set) => ({
       };
     });
   },
-  setMessageContent: (content) => {
+  setMessageContent: (content, fromShiftEnter) => {
+    if (content == "\n" && !fromShiftEnter) return;
     set((state) => {
       let newMessage = { ...state.currentMessage, msg: content };
       return { currentMessage: newMessage };
     });
   },
-  addAttachedMedia: (images, type) => {
+  attachDroppedMeddia: (images, type) => {
     set((state) => {
       let newMediaArray = [...state.currentMessage.attachedMedia];
       let typedMedia = images.map((i) => {
-        return { file: i, type, favorite: false };
+        return { file: i, type, favorite: false, firstDrop: true };
       });
       forArrayLength(typedMedia, (media) => {
         if (newMediaArray.length < 4) {
@@ -131,6 +132,19 @@ const chatStore = create((set) => ({
       };
     });
   },
+  addMyMediaToMsg: (media) => {
+    media.firstDrop = false;
+    set((state) => {
+      if (state.currentMessage.attachedMedia.length < 4) {
+        return {
+          currentMessage: {
+            ...state.currentMessage,
+            attachedMedia: [...state.currentMessage.attachedMedia, media],
+          },
+        };
+      }
+    });
+  },
   addMediaUrlToMsg: (path) => {
     set((state) => {
       if (![...(state.currentMessage.imgUrls ?? [])].includes(path))
@@ -142,13 +156,13 @@ const chatStore = create((set) => ({
         };
     });
   },
-  removeAttachedImage: (image) => {
+  removeAttachedMedia: (media) => {
     set((state) => {
       return {
         currentMessage: {
           ...state.currentMessage,
           attachedMedia: state.currentMessage.attachedMedia.filter(
-            (i) => i != image
+            (m) => m.id != media.id
           ),
         },
       };

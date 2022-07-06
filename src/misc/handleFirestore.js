@@ -200,7 +200,7 @@ async function updateTriggerWordInGeneralList(item) {
 async function addItemToUserList(uid, list, item) {
   const docRef = doc(db, "users/", uid);
   await getDoc(docRef).then((snapshot) => {
-    let l = snapshot.data()[list];
+    let l = snapshot.data()[list] ?? [];
     l.push(item);
     updateDoc(docRef, { [list]: l });
   });
@@ -412,7 +412,33 @@ function cloudFunc(name, data, onResult, onError) {
     });
 }
 
+async function getUserObject(uid, onUser) {
+  let userRef = doc(db, "users/", uid);
+  let userDoc = await getDoc(userRef);
+  onUser(userDoc.data());
+}
+
+function getUserListsOnStartUp(uid, lists) {
+  var userDoc = null;
+
+  forArrayLength(lists, (list) => {
+    let localList = JSON.parse(localStorage.getItem(uid + list.list));
+    if (localList != null) list.set(uid, localList);
+    else {
+      if (userDoc) list.set(uid, userDoc[list.list]);
+      else {
+        getUserObject(uid, (user) => {
+          console.log("user - ", user);
+          userDoc = user;
+          list.set(uid, userDoc[list.list]);
+        });
+      }
+    }
+  });
+}
+
 export {
+  getUserListsOnStartUp,
   cloudFunc,
   queryCollectionGroup,
   queryCollection,
