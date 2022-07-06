@@ -35,21 +35,24 @@ const InputField = () => {
   useEffect(() => {
     if (info != null) {
       let depthCheck = checkCorrectChatDepth(info.stats.levels, activeStrains);
-      setSendingPossible({ ...sendingPossible, state: depthCheck });
+      setSendingPossible({ loggedIn, state: depthCheck });
     }
-  }, [activeStrains, info]);
+  }, [activeStrains, info, loggedIn]);
 
   useEffect(() => {
     setSendingPossible({ state: loggedIn, loggedIn });
   }, [loggedIn]);
 
   const onEnter = (e) => {
-    if (e.key == "Enter" && !e.shiftKey && currentMessage.msg.length > 0) {
+    if (
+      e.key == "Enter" &&
+      !e.shiftKey &&
+      (currentMessage.msg.length > 0 || currentMessage.attachedMedia.length > 0)
+    ) {
       e.preventDefault();
       submitMsg();
-    }
-    if (e.key == "Enter" && e.shiftKey) {
-      setMessageContent(currentMessage.msg + "\n");
+    } else if (e.key == "Enter" && e.shiftKey) {
+      setMessageContent(currentMessage.msg + "\n", true);
     }
   };
 
@@ -68,7 +71,6 @@ const InputField = () => {
       }
     });
 
-    //make ressourceObject
     const resObj = {};
     let chatRessources =
       [...new Set(ressources)].length > 0
@@ -96,16 +98,18 @@ const InputField = () => {
         tries > 20
       ) {
         setTimeout(() => {
-          console.log("uploading images");
           tries++;
         }, 100);
       }
     }
     delete currentMessage.attachedMedia;
     console.log("currentMessage - ", currentMessage);
+    addMediaToFirestore(activeChat.imgUrls);
     sendMessageToTurfChats(activeChat, currentMessage);
     resetCurrentMessage();
   };
+
+  function addMediaToFirestore(mediaList) {}
 
   useEffect(() => {
     if (inputWidth != null) {
