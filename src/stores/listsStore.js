@@ -216,6 +216,30 @@ const listsStore = create((set) => ({
       return { turfChats: chats };
     });
   },
+  otherUser: [],
+  setOtherUser: (uid, user) => {
+    set((state) => {
+      return { otherUser: user.filter((u) => u.id != uid) };
+    });
+  },
+  userComparissons: [],
+  setUserComparissons: (info, comparissons) => {
+    set((state) => {
+      return { userComparissons: comparissons };
+    });
+  },
+  addUserComparissons: (uid, comps) => {
+    set((state) => {
+      let newList = [
+        ...state.userComparissons.filter(
+          (c) => !comps.map((co) => co.id).includes(c.id)
+        ),
+        ...comps,
+      ];
+      localStorage.setItem(uid + "userComparissons", JSON.stringify(newList));
+      return { userComparissons: newList };
+    });
+  },
 }));
 
 export default listsStore;

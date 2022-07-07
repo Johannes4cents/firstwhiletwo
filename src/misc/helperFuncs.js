@@ -323,7 +323,38 @@ function checkMsTimeDiff(msTime) {
   return newMsTime - msTime;
 }
 
+function makeContextOption(text, imgUrl, onClick) {
+  return {
+    text,
+    imgUrl,
+    onClick,
+  };
+}
+
+function makeHoverOption(
+  description,
+  click,
+  payload,
+  imgUrl,
+  greyHover = true
+) {
+  return {
+    description,
+    click,
+    payload,
+    imgUrl,
+    greyHover,
+  };
+}
+
+function showUserComparisson(otherUser) {
+  console.log("otherUser - ", otherUser);
+}
+
 export {
+  showUserComparisson,
+  makeHoverOption,
+  makeContextOption,
   checkMsTimeDiff,
   addRemoveItem,
   clickThroughIndex,

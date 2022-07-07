@@ -22,6 +22,7 @@ import useHandleUpdating from "./hooks/useHandleUpdating";
 import ClickedImageContainer from "./misc/elements/ClickedImageContainer";
 import AfterSignUpPage from "./firebase/signUpOptions/AfterSignUpPage";
 import useGeneralListListener from "./hooks/useGeneralListListener";
+import useCompareUsers from "./hooks/useCompareUsers";
 
 function App() {
   const { info, setInfo, loggedIn } = userStore();
@@ -34,6 +35,7 @@ function App() {
   const clearOnLogOut = useClearOnLogOut();
   useHandleUpdating();
   useGeneralListListener();
+  useCompareUsers();
 
   const listenToChats = useListenToActiveStrains(
     subscriptions,

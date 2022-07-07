@@ -378,7 +378,6 @@ async function getGeneralStuff(local, uid, setFireItems, setSuggestedStrains) {
 }
 
 async function getCustomUserList(uid, collection, onCollectionRetrieved) {
-  console.log("getCustomUserList called");
   const userDocRef = doc(db, "users/", uid);
   await getDoc(userDocRef).then((doc) => {
     const list = doc.data()[collection];
@@ -457,7 +456,34 @@ function getUserListsOnStartUp(uid, lists) {
   });
 }
 
+async function fireAnswersToExtended(uid, setMyAnswers) {
+  let listsRef = doc(db, "general", "lists");
+  let lists = await getDoc(listsRef);
+  let fireFlags = lists.data()["fireFlags"];
+
+  let userRef = doc(db, "users", uid);
+  let user = await getDoc(userRef);
+  const statements = user.data()["statements"];
+
+  console.log("fireFlags - ", fireFlags, " | statements - ", statements);
+  let fixedAnswers = [];
+  forArrayLength(statements, (answer) => {
+    const fa = {};
+    fa.statement = answer.statement;
+    fa.answered = new Date().getTime();
+    fa.private = answer.private;
+    fa.importance = answer.importance;
+    fa.statement = fireFlags
+      .find((f) => f.id == answer.statement.flagId)
+      .statements.find((s) => s.id == answer.statement.statement);
+    fixedAnswers.push(fa);
+  });
+  localStorage.setItem(uid + "myAnswers", JSON.stringify(fixedAnswers));
+  setMyAnswers(uid, fixedAnswers);
+}
+
 export {
+  fireAnswersToExtended,
   getUserListsOnStartUp,
   cloudFunc,
   multiQueryCollection,

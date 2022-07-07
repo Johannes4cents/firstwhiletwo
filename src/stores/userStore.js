@@ -52,6 +52,8 @@ const userStore = create((set) => ({
         ...state.info,
         updates: { ...(state.updates ?? {}), statements: true },
       };
+      state.setInfo(newInfo);
+      localStorage.setItem("info", JSON.stringify(newInfo));
       updateDocInFirestore(
         "users/",
         uid,

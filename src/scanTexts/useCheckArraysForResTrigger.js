@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { clamp, newTrim, umlautFix } from "../misc/helperFuncs";
+import { clamp, newTrim, objectToArray, umlautFix } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import readStore from "../stores/readStore";
 
@@ -30,8 +30,12 @@ const useCheckArraysForResTrigger = () => {
       for (let i = 0; i < contentArray.length; i++) {
         const string = contentArray[i];
         const firstChar = umlautFix(string[0].toLowerCase());
+        const triggerArray = objectToArray(triggerWords);
+
         const ressourceWords = firstChar
-          ? triggerWords[firstChar].ressources
+          ? triggerArray.length > 0
+            ? triggerWords[firstChar].ressources
+            : []
           : [];
 
         let foundRessource = ressourceWords.find((s) => s.string == string);

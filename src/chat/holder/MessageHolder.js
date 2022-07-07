@@ -7,6 +7,7 @@ import ItemMessageHolder from "./ItemMessageHolder";
 
 import AttachedItemHolder from "./AttachedMessageHolder";
 import MessageMediaField from "./MessageMediaField";
+import MessageNickField from "./MessageElements/MessageNickField";
 
 const MessageHolder = ({ message }) => {
   const messageDiv = useRef();
@@ -60,45 +61,7 @@ const MessageHolder = ({ message }) => {
           className="divColumn"
           style={{ flex: 1, alignItems: "baseline" }}
         >
-          <div
-            className="divRow"
-            style={{ marginBottom: "3px", width: "100%" }}
-          >
-            <div className="textBoldWhite">{message.author.nickname}</div>
-            <div className="divRow" style={{ marginLeft: "5px" }}>
-              <div
-                className="textWhite"
-                style={{
-                  fontSize: "11px",
-                  color: "lightgray",
-                  fontStyle: "italic",
-                }}
-              >
-                {timestampToChatDate(message.timestamp)}
-              </div>
-            </div>
-
-            <div
-              className="divRow"
-              style={{
-                marginLeft: "5px",
-                backgroundColor: "lightgray",
-                borderRadius: "0.5rem/1rem",
-                display: "flex",
-                height: "100%",
-              }}
-            >
-              <div
-                style={{
-                  color: "grey",
-                  fontSize: "12px",
-                  height: "auto",
-                }}
-              >
-                {message.postedIn}
-              </div>
-            </div>
-          </div>
+          <MessageNickField message={message} />
           <div className="divColumn" style={{ width: "100%" }}>
             {(message.attachedItems ?? []).length > 0 &&
               message.attachedItems.map((i) => (

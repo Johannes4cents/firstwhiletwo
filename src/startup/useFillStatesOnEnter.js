@@ -6,6 +6,7 @@ import {
   getGeneralStuff,
   getBaseCollection,
   getUserListsOnStartUp,
+  fireAnswersToExtended,
 } from "../misc/handleFirestore";
 import { updateTimeCheck } from "../misc/handleUpdates";
 import listsStore from "../stores/listsStore";
@@ -21,6 +22,8 @@ const useFillStatesOnEnter = () => {
     setLoot,
     setSuggestedStrains,
     setMyMedia,
+    setUserComparissons,
+    fireFlags,
   } = listsStore();
 
   const { setMinMaxUpvotes, setShowPeople } = settingsStore();
@@ -80,7 +83,7 @@ const useFillStatesOnEnter = () => {
     storageListToState(uid, "scannedMessages", setScannedMessages);
     storageListToState(uid, "mediaFolder", setMediaFolder);
     storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
-    storageListToState(uid, "myAnswers", setAnswers);
+    storageListToState(uid, "userComparissons", setUserComparissons);
 
     // loot
     let loot = JSON.parse(localStorage.getItem(uid + "loot"));
@@ -89,6 +92,13 @@ const useFillStatesOnEnter = () => {
       getUserLoot(uid, (list) => {
         setLoot(uid, list);
       });
+
+    // myAnswers
+    let localAnswers = JSON.parse(localStorage.getItem(uid + "myAnswers"));
+    if (localAnswers) setAnswers(uid, localAnswers);
+    else {
+      fireAnswersToExtended(uid, setAnswers);
+    }
 
     // generalStuff
     let fireitems = JSON.parse(localStorage.getItem(uid + "fireItems"));

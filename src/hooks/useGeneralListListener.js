@@ -8,29 +8,27 @@ import listsStore from "../stores/listsStore";
 import userStore from "../stores/userStore";
 
 const useGeneralListListener = () => {
-  const [unsubscribe, setUnsubscribe] = useState(null);
-  const { setFireFlags } = listsStore();
+  const { setFireFlags, setTurfChats, setOtherUser } = listsStore();
   const { info, loggedIn } = userStore();
 
   useEffect(() => {
-    var listener = () => {};
+    var unsubscribe = () => {};
 
     if (info && loggedIn) {
       const docRef = doc(db, "general", "lists");
-      listener = onSnapshot(docRef, (d) => {
-        console.log("doc - ", d);
+      unsubscribe = onSnapshot(docRef, (d) => {
         const lists = d.data();
         setFireFlags(info.uid, lists["fireFlags"]);
+        setTurfChats(lists["turfChats"]);
+        setOtherUser(info.uid, lists["userList"]);
       });
-      setUnsubscribe(listener);
     } else {
-      if (unsubscribe) unsubscribe();
+      unsubscribe();
     }
 
-    return () => {
-      listener();
-    };
+    return () => unsubscribe();
   }, [info]);
+
   return <div>useGeneralListListener</div>;
 };
 

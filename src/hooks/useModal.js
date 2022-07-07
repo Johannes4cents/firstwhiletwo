@@ -11,6 +11,8 @@ const useModal = ({
   offsetY = 0,
   extraOpen = true,
   position = "topLeft",
+  center = false,
+  darkOverlay = false,
 }) => {
   const contentDiv = useRef(null);
   const mousePosition = useMousePosition();
@@ -71,21 +73,28 @@ const useModal = ({
       <div>
         {modalOpen && (
           <div>
-            <div className="overlayClear" onClick={() => closeModal()} />
+            <div
+              className={darkOverlay ? "overlay" : "overlayClear"}
+              onClick={() => closeModal()}
+            />
             <div
               ref={contentDiv}
               className="modalContent"
               style={{
-                left: `${clamp(
-                  openPos.x + offsetPos.width + offsetX,
-                  0,
-                  windowSize.width
-                )}px`,
-                top: `${clamp(
-                  openPos.y + offsetPos.height + offsetY,
-                  0,
-                  windowSize.height
-                )}px`,
+                left: center
+                  ? "50%"
+                  : `${clamp(
+                      openPos.x + offsetPos.width + offsetX,
+                      0,
+                      windowSize.width
+                    )}px`,
+                top: center
+                  ? "40%"
+                  : `${clamp(
+                      openPos.y + offsetPos.height + offsetY,
+                      0,
+                      windowSize.height
+                    )}px`,
                 zIndex: 1,
                 backgroundColor: "#00000000",
               }}
