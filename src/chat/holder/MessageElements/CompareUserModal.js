@@ -14,6 +14,7 @@ const CompareUserModal = ({ otherId, userImage }) => {
 
   useEffect(() => {
     let foundComparisson = userComparissons.find((c) => c.id == otherId);
+    console.log("foundComparisson - ", foundComparisson);
     if (foundComparisson) setComparisson(foundComparisson);
     else {
       getSingleDocFromFirestore("users", otherId, (user) => {

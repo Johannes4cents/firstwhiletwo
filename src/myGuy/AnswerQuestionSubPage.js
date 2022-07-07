@@ -32,12 +32,6 @@ const AnswerQuestionSubPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setAnswer((answer) => {
-        console.log(
-          "answer.answered - ",
-          answer.answered,
-          " | answer - ",
-          answer
-        );
         if (answer.answered != null) {
           let timeDiff = Math.round(
             (new Date().getTime() - answer.answered) / 1000
@@ -57,7 +51,6 @@ const AnswerQuestionSubPage = () => {
   }, [fireFlags]);
 
   function onStatementClicked(statement) {
-    console.log("timeDiff - ", timeDiff);
     if (timeDiff - 600 > 0 || timeDiff == null) {
       let newAnswer = { ...answer, statement, answered: new Date().getTime() };
 

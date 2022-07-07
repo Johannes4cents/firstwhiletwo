@@ -9,14 +9,20 @@ import AttachedItemField from "./AttachedItemField";
 import ChatMessagesField from "./ChatMessagesField";
 import { checkMessagesForUpdate } from "./handleChat";
 import InputField from "./InputField";
+import userStore from "../stores/userStore";
 
 const ChatArea = () => {
   const { addAttachedItem, currentMessage, addMyMediaToMsg } = chatStore();
+  const { info } = userStore();
 
   const mouseEvents = useMouseHandling({ onDrop });
 
+  useEffect(() => {
+    console.log("currentMEssage - ", currentMessage);
+  }, [currentMessage]);
+
   function onDrop(dragCursor) {
-    if (dragCursor.type == "loot") addAttachedItem(dragCursor.item);
+    if (dragCursor.type == "loot") addAttachedItem(info, dragCursor.item);
     if (dragCursor.type == "media") addMyMediaToMsg(dragCursor.item);
   }
   return (
