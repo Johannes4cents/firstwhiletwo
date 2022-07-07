@@ -62,6 +62,7 @@ const MessageHolder = ({ message }) => {
           style={{ flex: 1, alignItems: "baseline" }}
         >
           <MessageNickField message={message} />
+
           <div className="divColumn" style={{ width: "100%" }}>
             {(message.attachedItems ?? []).length > 0 &&
               message.attachedItems.map((i) => (

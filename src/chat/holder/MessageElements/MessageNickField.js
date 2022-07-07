@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useModal from "../../../hooks/useModal";
 import useOnHover from "../../../hooks/useOnHover";
 import {
@@ -10,19 +10,25 @@ import listsStore from "../../../stores/listsStore";
 import CompareUserModal from "./CompareUserModal";
 
 const MessageNickField = ({ message }) => {
+  const [comparedUser, setComparedUser] = useState({ id: "", imgUrl: "" });
   const modal = useModal({
     modalContent: (
       <CompareUserModal
-        otherId={message.author.id}
-        userImage={message.author.imgUrl}
+        otherId={comparedUser.id}
+        userImage={compareUser.imgUrl}
       />
     ),
+    password: message.id,
     center: true,
     darkOverlay: true,
   });
 
+  useEffect(() => {
+    setComparedUser({ id: message.author.id, imgUrl: message.author.imgUrl });
+  }, [message]);
+
   function compareUser(otherId) {
-    modal.open();
+    modal.open(message.id);
   }
   const hover = useOnHover({
     hoverOptions: {

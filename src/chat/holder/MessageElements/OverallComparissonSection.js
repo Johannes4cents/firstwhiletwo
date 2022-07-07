@@ -1,7 +1,6 @@
 import React from "react";
 
 const OverallComparissonSection = ({ comparisson, userImage }) => {
-  console.log("comparisson - ", comparisson);
   return (
     <div className="divColumn" style={{ width: "100%" }}>
       <div
