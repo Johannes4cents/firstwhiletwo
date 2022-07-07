@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTransition, animated } from "react-spring";
 import useWindowSize from "../../hooks/useWindowSize";
 import miscStore from "../../stores/miscStore";
+import HoverArrow from "../../misc/elements/HoverArrow";
 
 const ClickedImageContainer = () => {
   const keyRef = useRef();
@@ -76,31 +77,6 @@ const ClickedImageContainer = () => {
         </div>
       )}
     </div>
-  );
-};
-
-const HoverArrow = ({ upDown, onArrowClicked }) => {
-  const [hover, setHover] = useState();
-  return (
-    <img
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onClick={() => {
-        onArrowClicked(upDown);
-      }}
-      src={
-        hover
-          ? "/images/icons/icon_up_down_arrow_selected.png"
-          : "/images/icons/icon_up_down_arrow.png"
-      }
-      className="image70"
-      style={{
-        transform: upDown == -1 ? "rotate(-90deg)" : "rotate(90deg)",
-        zIndex: 9999999,
-        marginLeft: upDown == -1 ? "100px" : "0px",
-        marginRight: upDown == 1 ? "100px" : "0px",
-      }}
-    />
   );
 };
 
