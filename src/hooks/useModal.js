@@ -5,6 +5,7 @@ import useMousePosition from "./useMousePosition";
 import useWindowSize from "./useWindowSize";
 
 const useModal = ({
+  password = null,
   modalContent,
   offsetX = 0,
   offsetY = 0,
@@ -20,6 +21,7 @@ const useModal = ({
   const [openPos, setOpenPos] = useState({ x: 0, y: 0 });
   const { closeModal, openModal, modalOpen } = miscStore();
   const [offsetPos, setOffsetPos] = useState({ width: 0, height: 0 });
+  const [modalPw, setModalPw] = useState(null);
   const windowSize = useWindowSize();
 
   useEffect(() => {
@@ -33,7 +35,8 @@ const useModal = ({
     }
   }, [contentDiv, modalOpen]);
 
-  const open = () => {
+  const open = (modalPassword) => {
+    setModalPw(modalPassword);
     setOpenPos({ x: mousePosition.x, y: mousePosition.y });
     openModal(true);
   };
@@ -87,7 +90,7 @@ const useModal = ({
                 backgroundColor: "#00000000",
               }}
             >
-              {extraOpen && modalContent}
+              {extraOpen && modalPw == password && modalContent}
             </div>
           </div>
         )}

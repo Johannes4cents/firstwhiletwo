@@ -56,6 +56,7 @@ function makeChatDoc(chatName, uid, username, chats) {
     created: dateToTimestamp(new Date()),
     createdBy: { id: uid, nick: username },
     turf: Turf(),
+    currentUser: [],
   };
 }
 

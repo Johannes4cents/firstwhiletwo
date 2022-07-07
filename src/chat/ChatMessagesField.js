@@ -86,11 +86,9 @@ const ChatMessagesField = () => {
           overflow: "auto",
         }}
       >
-        {displayedMessages
-          .sort((a, b) => (a.timestamp.msTime > b.timestamp.msTime ? 1 : -1))
-          .map((msg) => {
-            return <MessageHolder message={msg} key={msg.id} />;
-          })}
+        {displayedMessages.map((msg) => {
+          return <MessageHolder message={msg} key={msg.id} />;
+        })}
         <div ref={scrollDiv} style={{ height: "0px" }} />
       </div>
     </DragDropDiv>

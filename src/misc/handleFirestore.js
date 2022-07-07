@@ -46,14 +46,31 @@ async function queryCollectionGroup(group, field, operator, value) {
   return docs;
 }
 
-async function queryCollection(collection, field, operator, value) {
-  const colRef = collection(db, collection);
+async function queryCollection(col, field, operator, value, onResult) {
+  const colRef = collection(db, col);
   let q = query(colRef, where(field, operator, value));
   const snapshot = await getDocs(q);
   let docs = [];
   snapshot.forEach((d) => {
     docs.push(d.data());
   });
+  if (onResult) onResult(docs);
+  return docs;
+}
+
+async function multiQueryCollection(col, queries, onResult) {
+  let qList = [];
+  forArrayLength(queries, (query) => {
+    qList.push(where(query[0], query[1], query[2]));
+  });
+  const colRef = collection(db, col);
+  let q = query(colRef, ...qList);
+  const snapshot = await getDocs(q);
+  let docs = [];
+  snapshot.forEach((d) => {
+    docs.push(d.data());
+  });
+  if (onResult) onResult(docs);
   return docs;
 }
 
@@ -114,11 +131,14 @@ function getCollectionListener(colRef, onCollection) {
   });
 }
 
-function getDocListener(col, id, onChange) {
+async function getDocListener(col, id, onChange) {
+  console.log("col - ", col, " | id - ", id);
   const docRef = doc(db, col, id);
-  onSnapshot(docRef, (doc) => {
+  let unsubscribe = onSnapshot(docRef, (doc) => {
+    console.log("doc - ", doc);
     onChange(doc.data());
   });
+  return unsubscribe;
 }
 
 async function getGeneralList(name, onListRetrieved) {
@@ -132,7 +152,7 @@ async function getGeneralList(name, onListRetrieved) {
 async function addItemToGeneralList(list, item) {
   const docRef = doc(db, "general", "lists");
   await getDoc(docRef).then((snapshot) => {
-    let l = snapshot.data()[list];
+    let l = snapshot.data()[list] ?? [];
     l.push(item);
     updateDoc(docRef, { [list]: l });
   });
@@ -168,19 +188,19 @@ async function updateItemInGeneralList(
   list,
   item,
   identifier,
-  identifierValue,
   toLowerCase = false
 ) {
   const docRef = doc(db, "general", "lists");
   await getDoc(docRef).then((snapshot) => {
-    let l = snapshot.data()[list];
+    let l = snapshot.data()[list] ?? [];
     const foundItem = toLowerCase
       ? l.find(
-          (i) => i[identifier].toLowerCase() == identifierValue.toLowerCase()
+          (i) => i[identifier].toLowerCase() == item[identifier].toLowerCase()
         )
-      : l.find((i) => i[identifier] == identifierValue);
+      : l.find((i) => i[identifier] == item[identifier]);
     const index = l.indexOf(foundItem);
-    l[index] = item;
+    if (foundItem) l[index] = item;
+    else l.push(item);
     updateDoc(docRef, { [list]: l });
   });
 }
@@ -412,7 +432,7 @@ function cloudFunc(name, data, onResult, onError) {
     });
 }
 
-async function getUserObject(uid, onUser) {
+async function getUser(uid, onUser) {
   let userRef = doc(db, "users/", uid);
   let userDoc = await getDoc(userRef);
   onUser(userDoc.data());
@@ -427,7 +447,7 @@ function getUserListsOnStartUp(uid, lists) {
     else {
       if (userDoc) list.set(uid, userDoc[list.list]);
       else {
-        getUserObject(uid, (user) => {
+        getUser(uid, (user) => {
           console.log("user - ", user);
           userDoc = user;
           list.set(uid, userDoc[list.list]);
@@ -440,6 +460,7 @@ function getUserListsOnStartUp(uid, lists) {
 export {
   getUserListsOnStartUp,
   cloudFunc,
+  multiQueryCollection,
   queryCollectionGroup,
   queryCollection,
   getCreateUserListener,

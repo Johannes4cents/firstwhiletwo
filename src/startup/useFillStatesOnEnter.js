@@ -19,7 +19,6 @@ const useFillStatesOnEnter = () => {
     setMyStrains,
     setActiveStrains,
     setLoot,
-    setFireFlags,
     setSuggestedStrains,
     setMyMedia,
   } = listsStore();
@@ -82,7 +81,6 @@ const useFillStatesOnEnter = () => {
     storageListToState(uid, "mediaFolder", setMediaFolder);
     storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
     storageListToState(uid, "myAnswers", setAnswers);
-    getMainCollection(uid, "fireFlags", setFireFlags, 24 * 60);
 
     // loot
     let loot = JSON.parse(localStorage.getItem(uid + "loot"));

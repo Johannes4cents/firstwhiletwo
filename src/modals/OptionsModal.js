@@ -23,13 +23,12 @@ const OptionsModal = ({ mousePosition, setModalOpen }) => {
   };
 
   const signOutUser = () => {
-    const newInfo = { ...info, loggedIn: false };
     signOut(auth).then(() => {
+      console.log("signing Out");
       // set localStorage
-      localStorage.setItem("info", JSON.stringify(newInfo));
-
+      localStorage.removeItem("info");
       // setState
-      setInfo(newInfo);
+      setInfo(null);
     });
   };
 

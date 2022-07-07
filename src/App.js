@@ -20,23 +20,32 @@ import { ToastContainer } from "react-toastify";
 
 import useHandleUpdating from "./hooks/useHandleUpdating";
 import ClickedImageContainer from "./misc/elements/ClickedImageContainer";
+import AfterSignUpPage from "./firebase/signUpOptions/AfterSignUpPage";
+import useGeneralListListener from "./hooks/useGeneralListListener";
 
 function App() {
   const { info, setInfo, loggedIn } = userStore();
+  const [filledInfo, setFilledinfo] = useState(false);
   const { setDragCursor } = miscStore();
   const { activeStrains } = listsStore();
-  const { loginTrigger } = triggerStore();
-  const { displayedMessages } = chatStore();
   const { setActiveChat, setDisplayedMessages } = chatStore();
   const [subscriptions, setSubscriptions] = useState([]);
   const fillStorage = useFillStatesOnEnter();
   const clearOnLogOut = useClearOnLogOut();
-  const handleUpdating = useHandleUpdating();
+  useHandleUpdating();
+  useGeneralListListener();
 
   const listenToChats = useListenToActiveStrains(
     subscriptions,
     setSubscriptions
   );
+
+  useEffect(() => {
+    if (info) {
+      if (info.uniqueName && info.password) setFilledinfo(true);
+      else setFilledinfo(false);
+    }
+  }, [info]);
 
   useCheckArraysForResTrigger();
   useScanChatMessages();
@@ -54,7 +63,7 @@ function App() {
       setActiveChat(null);
     }
     return () => {
-      unsubscribe();
+      if (unsubscribe) unsubscribe();
     };
   }, [activeStrains]);
 
@@ -82,11 +91,14 @@ function App() {
       <ContextMenu />
       <HoverBox />
       <DragCursor />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/*" element={<MainPage />} />
-        </Routes>
-      </BrowserRouter>
+      {(!info || filledInfo) && (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/*" element={<MainPage />} />
+          </Routes>
+        </BrowserRouter>
+      )}
+      {info && !filledInfo && <AfterSignUpPage />}
     </div>
   );
 }

@@ -21,8 +21,7 @@ const AdminBar = () => {
   }
 
   const checkStuff = () => {
-    console.log("currentMessage - ", currentMessage);
-    console.log("myAnswers - ", myAnswers);
+    console.log("displayedMessages - ", displayedMessages);
   };
 
   const queryTest = () => {

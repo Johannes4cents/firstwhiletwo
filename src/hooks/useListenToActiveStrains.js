@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import listsStore from "../stores/listsStore";
 import db from "../firebase/fireInit";
 import {
+  checkCorrectChatDepth,
   checkIfTurfChatExists,
   getChatList,
   getChatListener,
 } from "../chat/handleChat";
 import userStore from "../stores/userStore";
 import chatStore from "../stores/chatStore";
+import { updateDocInFirestore } from "../misc/handleFirestore";
+
 const useListenToActiveStrains = (subscriptions, setSubscriptions) => {
   const { activeStrains } = listsStore();
   const { setActiveChat, setDisplayedMessages, setActiveChats } = chatStore();
@@ -27,14 +30,18 @@ const useListenToActiveStrains = (subscriptions, setSubscriptions) => {
 
     setActiveChats(getChatList(strains));
     const turfChat = strains.join("|").toLowerCase();
-
-    checkIfTurfChatExists(turfChat, info.uid, info.nickname, strains);
-    setActiveChat(turfChat);
-    const unsubscribe = getChatListener(turfChat, (messages) => {
-      setDisplayedMessages(messages);
-    });
-    setSubscriptions([...subscriptions, unsubscribe]);
-    return unsubscribe;
+    if (checkCorrectChatDepth(info.stats.levels, activeStrains)) {
+      checkIfTurfChatExists(turfChat, info.uid, info.nickname, strains);
+      setActiveChat(turfChat);
+      const unsubscribe = getChatListener(turfChat, (messages) => {
+        setDisplayedMessages(messages);
+      });
+      setSubscriptions([...subscriptions, unsubscribe]);
+      updateDocInFirestore("users/", info.uid, "activeChat", turfChat);
+      return unsubscribe;
+    } else {
+      updateDocInFirestore("users/", info.uid, "activeChat", null);
+    }
   }
 
   return listenToStrainChats;

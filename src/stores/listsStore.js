@@ -210,6 +210,12 @@ const listsStore = create((set) => ({
       return { myMedia: newList };
     });
   },
+  turfChats: [],
+  setTurfChats: (chats) => {
+    set((state) => {
+      return { turfChats: chats };
+    });
+  },
 }));
 
 export default listsStore;

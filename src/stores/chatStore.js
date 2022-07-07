@@ -29,9 +29,9 @@ const chatStore = create((set) => ({
     });
   },
   activeChat: [],
-  setActiveChat: (chats) => {
+  setActiveChat: (chat) => {
     set((state) => {
-      return { activeChat: chats };
+      return { activeChat: chat };
     });
   },
   activeChats: [],
@@ -47,7 +47,11 @@ const chatStore = create((set) => ({
       const newMessages = messages.filter(
         (msg) => !state.displayedMessages.map((m) => m.id).includes(msg.id)
       );
-      return { displayedMessages: dms.concat(newMessages) };
+      return {
+        displayedMessages: dms
+          .concat(newMessages)
+          .sort((a, b) => (a.msTime > b.msTime ? 1 : -1)),
+      };
     });
   },
   updateDisplayedMessage: (message) => {

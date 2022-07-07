@@ -103,7 +103,8 @@ const InputField = () => {
       }
     }
     delete currentMessage.attachedMedia;
-    console.log("currentMessage - ", currentMessage);
+    // add timestamp for sorting
+    currentMessage.msTime = new Date().getTime();
     addMediaToFirestore(activeChat.imgUrls);
     sendMessageToTurfChats(activeChat, currentMessage);
     resetCurrentMessage();

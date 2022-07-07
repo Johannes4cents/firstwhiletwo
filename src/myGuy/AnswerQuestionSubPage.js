@@ -36,7 +36,6 @@ const AnswerQuestionSubPage = () => {
           let timeDiff = Math.round(
             (new Date().getTime() - answer.answered) / 1000
           );
-          console.log("timeDiff - ", timeDiff);
           setTimeDiff(timeDiff);
         }
         return answer;
@@ -52,9 +51,12 @@ const AnswerQuestionSubPage = () => {
   }, [fireFlags]);
 
   function onStatementClicked(statement) {
-    let newAnswer = { ...answer, statement, answered: new Date().getTime() };
-    addAnswer(info.uid, newAnswer);
-    getUnansweredFlag(newAnswer.statement.id, true);
+    if (timeDiff - 600 > 0) {
+      let newAnswer = { ...answer, statement, answered: new Date().getTime() };
+      addAnswer(info.uid, newAnswer);
+    }
+
+    getUnansweredFlag(statement.id, true);
   }
 
   useEffect(() => {

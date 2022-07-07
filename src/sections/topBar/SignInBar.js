@@ -1,4 +1,6 @@
 import { signInWithGoogle } from "../../firebase/fireAuth";
+import SignUpWithEMailModal from "../../firebase/signUpOptions/SignUpWithEMailModal";
+import useModal from "../../hooks/useModal";
 import AdminBar from "../../misc/elements/AdminBar";
 
 import { getCreateUserListener } from "../../misc/handleFirestore";
@@ -7,6 +9,11 @@ import UserButton from "./UserButton";
 
 const SignInBar = () => {
   const { loggedIn, setInfo } = userStore();
+  const modal = useModal({
+    modalContent: <SignUpWithEMailModal />,
+    offsetY: 10,
+    position: "bottomLeft",
+  });
 
   // after successfully logging into the account
 
@@ -34,17 +41,29 @@ const SignInBar = () => {
   }
 
   return (
-    <div className="divRowColored" style={{ marginRight: "10px" }}>
+    <div
+      className="divRowColored"
+      style={{ marginRight: "10px", justifyContent: "center" }}
+    >
       <AdminBar />
       {loggedIn && <UserButton />}
       {!loggedIn && (
-        <div className="signInButtons">
+        <div
+          className="divRow"
+          style={{ alignItems: "center", justifyContent: "center" }}
+        >
           <img
             onClick={() => signInWithGoogle(onLogInSuccess)}
             src={"/images/btn_google_sign_in.png"}
           />
+
+          <img
+            src="/images/icons/btn_password_sign_in.png"
+            onClick={() => modal.open()}
+          />
         </div>
       )}
+      {modal.element}
     </div>
   );
 };
