@@ -32,15 +32,21 @@ const AnswerQuestionSubPage = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setAnswer((answer) => {
+        console.log(
+          "answer.answered - ",
+          answer.answered,
+          " | answer - ",
+          answer
+        );
         if (answer.answered != null) {
           let timeDiff = Math.round(
             (new Date().getTime() - answer.answered) / 1000
           );
           setTimeDiff(timeDiff);
-        }
+        } else setTimeDiff(null);
         return answer;
       });
-    }, 1000);
+    }, 500);
     return () => {
       clearInterval(interval);
     };
@@ -80,6 +86,7 @@ const AnswerQuestionSubPage = () => {
           importance: 2,
           private: false,
           statement: null,
+          answered: null,
         });
       }
     }
