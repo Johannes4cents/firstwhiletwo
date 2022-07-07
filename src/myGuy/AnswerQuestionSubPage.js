@@ -51,8 +51,10 @@ const AnswerQuestionSubPage = () => {
   }, [fireFlags]);
 
   function onStatementClicked(statement) {
-    if (timeDiff - 600 > 0) {
+    console.log("timeDiff - ", timeDiff);
+    if (timeDiff - 600 > 0 || timeDiff == null) {
       let newAnswer = { ...answer, statement, answered: new Date().getTime() };
+
       addAnswer(info.uid, newAnswer);
     }
 
@@ -212,7 +214,6 @@ const QuestionBottomHolder = ({
   useEffect(() => {
     var found = myAnswers.find((a) => a.statement.flagId == currentFlag.id);
     setFoundAnswer(found);
-    console.log("foundAnswer - ", foundAnswer, " | answer - ", answer.private);
     if (found) {
       setAnswerTheSame(
         found.importance == (answer.importance ?? 0) &&
