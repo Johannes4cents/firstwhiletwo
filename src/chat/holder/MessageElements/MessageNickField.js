@@ -16,6 +16,8 @@ const MessageNickField = ({ message }) => {
       <CompareUserModal
         otherId={comparedUser.id}
         userImage={compareUser.imgUrl}
+        answers={message.answers ?? []}
+        uniqueName={message.author.uniqueName ?? message.author.nickname}
       />
     ),
     password: message.id,

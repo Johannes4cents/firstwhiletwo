@@ -87,6 +87,7 @@ const InputField = () => {
       nickname: info.nickname,
       id: info.uid,
       imgUrl: info.profilePicUrl,
+      uniqueName: info.uniqueName,
     };
     currentMessage.postedIn = activeChat;
     currentMessage.attachedItems = attachedItems;

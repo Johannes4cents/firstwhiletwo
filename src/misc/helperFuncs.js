@@ -347,12 +347,68 @@ function makeHoverOption(
   };
 }
 
-function showUserComparisson(otherUser) {
-  console.log("otherUser - ", otherUser);
+function getScore(importance) {
+  let obj = { 0: 0, 1: 1, 2: 2, 3: 4 };
+  return obj[importance];
+}
+
+function compareUser(user, myAnswers, statementOrId = "statement") {
+  const comparedUser = {
+    id: user.id,
+    name: user.name,
+    overallScore: {
+      user: { score: 0, possible: 0 },
+      otherUser: { score: 0, possible: 0 },
+    },
+    statements: [],
+  };
+  // itterate through all your answers
+  forArrayLength(myAnswers, (answer) => {
+    // check if the other user has also answered the question
+    const foundStatement = user.statements.find(
+      (s) => s.statement.flagId == answer.statement.flagId
+    );
+
+    // if they have answered the same
+    if (foundStatement) {
+      console.log(
+        "foundStatement - ",
+        foundStatement.statement,
+        "|answer.statement - ",
+        answer.statement.id
+      );
+      // increase possible score
+      comparedUser.overallScore.user.possible += getScore(answer.importance);
+      comparedUser.overallScore.otherUser.possible += getScore(
+        foundStatement.importance
+      );
+      // increase score if both have answered the same
+      const match =
+        foundStatement.statement[statementOrId] == answer.statement.id;
+      if (match) {
+        comparedUser.overallScore.user.score += getScore(answer.importance);
+        comparedUser.overallScore.otherUser.score += getScore(
+          foundStatement.importance
+        );
+      }
+      // add statement to comparedUser.statements
+      const comparedStatement = {
+        flagId: answer.statement.flagId,
+        match,
+        importance: {
+          user: answer.importance,
+          otherUser: foundStatement.importance,
+        },
+      };
+      comparedUser.statements.push(comparedStatement);
+    }
+  });
+  console.log("comparedUser - ", comparedUser);
+  return comparedUser;
 }
 
 export {
-  showUserComparisson,
+  compareUser,
   makeHoverOption,
   makeContextOption,
   checkMsTimeDiff,

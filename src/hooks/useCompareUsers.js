@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { clamp, forArrayLength } from "../misc/helperFuncs";
+import { clamp, compareUser, forArrayLength } from "../misc/helperFuncs";
 import listsStore from "../stores/listsStore";
 import userStore from "../stores/userStore";
 
@@ -68,62 +68,13 @@ const useCompareUsers = () => {
     }
   }, [userIndex]);
 
-  function getScore(importance) {
-    let obj = { 0: 0, 1: 1, 2: 2, 3: 4 };
-    return obj[importance];
-  }
-
   // compare user
   async function compareWithUser(tenUser) {
     const checkedUsers = [];
     // itterate through all user
     forArrayLength(tenUser, (user) => {
-      const comparedUser = {
-        id: user.id,
-        name: user.uniqueName,
-        overallScore: {
-          user: { score: 0, possible: 0 },
-          otherUser: { score: 0, possible: 0 },
-        },
-        statements: [],
-      };
-      // itterate through all your answers
-      forArrayLength(myAnswers, (answer) => {
-        // check if the other user has also answered the question
-        const foundStatement = user.statements.find(
-          (s) => s.statement.flagId == answer.statement.flagId
-        );
-        // if they have answered the same
-        if (foundStatement) {
-          // increase possible score
-          comparedUser.overallScore.user.possible += getScore(
-            answer.importance
-          );
-          comparedUser.overallScore.otherUser.possible += getScore(
-            foundStatement.importance
-          );
-          // increase score if both have answered the same
-          const match =
-            foundStatement.statement.statement == answer.statement.id;
-          if (match) {
-            comparedUser.overallScore.user.score += getScore(answer.importance);
-            comparedUser.overallScore.otherUser.score += getScore(
-              foundStatement.importance
-            );
-          }
-          // add statement to comparedUser.statements
-          const comparedStatement = {
-            flagId: answer.statement.flagId,
-            match,
-            importance: {
-              user: answer.importance,
-              otherUser: foundStatement.importance,
-            },
-          };
-          comparedUser.statements.push(comparedStatement);
-        }
-      });
-      checkedUsers.push(comparedUser);
+      let compared = compareUser(user, myAnswers);
+      checkedUsers.push(compared);
     });
 
     if (checkedUsers.length > 0) addUserComparissons(info.uid, checkedUsers);

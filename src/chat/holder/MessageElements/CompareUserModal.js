@@ -1,27 +1,25 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { user } from "../../../firebase/fireInit";
 import { getSingleDocFromFirestore } from "../../../misc/handleFirestore";
+import { compareUser } from "../../../misc/helperFuncs";
 import SubOptionsBar from "../../../myGuy/SubOptionsBar";
 import listsStore from "../../../stores/listsStore";
+import userStore from "../../../stores/userStore";
 import OverallComparissonSection from "./OverallComparissonSection";
 import QuestionComparissonSection from "./QuestionComparissonSection";
 
-const CompareUserModal = ({ otherId, userImage }) => {
+const CompareUserModal = ({ otherId, userImage, answers, uniqueName }) => {
   const [comparisson, setComparisson] = useState(null);
   const [selectedCat, setSelectedCat] = useState("overall");
-  const { userComparissons } = listsStore();
+  const { myAnswers } = userStore();
   const catList = ["overall", "questions"];
 
   useEffect(() => {
-    let foundComparisson = userComparissons.find((c) => c.id == otherId);
-    console.log("foundComparisson - ", foundComparisson);
-    if (foundComparisson) setComparisson(foundComparisson);
-    else {
-      getSingleDocFromFirestore("users", otherId, (user) => {
-        // TO DO - make comparisson if user is not found but has answered questions
-      });
-    }
-  }, [otherId]);
+    console.log("test");
+    let user = { id: otherId, name: uniqueName, statements: answers };
+    setComparisson(compareUser(user, myAnswers, "id"));
+  }, [myAnswers]);
   return (
     <div
       className="divColumn"
