@@ -52,6 +52,7 @@ function App() {
   useEffect(() => {
     let clearCheck = JSON.parse(localStorage.getItem("clearCheck"));
     if (!clearCheck) {
+      console.log("clearingStorage");
       localStorage.clear();
       localStorage.setItem("clearCheck", JSON.stringify(true));
     }
