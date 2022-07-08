@@ -6,7 +6,8 @@ const useLongPress = (
   onClick,
   { shouldPreventDefault = true, delay = 300 } = {},
   onMouseUpFunc = null,
-  onDrop = null
+  onDrop = null,
+  customMouseLeave = null
 ) => {
   const [longPressTriggered, setLongPressTriggered] = useState(false);
   const { dragCursor } = miscStore();
@@ -53,7 +54,10 @@ const useLongPress = (
       if (dragCursor != null && onDrop != null) onDrop(dragCursor);
       if (onMouseUpFunc != null) onMouseUpFunc();
     },
-    onMouseLeave: (e) => clear(e, false),
+    onMouseLeave: (e) => {
+      if (customMouseLeave) customMouseLeave(e);
+      clear(e, false);
+    },
     onTouchEnd: (e) => clear(e),
   };
 };

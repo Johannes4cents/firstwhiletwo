@@ -150,7 +150,7 @@ const listsStore = create((set) => ({
 
   activeStrains: [],
   setActiveStrains: (uid, strains) => {
-    console.log("strains are - ", strains);
+    localStorage.setItem(uid + "activeStrains", JSON.stringify(strains));
     set((state) => {
       return { activeStrains: strains };
     });

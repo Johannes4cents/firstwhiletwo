@@ -29,7 +29,7 @@ const useFillStatesOnEnter = () => {
   const { setMinMaxUpvotes, setShowPeople } = settingsStore();
   const { setLastUpdates } = miscStore();
   const { setFireStuff, setScannedMessages } = readStore();
-  const { setMediaFolder, setAnswers } = userStore();
+  const { setMediaFolder, setAnswers, setSavedChats } = userStore();
 
   function getCollectionFromUser(uid, collection, setFunc) {
     const localList = JSON.parse(localStorage.getItem(uid + collection));
@@ -84,6 +84,7 @@ const useFillStatesOnEnter = () => {
     storageListToState(uid, "mediaFolder", setMediaFolder);
     storageListToState(uid, "minMaxMsgUpvotes", setMinMaxUpvotes);
     storageListToState(uid, "userComparissons", setUserComparissons);
+    storageListToState(uid, "savedChats", setSavedChats);
 
     // loot
     let loot = JSON.parse(localStorage.getItem(uid + "loot"));

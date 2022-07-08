@@ -7,10 +7,12 @@ import bgImg from "../../images/bg_strain.png";
 import listsStore from "../../stores/listsStore";
 import { forArrayLength, getComparissonScore } from "../../misc/helperFuncs";
 import userStore from "../../stores/userStore";
+import chatStore from "../../stores/chatStore";
 
-const ChatListHolder = ({ chat, comparissons }) => {
-  const { info } = userStore();
-  const hover = useOnHover({ item: chat.key, active: info.activeChat });
+const ChatListHolder = ({ chat, comparissons, from = "suggestions" }) => {
+  const { info, addSavedChat } = userStore();
+  const { activeChat } = chatStore();
+  const hover = useOnHover({ item: chat.key, active: activeChat });
   const { setActiveStrains, allStrains } = listsStore();
 
   const [loadingScore, setLoadingScore] = useState(true);
@@ -26,11 +28,13 @@ const ChatListHolder = ({ chat, comparissons }) => {
         let foundStrain = allStrains.find((s) => s.id == string);
         if (foundStrain) strainList.push(foundStrain);
       });
-      console.log("strainList - ", strainList);
-      if (strainList.length == strains.length)
+      if (strainList.length == strains.length) {
+        console.log("settingActiveStrains");
         setActiveStrains(info.uid, strainList);
+      }
+      if (from == "suggestions") addSavedChat(info.uid, chat);
     }
-  }, [info]);
+  }, [info, activeChat, allStrains]);
 
   const mouseHandling = useMouseHandling({ onOneClick: clickChat });
 
@@ -54,8 +58,8 @@ const ChatListHolder = ({ chat, comparissons }) => {
 
   return (
     <div
+      onClick={clickChat}
       {...hover.divProps}
-      {...mouseHandling}
       className="divRow"
       style={{
         backgroundImage: `url(${bgImg})`,

@@ -17,10 +17,6 @@ const ChatArea = () => {
 
   const mouseEvents = useMouseHandling({ onDrop });
 
-  useEffect(() => {
-    console.log("currentMEssage - ", currentMessage);
-  }, [currentMessage]);
-
   function onDrop(dragCursor) {
     if (dragCursor.type == "loot") addAttachedItem(info, dragCursor.item);
     if (dragCursor.type == "media") addMyMediaToMsg(dragCursor.item);

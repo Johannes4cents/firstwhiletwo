@@ -30,6 +30,7 @@ const useListenToActiveStrains = (subscriptions, setSubscriptions) => {
 
     setActiveChats(getChatList(strains));
     const turfChat = strains.join("|").toLowerCase();
+
     if (checkCorrectChatDepth(info.stats.levels, activeStrains)) {
       checkIfTurfChatExists(turfChat, info.uid, info.nickname, strains);
       setActiveChat(turfChat);

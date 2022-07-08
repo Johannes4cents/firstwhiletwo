@@ -109,6 +109,15 @@ const userStore = create((set) => ({
       return { savedChats: chats };
     });
   },
+  addSavedChat: (uid, chat) => {
+    set((state) => {
+      if (!state.savedChats.map((c) => c.key).includes(chat.key)) {
+        let newList = [...state.savedChats, chat];
+        localStorage.setItem(uid + "savedChats", JSON.stringify(newList));
+        return { savedChats: newList };
+      }
+    });
+  },
 }));
 
 export default userStore;

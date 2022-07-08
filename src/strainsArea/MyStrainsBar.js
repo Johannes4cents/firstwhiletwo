@@ -4,17 +4,21 @@ import SearchBar from "../misc/elements/SearchBar";
 import SearchStrainsBar from "../misc/elements/SearchStrainsBar";
 import listsStore from "../stores/listsStore";
 import StrainListHolder from "./holder/StrainListHolder";
+import MyChatsPage from "./myStrainsSubPages/MyChatsPage";
+import MyStrainsPage from "./myStrainsSubPages/MyStrainsPage";
+import SavedPage from "./myStrainsSubPages/SavedPage";
 import StrainSectionBar from "./StrainSectionBar";
 
 const MyStrainsBar = () => {
   const [displayedStrains, setDisplayedStrains] = useState([]);
   const sections = ["Chats", "Strains", "Saved"];
   const [activeSection, setActiveSection] = useState("Chats");
-  const { myStrains } = listsStore();
 
-  useEffect(() => {
-    if (myStrains != null) setDisplayedStrains(myStrains);
-  }, [myStrains]);
+  const sectionHolder = {
+    Chats: <MyChatsPage />,
+    Strains: <MyStrainsPage />,
+    Saved: <SavedPage />,
+  };
 
   return (
     <div
@@ -38,20 +42,7 @@ const MyStrainsBar = () => {
         activeSection={activeSection}
         setActiveSection={setActiveSection}
       />
-      <div
-        className="divColumn"
-        style={{
-          width: "100%",
-          maxHeight: "360px",
-          overflow: "auto",
-          height: "100%",
-          flex: 1,
-        }}
-      >
-        {displayedStrains.map((s) => {
-          return <StrainListHolder key={s.id} strain={s} />;
-        })}
-      </div>
+      {sectionHolder[activeSection]}
     </div>
   );
 };
