@@ -24,7 +24,7 @@ const InputField = () => {
   const { updateLootItem, activeStrains } = listsStore();
   const { setInputHeight, updateLastActive, setInputWidth } = miscStore();
   const windowsize = useWindowSize();
-  const { info, loggedIn } = userStore();
+  const { info, loggedIn, myAnswers } = userStore();
   const [height, setHeight] = useState();
   const [width, setWidth] = useState();
   const [sendingPossible, setSendingPossible] = useState({
@@ -106,6 +106,7 @@ const InputField = () => {
     // add timestamp for sorting
     addMediaToFirestore(currentMessage.imgUrls);
     currentMessage.collection = "turfChats/" + activeChat + "/messages";
+    currentMessage.answers = myAnswers;
     const onSend = () => {};
     const onError = (e) => {
       console.log("e - ", e);
