@@ -110,7 +110,7 @@ const InputField = () => {
     const onError = (e) => {
       console.log("e - ", e);
     };
-    cloudFunc("postMessageToTurfChat", currentMessage, onSend, onError);
+    cloudFunc("postMessage", currentMessage, onSend, onError);
 
     resetCurrentMessage();
   };
