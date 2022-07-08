@@ -362,21 +362,15 @@ function compareUser(user, myAnswers, statementOrId = "statement") {
     },
     statements: [],
   };
+
   // itterate through all your answers
   forArrayLength(myAnswers, (answer) => {
     // check if the other user has also answered the question
     const foundStatement = user.statements.find(
       (s) => s.statement.flagId == answer.statement.flagId
     );
-
     // if they have answered the same
     if (foundStatement) {
-      console.log(
-        "foundStatement - ",
-        foundStatement.statement,
-        "|answer.statement - ",
-        answer.statement.id
-      );
       // increase possible score
       comparedUser.overallScore.user.possible += getScore(answer.importance);
       comparedUser.overallScore.otherUser.possible += getScore(
@@ -393,6 +387,10 @@ function compareUser(user, myAnswers, statementOrId = "statement") {
       }
       // add statement to comparedUser.statements
       const comparedStatement = {
+        statements: {
+          user: answer.statement.id,
+          otherUser: foundStatement.statement[statementOrId],
+        },
         flagId: answer.statement.flagId,
         match,
         importance: {
@@ -403,11 +401,32 @@ function compareUser(user, myAnswers, statementOrId = "statement") {
       comparedUser.statements.push(comparedStatement);
     }
   });
-  console.log("comparedUser - ", comparedUser);
   return comparedUser;
 }
 
+function getComparissonScore(userId, comparissons) {
+  let comparisson = comparissons.find((c) => c.id == userId);
+  if (comparisson) {
+    let userScore = comparisson.overallScore.user;
+    let otherUserScore = comparisson.overallScore.otherUser;
+    return {
+      user: {
+        ...userScore,
+        percentage: Math.round((userScore.score / userScore.possible) * 100),
+      },
+      otherUser: {
+        ...otherUserScore,
+        percentage: Math.round(
+          (otherUserScore.score / otherUserScore.possible) * 100
+        ),
+      },
+    };
+  }
+  return null;
+}
+
 export {
+  getComparissonScore,
   compareUser,
   makeHoverOption,
   makeContextOption,

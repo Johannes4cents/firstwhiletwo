@@ -323,7 +323,7 @@ function getSuggestedStrains(category) {
   }
 }
 
-async function getGeneralStuff(local, uid, setFireItems, setSuggestedStrains) {
+async function getGeneralStuff(local, uid, setFireItems, setAllStrains) {
   let localItems = local ?? [];
   const lootDocRef = doc(db, "general/", "fireItems");
   const listsDocRef = doc(db, "general", "lists");
@@ -352,8 +352,8 @@ async function getGeneralStuff(local, uid, setFireItems, setSuggestedStrains) {
     });
   });
 
-  // setSuggestedStrains
-  setSuggestedStrains(uid, listsDoc.data()["strainList"]);
+  // setAllStrains
+  setAllStrains(uid, listsDoc.data()["strainList"]);
 
   if (localItems.length < 1) {
     await getCustomUserList(uid, "fireItems", (firestoreItems) => {

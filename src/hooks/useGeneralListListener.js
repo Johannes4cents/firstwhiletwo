@@ -18,6 +18,7 @@ const useGeneralListListener = () => {
       const docRef = doc(db, "general", "lists");
       unsubscribe = onSnapshot(docRef, (d) => {
         const lists = d.data();
+        console.log("docs updated", lists);
         setFireFlags(info.uid, lists["fireFlags"]);
         setTurfChats(lists["turfChats"]);
         setOtherUser(info.uid, lists["userList"]);

@@ -29,7 +29,7 @@ const MessageNickField = ({ message }) => {
     setComparedUser({ id: message.author.id, imgUrl: message.author.imgUrl });
   }, [message]);
 
-  function compareUser(otherId) {
+  function compareUser() {
     modal.open(message.id);
   }
   const hover = useOnHover({

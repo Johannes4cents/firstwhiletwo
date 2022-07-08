@@ -16,9 +16,10 @@ const AdminBar = () => {
     fireFlags,
     statements,
     myStrains,
-    suggestedStrains,
+    allStrains,
     myMedia,
     userComparissons,
+    turfChats,
   } = listsStore();
   const navigate = useNavigate();
 
@@ -27,8 +28,7 @@ const AdminBar = () => {
   }
 
   const checkStuff = () => {
-    console.log("displayedMessages - ", displayedMessages);
-    console.log("myAnswers - ", myAnswers);
+    console.log("turfChats - ", turfChats);
     console.log("userComparissons - ", userComparissons);
     console.log("info - ", info);
   };

@@ -83,7 +83,8 @@ const ChatMessagesField = () => {
             attachedItemHeight -
             95
           }px`,
-          overflow: "auto",
+          overflowY: "auto",
+          overflowX: "hidden",
         }}
       >
         {displayedMessages.map((msg) => {

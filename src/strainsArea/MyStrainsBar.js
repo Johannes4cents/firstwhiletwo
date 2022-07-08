@@ -8,8 +8,8 @@ import StrainSectionBar from "./StrainSectionBar";
 
 const MyStrainsBar = () => {
   const [displayedStrains, setDisplayedStrains] = useState([]);
-  const sections = ["One", "Two", "Three"];
-  const [activeSection, setActiveSection] = useState("One");
+  const sections = ["Chats", "Strains", "Saved"];
+  const [activeSection, setActiveSection] = useState("Chats");
   const { myStrains } = listsStore();
 
   useEffect(() => {

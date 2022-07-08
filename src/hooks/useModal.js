@@ -37,6 +37,12 @@ const useModal = ({
     }
   }, [contentDiv, modalOpen]);
 
+  useEffect(() => {
+    if (!modalOpen) {
+      setModalPw(null);
+    }
+  }, [modalOpen]);
+
   const open = (modalPassword) => {
     setModalPw(modalPassword);
     setOpenPos({ x: mousePosition.x, y: mousePosition.y });

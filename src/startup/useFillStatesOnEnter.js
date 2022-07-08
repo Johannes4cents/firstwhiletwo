@@ -20,7 +20,7 @@ const useFillStatesOnEnter = () => {
     setMyStrains,
     setActiveStrains,
     setLoot,
-    setSuggestedStrains,
+    setAllStrains,
     setMyMedia,
     setUserComparissons,
     fireFlags,
@@ -102,7 +102,7 @@ const useFillStatesOnEnter = () => {
 
     // generalStuff
     let fireitems = JSON.parse(localStorage.getItem(uid + "fireItems"));
-    getGeneralStuff(fireitems, uid, setFireStuff, setSuggestedStrains);
+    getGeneralStuff(fireitems, uid, setFireStuff, setAllStrains);
 
     //
     let showPeopleFilter = JSON.parse(localStorage.getItem(uid + "showPeople"));

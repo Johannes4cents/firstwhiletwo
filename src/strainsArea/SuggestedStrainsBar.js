@@ -4,16 +4,25 @@ import SearchStrainsBar from "../misc/elements/SearchStrainsBar";
 import listsStore from "../stores/listsStore";
 import StrainSuggestionHolder from "./holder/StrainSuggestionHolder";
 import StrainSectionBar from "./StrainSectionBar";
+import HotChatsPage from "./suggestionSubPages.js/HotChatsPage";
+import PersonalSuggestionsPage from "./suggestionSubPages.js/PersonalSuggestionsPage";
+import SuggestedStrainsPage from "./suggestionSubPages.js/SuggestedStrainsPage";
 
 const SuggestedStrainsBar = () => {
-  const { suggestedStrains } = listsStore();
+  const { allStrains } = listsStore();
   const [activeSection, setActiveSection] = useState("Hot");
   const [displayedStrains, setDisplayedStrains] = useState([]);
-  const sections = ["Hot", "Personal", "All TIme"];
+  const sections = ["Hot", "Personal", "Strains"];
+
+  const sectionHolder = {
+    Hot: <HotChatsPage />,
+    Personal: <PersonalSuggestionsPage />,
+    Strains: <SuggestedStrainsPage />,
+  };
 
   useEffect(() => {
-    setDisplayedStrains(suggestedStrains);
-  }, [suggestedStrains]);
+    setDisplayedStrains(allStrains);
+  }, [allStrains]);
   return (
     <div
       className="divColumn"
@@ -25,7 +34,7 @@ const SuggestedStrainsBar = () => {
           width: "225px",
         }}
       >
-        Suggested Strains
+        Suggested
       </div>
       <SearchStrainsBar
         setDisplayedStrains={setDisplayedStrains}
@@ -36,20 +45,7 @@ const SuggestedStrainsBar = () => {
         setActiveSection={setActiveSection}
         sections={sections}
       />
-      <div
-        className="divColumn"
-        style={{
-          width: "100%",
-          height: "100%",
-          flex: 1,
-          maxHeight: "360px",
-          overflow: "auto",
-        }}
-      >
-        {displayedStrains.map((s) => {
-          return <StrainSuggestionHolder key={s.id} strain={s} />;
-        })}
-      </div>
+      {sectionHolder[activeSection]}
     </div>
   );
 };

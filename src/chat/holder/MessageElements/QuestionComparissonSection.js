@@ -1,21 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { animated, useTransition, useSpringRef } from "react-spring";
 import HoverArrow from "../../../misc/elements/HoverArrow";
-import { getSingleDocFromFirestore } from "../../../misc/handleFirestore";
 import listsStore from "../../../stores/listsStore";
 import ComparedQuestionHolder from "./ComparedQuestionHolder";
 
 const QuestionComparissonSection = ({ comparisson }) => {
-  const [currentFlag, setCurrentFlag] = useState(null);
+  const [currentFlag, setCurrentFlag] = useState({
+    flag: null,
+    statement: null,
+  });
+
   const [statements, setStatements] = useState([]);
+  const [[index, dir], setIndex] = useState([0, 0]);
   const { fireFlags } = listsStore();
 
-  function setFlag(flagId) {
-    let flag = fireFlags.find((f) => f.id == flagId);
-    console.log("flag - ", flag);
-    setCurrentFlag(flag);
+  const handleNextSlide = useCallback(
+    (dir) => {
+      setIndex((state) => {
+        return [(state[0] + dir + statements.length) % statements.length, dir];
+      });
+    },
+    [statements]
+  );
+
+  function setFlag(statement) {
+    let flag = fireFlags.find((f) => f.id == statement.flagId);
+    setCurrentFlag({ flag, statement });
   }
 
-  function clickArrow(direction) {}
+  useEffect(() => {
+    if (statements.length > 0) {
+      let currentStatement = statements[index];
+      setFlag(currentStatement);
+    }
+  }, [index]);
 
   useEffect(() => {
     if (comparisson) {
@@ -24,7 +42,7 @@ const QuestionComparissonSection = ({ comparisson }) => {
           a.importance.user < b.importance.user ? 1 : -1
         );
         setStatements(sortedStatements);
-        setFlag(sortedStatements[0].flagId);
+        setFlag(sortedStatements[0]);
       }
     }
   }, [comparisson]);
@@ -32,18 +50,24 @@ const QuestionComparissonSection = ({ comparisson }) => {
   return (
     <div
       className="divRow"
-      style={{ width: "100%", height: "100%", justifyContent: "space-between" }}
+      style={{
+        width: "100%",
+        height: "100%",
+        justifyContent: "space-between",
+        position: "relative",
+      }}
     >
       <HoverArrow
         upDown={-1}
-        onArrowClicked={clickArrow}
+        onArrowClicked={handleNextSlide}
         size={25}
         margins={{ left: 20, right: 0 }}
       />
       <ComparedQuestionHolder flag={currentFlag} />
+
       <HoverArrow
         upDown={1}
-        onArrowClicked={clickArrow}
+        onArrowClicked={handleNextSlide}
         size={25}
         margins={{ left: 0, right: 20 }}
       />

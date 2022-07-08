@@ -102,6 +102,13 @@ const userStore = create((set) => ({
       return { info: newInfo };
     });
   },
+
+  savedChats: [],
+  setSavedChats: (uid, chats) => {
+    set((state) => {
+      return { savedChats: chats };
+    });
+  },
 }));
 
 export default userStore;

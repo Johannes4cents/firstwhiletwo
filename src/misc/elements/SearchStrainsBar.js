@@ -8,7 +8,7 @@ import PickSchoolButton from "./PickSchoolButton";
 import SearchBar from "./SearchBar";
 
 const SearchStrainsBar = ({ displayedStrains, setDisplayedStrains }) => {
-  const { addMyStrain, suggestedStrains } = listsStore();
+  const { addMyStrain, allStrains } = listsStore();
   const [pickedSchool, setPickedSchool] = useState();
   const { info, changeChips } = userStore();
   const [strainInput, setStrainInput] = useState("");
@@ -18,11 +18,11 @@ const SearchStrainsBar = ({ displayedStrains, setDisplayedStrains }) => {
     setStrainInput(result);
     if (result.length > 0)
       setDisplayedStrains(
-        suggestedStrains.filter((s) =>
+        allStrains.filter((s) =>
           s.id.toLowerCase().startsWith(result.toLowerCase())
         )
       );
-    else setDisplayedStrains(suggestedStrains);
+    else setDisplayedStrains(allStrains);
   };
 
   const makeNewStrain = () => {

@@ -58,21 +58,21 @@ const listsStore = create((set) => ({
       return { dismissedStrains: newList };
     });
   },
-  suggestedStrains: [],
-  setSuggestedStrains: (list) => {
+  allStrains: [],
+  setAllStrains: (list) => {
     set((state) => {
-      return { suggestedStrains: list };
+      return { allStrains: list };
     });
   },
   changeSuggestedStrains: (uid, strain) => {
     set((state) => {
       var list = [];
-      if (!state.suggestedStrains.map((s) => s.id).includes(strain.id))
-        list = [...state.suggestedStrains, strain];
-      else list = state.suggestedStrains.filter((s) => s.id != strain.id);
-      localStorage.setItem(uid + "suggestedStrains", JSON.stringify(list));
+      if (!state.allStrains.map((s) => s.id).includes(strain.id))
+        list = [...state.allStrains, strain];
+      else list = state.allStrains.filter((s) => s.id != strain.id);
+      localStorage.setItem(uid + "allStrains", JSON.stringify(list));
       return {
-        suggestedStrains: list.sort((a, b) => (a.text > b.text ? 1 : -1)),
+        allStrains: list.sort((a, b) => (a.text > b.text ? 1 : -1)),
       };
     });
   },
@@ -90,11 +90,11 @@ const listsStore = create((set) => ({
       return { flags };
     });
   },
-  suggestedStrains: [],
-  setSuggestedStrains: (uid, strains) => {
-    localStorage.setItem(uid + "suggestedStrains", JSON.stringify(strains));
+  allStrains: [],
+  setAllStrains: (uid, strains) => {
+    localStorage.setItem(uid + "allStrains", JSON.stringify(strains));
     set((state) => {
-      return { suggestedStrains: strains };
+      return { allStrains: strains };
     });
   },
 
@@ -150,6 +150,7 @@ const listsStore = create((set) => ({
 
   activeStrains: [],
   setActiveStrains: (uid, strains) => {
+    console.log("strains are - ", strains);
     set((state) => {
       return { activeStrains: strains };
     });
@@ -240,6 +241,8 @@ const listsStore = create((set) => ({
       return { userComparissons: newList };
     });
   },
+  suggestedChatList: [],
+  setSuggestedChatList: (chats) => {},
 }));
 
 export default listsStore;
