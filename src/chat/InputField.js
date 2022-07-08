@@ -106,7 +106,11 @@ const InputField = () => {
     // add timestamp for sorting
     addMediaToFirestore(currentMessage.imgUrls);
     currentMessage.collection = "turfChats/" + activeChat + "/messages";
-    cloudFunc("postMessageToTurfChat", currentMessage);
+    const onSend = () => {};
+    const onError = (e) => {
+      console.log("e - ", e);
+    };
+    cloudFunc("postMessageToTurfChat", currentMessage, onSend, onError);
 
     resetCurrentMessage();
   };

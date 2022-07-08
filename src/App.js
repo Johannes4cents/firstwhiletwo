@@ -43,12 +43,19 @@ function App() {
   );
 
   useEffect(() => {
-    localStorage.clear();
     if (info) {
       if (info.uniqueName && info.password) setFilledinfo(true);
       else setFilledinfo(false);
     }
   }, [info]);
+
+  useEffect(() => {
+    let clearCheck = JSON.parse(localStorage.getItem("clearCheck"));
+    if (!clearCheck) {
+      localStorage.clear();
+      localStorage.setItem("clearCheck", JSON.stringify(true));
+    }
+  }, []);
 
   useCheckArraysForResTrigger();
   useScanChatMessages();
