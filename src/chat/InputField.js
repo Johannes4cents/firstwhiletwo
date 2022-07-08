@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChatMessage from "../fire_classes/ChatMessage";
 import useWindowSize from "../hooks/useWindowSize";
-import { setDocInFirestore } from "../misc/handleFirestore";
+import { cloudFunc, setDocInFirestore } from "../misc/handleFirestore";
 import { forArrayLength, getRandomId, newTrim } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import listsStore from "../stores/listsStore";
@@ -104,9 +104,10 @@ const InputField = () => {
     }
     delete currentMessage.attachedMedia;
     // add timestamp for sorting
-    currentMessage.msTime = new Date().getTime();
-    addMediaToFirestore(activeChat.imgUrls);
-    sendMessageToTurfChats(activeChat, currentMessage);
+    addMediaToFirestore(currentMessage.imgUrls);
+    currentMessage.collection = "turfChats/" + activeChat + "/messages";
+    cloudFunc("postMessageToTurfChat", currentMessage);
+
     resetCurrentMessage();
   };
 

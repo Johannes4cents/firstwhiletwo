@@ -68,10 +68,7 @@ function checkMessagesForUpdate(messages, updateMessage) {
   });
 }
 
-function sendMessageToTurfChats(chat, msg) {
-  msg.collection = "turfChats/" + chat + "/messages";
-  setDocInFirestore("turfChats/" + chat + "/messages", msg.id, msg);
-}
+function sendMessageToTurfChats(chat, msg) {}
 
 function checkCorrectChatDepth(levels, activeStrains) {
   let activeAmount = activeStrains.length;

@@ -43,6 +43,7 @@ function App() {
   );
 
   useEffect(() => {
+    localStorage.clear();
     if (info) {
       if (info.uniqueName && info.password) setFilledinfo(true);
       else setFilledinfo(false);
