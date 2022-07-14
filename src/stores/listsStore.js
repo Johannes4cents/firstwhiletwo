@@ -59,7 +59,7 @@ const listsStore = create((set) => ({
     });
   },
   allStrains: [],
-  setAllStrains: (list) => {
+  setAllStrains: (uid, list) => {
     set((state) => {
       return { allStrains: list };
     });

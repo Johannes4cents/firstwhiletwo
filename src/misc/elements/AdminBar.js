@@ -8,7 +8,7 @@ import listsStore from "../../stores/listsStore";
 import userStore from "../../stores/userStore";
 
 const AdminBar = () => {
-  const { info, setInfo, changeChips, myAnswers } = userStore();
+  const { info, setInfo, changeChips, myAnswers, savedChats } = userStore();
 
   const { triggerWords, clearRecentlyTyped, resTrigger } = readStore();
   const { displayedMessages, currentMessage } = chatStore();
@@ -31,6 +31,7 @@ const AdminBar = () => {
     console.log("turfChats - ", turfChats);
     console.log("userComparissons - ", userComparissons);
     console.log("info - ", info);
+    console.log("savedChats - ", savedChats);
   };
 
   const queryTest = () => {

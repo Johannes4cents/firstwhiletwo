@@ -87,8 +87,17 @@ const ChatMessagesField = () => {
           overflowX: "hidden",
         }}
       >
-        {displayedMessages.map((msg) => {
-          return <MessageHolder message={msg} key={msg.id} />;
+        {displayedMessages.map((msg, index) => {
+          return (
+            <MessageHolder
+              message={msg}
+              key={msg.id}
+              lastMsg={
+                (displayedMessages[index - 1] ?? { author: { id: null } })
+                  .author.id
+              }
+            />
+          );
         })}
         <div ref={scrollDiv} style={{ height: "0px" }} />
       </div>

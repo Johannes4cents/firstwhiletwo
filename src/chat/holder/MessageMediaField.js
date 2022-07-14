@@ -63,7 +63,7 @@ const ImageHolder = ({
       inside: true,
       direction: "horizontal",
       options: [
-        imgObj.author.id != info.uid
+        imgObj.author.id != (info ? info.uid : "")
           ? {
               description: "Add Image to your media",
               click: imgObj.favorite ? undoFavorite : makeFavorite,

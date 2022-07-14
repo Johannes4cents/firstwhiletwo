@@ -13,6 +13,7 @@ const useOnHover = ({
   selectedTextColor = null,
   unselectedTextColor = null,
   hoverColor = null,
+  nonHoverColor = "white",
   hoverBgColor = "#5f5f5f",
   normalBgColor = "#4f4f4f",
   checkboxSize = "icon20",
@@ -24,6 +25,7 @@ const useOnHover = ({
     size: "icon20",
     inside: false,
   },
+  hoverChange = true,
 }) => {
   const [hover, setHover] = useState(false);
   const [textColor, setTextColor] = useState("white");
@@ -92,16 +94,20 @@ const useOnHover = ({
   }, [active, hover, inclusionList, item]);
 
   const onMouseEnter = () => {
-    setHoverStarted(dateToTimestamp(new Date()).msTime);
-    setHover(true);
-    setShowHoverMenu(true);
+    if (hoverChange) {
+      setHoverStarted(dateToTimestamp(new Date()).msTime);
+      setHover(true);
+      setShowHoverMenu(true);
+    }
   };
 
   const onMouseLeave = () => {
-    setHover(false);
-    setHoverStarted(null);
-    setShowHover(false);
-    setShowHoverMenu(false);
+    if (hoverChange) {
+      setHover(false);
+      setHoverStarted(null);
+      setShowHover(false);
+      setShowHoverMenu(false);
+    }
   };
 
   return {

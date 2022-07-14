@@ -20,7 +20,7 @@ const MyChatsPage = () => {
       {savedChats.map((c) => (
         <ChatListHolder
           chat={c}
-          key={c.id}
+          key={c.key}
           comparissons={userComparissons}
           from={"myChats"}
         />

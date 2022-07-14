@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TabBar } from "../misc/elements/TabButton";
 import bg from "../images/bg_section_title.png";
-import ItemPage from "./ItemPage";
+import MyGuyPage from "./MyGuyPage";
 import LootPage from "./LootPage";
 import StatementsPage from "./StatementsPage";
 import AlliesPage from "./AlliesPage";
@@ -11,7 +11,7 @@ import userStore from "../stores/userStore";
 import PleaseLogInField from "../sections/main/PleaseLogInField";
 
 const MyGuySection = () => {
-  const [activeTab, setActiveTab] = useState("Item");
+  const [activeTab, setActiveTab] = useState("My Guy");
   const { loggedIn } = userStore();
   return (
     <div
@@ -41,12 +41,12 @@ const MyGuySection = () => {
         </div>
       </div>
       <TabBar
-        tabs={["Item", "Loot", "Statements", "Allies", "Stats", "Media"]}
+        tabs={["My Guy", "Loot", "Statements", "Allies", "Stats", "Media"]}
         setActiveTab={setActiveTab}
         activeTab={activeTab}
       />
       {!loggedIn && <PleaseLogInField />}
-      {activeTab == "Item" && loggedIn && <ItemPage />}
+      {activeTab == "My Guy" && loggedIn && <MyGuyPage />}
       {activeTab == "Loot" && loggedIn && <LootPage />}
       {activeTab == "Statements" && loggedIn && <StatementsPage />}
       {activeTab == "Allies" && loggedIn && <AlliesPage />}

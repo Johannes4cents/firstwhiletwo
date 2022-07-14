@@ -375,4 +375,5 @@
   flex-direction: column;
   flex-wrap: wrap;
   align-self: center;
+  position: relative;
 }

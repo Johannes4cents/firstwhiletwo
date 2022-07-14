@@ -8,7 +8,7 @@ import ItemMyGuyHolder from "./ItemMyGuyHolder";
 import SubOptionsBar from "./SubOptionsBar";
 
 const LootPage = () => {
-  const catList = ["Items", "Spells", "events", "creatures", "buildings"];
+  const catList = ["Items", "Spells", "Skills", "Creatures", "buildings"];
 
   const [selectedLootCat, setSelectedLootCat] = useState("Items");
   const [displayedItems, setDisplayedItems] = useState([]);

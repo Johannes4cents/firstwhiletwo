@@ -6,7 +6,63 @@ import { updateDocInFirestore } from "../misc/handleFirestore";
 const userStore = create((set) => ({
   info: null,
   loggedIn: false,
-  equipped: "fist",
+  myGuy: {
+    equippedItem: null,
+    name: null,
+    constitution: { health: 100, max: 100 },
+    energy: { available: 100, max: 100 },
+    gender: null,
+    skills: [],
+  },
+
+  changeGender: (uid, gender) => {
+    set((state) => {
+      let newGuy = { ...state.myGuy, gender };
+      localStorage.setItem(uid, JSON.stringify(newGuy));
+      return { myGuy: newGuy };
+    });
+  },
+
+  setEquippedItem: (uid, item) => {
+    set((state) => {
+      let newGuy = { ...state.myGuy, equippedItem: item };
+      localStorage.setItem(uid, JSON.stringify(newGuy));
+      return { MyGuy: newGuy };
+    });
+  },
+  changeMyGuyName: (uid, name) => {
+    set((state) => {
+      let newGuy = { ...state.myGuy, name };
+      localStorage.setItem(uid, JSON.stringify(newGuy));
+      return { myGuy: newGuy };
+    });
+  },
+  changeMyGuyHealth: (uid, hps) => {
+    set((state) => {
+      let newGuy = {
+        ...state.myGuy,
+        constitution: {
+          ...state.myGuy.constitution,
+          health: state.myGuy.constitution.health + hps,
+        },
+      };
+      localStorage.setItem(uid, JSON.stringify(newGuy));
+      return { myGuy: newGuy };
+    });
+  },
+  changeMyGuyMaxHealth: (uid, hps) => {
+    set((state) => {
+      let newGuy = {
+        ...state.myGuy,
+        constitution: {
+          ...state.myGuy.constitution,
+          max: state.myGuy.constitution.max + hps,
+        },
+      };
+      localStorage.setItem(uid, JSON.stringify(newGuy));
+      return { myGuy: newGuy };
+    });
+  },
   myAnswers: [],
   mediaFolder: [],
   addMediaFolder: (info, name) => {

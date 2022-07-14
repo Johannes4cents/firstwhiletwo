@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import listsStore from "../../stores/listsStore";
 import StrainSuggestionHolder from "../holder/StrainSuggestionHolder";
 
 const SuggestedStrainsPage = () => {
   const [displayedStrains, setDisplayedStrains] = useState([]);
+  const { allStrains } = listsStore();
+
+  useEffect(() => {
+    setDisplayedStrains(allStrains);
+  }, [allStrains]);
   return (
     <div
       className="divColumn"

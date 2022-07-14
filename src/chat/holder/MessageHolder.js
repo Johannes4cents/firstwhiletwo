@@ -9,11 +9,19 @@ import AttachedItemHolder from "./AttachedMessageHolder";
 import MessageMediaField from "./MessageMediaField";
 import MessageNickField from "./MessageElements/MessageNickField";
 
-const MessageHolder = ({ message }) => {
+const MessageHolder = ({ message, lastMsg }) => {
+  const [chained, setChained] = useState(false);
   const messageDiv = useRef();
   const profilePic = useRef(null);
 
   const [hover, setHover] = useState(false);
+
+  useEffect(() => {
+    console.log("lastMsg == message.id - ", lastMsg == message.author.id);
+    if (lastMsg) {
+      if (lastMsg == message.author.id) setChained(true);
+    }
+  }, [message, lastMsg]);
 
   useEffect(() => {
     if (profilePic != null) {
@@ -49,19 +57,22 @@ const MessageHolder = ({ message }) => {
           backgroundColor: hover ? "grey" : "",
         }}
       >
-        <img
-          ref={profilePic}
-          src="/images/drawable/icon_unknown.png"
-          className="icon30"
-          style={{ marginRight: "10px" }}
-        />
+        {!chained && (
+          <img
+            ref={profilePic}
+            src="/images/drawable/icon_unknown.png"
+            className="icon30"
+            style={{ marginRight: "10px" }}
+          />
+        )}
+        {chained && <div style={{ width: "30px" }} />}
 
         <div
           ref={messageDiv}
           className="divColumn"
           style={{ flex: 1, alignItems: "baseline" }}
         >
-          <MessageNickField message={message} />
+          {!chained && <MessageNickField message={message} />}
 
           <div className="divColumn" style={{ width: "100%" }}>
             {(message.attachedItems ?? []).length > 0 &&
@@ -113,18 +124,19 @@ const MessageHolder = ({ message }) => {
             }px`,
           }}
         >
-          {objectToArray(message.ressources).map((r) => {
-            return (
-              <VoteRessourceArrows
-                key={r.key}
-                dbVotes={r.value}
-                ressource={r.key}
-                message={message}
-                hover={hover}
-                setHover={setHover}
-              />
-            );
-          })}
+          {hover &&
+            objectToArray(message.ressources).map((r) => {
+              return (
+                <VoteRessourceArrows
+                  key={r.key}
+                  dbVotes={r.value}
+                  ressource={r.key}
+                  message={message}
+                  hover={hover}
+                  setHover={setHover}
+                />
+              );
+            })}
         </div>
       </div>
     </div>

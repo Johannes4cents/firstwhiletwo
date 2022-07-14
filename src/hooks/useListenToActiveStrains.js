@@ -31,17 +31,21 @@ const useListenToActiveStrains = (subscriptions, setSubscriptions) => {
     setActiveChats(getChatList(strains));
     const turfChat = strains.join("|").toLowerCase();
 
-    if (checkCorrectChatDepth(info.stats.levels, activeStrains)) {
-      checkIfTurfChatExists(turfChat, info.uid, info.nickname, strains);
-      setActiveChat(turfChat);
-      const unsubscribe = getChatListener(turfChat, (messages) => {
-        setDisplayedMessages(messages);
-      });
-      setSubscriptions([...subscriptions, unsubscribe]);
-      updateDocInFirestore("users/", info.uid, "activeChat", turfChat);
-      return unsubscribe;
+    if (info) {
+      if (checkCorrectChatDepth(info.stats.levels, activeStrains)) {
+        checkIfTurfChatExists(turfChat, info.uid, info.nickname, strains);
+        setActiveChat(turfChat);
+        const unsubscribe = getChatListener(turfChat, (messages) => {
+          setDisplayedMessages(messages);
+        });
+        setSubscriptions([...subscriptions, unsubscribe]);
+        updateDocInFirestore("users/", info.uid, "activeChat", turfChat);
+        return unsubscribe;
+      } else {
+        updateDocInFirestore("users/", info.uid, "activeChat", null);
+      }
     } else {
-      updateDocInFirestore("users/", info.uid, "activeChat", null);
+      setActiveChats(null);
     }
   }
 

@@ -8,7 +8,8 @@ import listsStore from "../stores/listsStore";
 import userStore from "../stores/userStore";
 
 const useGeneralListListener = () => {
-  const { setFireFlags, setTurfChats, setOtherUser } = listsStore();
+  const { setFireFlags, setTurfChats, setOtherUser, setAllStrains } =
+    listsStore();
   const { info, loggedIn } = userStore();
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const useGeneralListListener = () => {
         setFireFlags(info.uid, lists["fireFlags"]);
         setTurfChats(lists["turfChats"]);
         setOtherUser(info.uid, lists["userList"]);
+        setAllStrains(info.uid, lists["strainList"]);
       });
     } else {
       unsubscribe();
