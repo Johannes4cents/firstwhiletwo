@@ -1,16 +1,15 @@
 const ressources = [
-  "cash",
   "mana",
-  "food",
+  "lifestyle",
   "military",
-  "diplomacy",
-  "industry",
-  "fear",
-  "happiness",
+  "politics",
+  "economy",
+  "dark",
+  "light",
   "knowledge",
   "science",
   "religion",
-  "health",
+  "life",
   "love",
   "espionage",
   "rage",
@@ -23,4 +22,6 @@ const schools = [
   { id: "bottom_right" },
 ];
 
-export { ressources, schools };
+const availableLanguages = ["english", "german"];
+
+export { ressources, schools, availableLanguages };

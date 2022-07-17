@@ -11,7 +11,12 @@ import {
 import db from "../firebase/fireInit";
 import Turf from "../fire_classes/Turf";
 import { setDocInFirestore } from "../misc/handleFirestore";
-import { dateToTimestamp, forArrayLength } from "../misc/helperFuncs";
+import {
+  dateToTimestamp,
+  forArrayLength,
+  newTrim,
+  umlautFix,
+} from "../misc/helperFuncs";
 
 function getChatListener(chat, onCollection) {
   const q = query(
@@ -112,7 +117,36 @@ function getChatList(activeStrains) {
   return chats;
 }
 
+async function scanMessageForWords(message, alphabetWords, onScanned) {
+  let resScore = {};
+  let foundLootStrings = [];
+  let strings = message.msg.split(" ").map((s) => newTrim(s));
+
+  forArrayLength(strings, (string) => {
+    let firstChar = umlautFix(string[0]);
+    let foundLootString = alphabetWords[firstChar].loot.find(
+      (s) => s.string == string
+    );
+    let foundResString = alphabetWords[firstChar].ressources.find(
+      (s) => s.string == string
+    );
+    if (foundLootString) {
+      foundLootStrings.push(foundLootString.id);
+    }
+    if (foundResString) {
+      if (resScore[foundResString.ressource]) {
+        resScore[foundResString.ressource] += foundResString.weight;
+      } else resScore[foundResString.ressource] = foundResString.weight;
+    }
+  });
+  message.lootStrings = foundLootStrings;
+  message.resScore = resScore;
+  message.length = strings.length;
+  onScanned(message);
+}
+
 export {
+  scanMessageForWords,
   checkCorrectChatDepth,
   getChatListener,
   checkIfTurfChatExists,

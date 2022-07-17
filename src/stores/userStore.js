@@ -15,6 +15,20 @@ const userStore = create((set) => ({
     skills: [],
   },
 
+  lastUpdated: {
+    newInfo: null,
+  },
+
+  changeLastUpdated: (field, value) => {
+    set((state) => {
+      let newUpdated = { ...state.lastUpdated, [field]: value };
+      localStorage.setItem(
+        state.info.uid + "lastUpdated",
+        JSON.stringify(newUpdated)
+      );
+      return { lastUpdated: newUpdated };
+    });
+  },
   changeGender: (uid, gender) => {
     set((state) => {
       let newGuy = { ...state.myGuy, gender };
@@ -138,7 +152,7 @@ const userStore = create((set) => ({
     localStorage.setItem("info", JSON.stringify(info));
 
     set((state) => {
-      return { info: info, loggedIn: info == null ? false : true };
+      return { info: info, loggedIn: info != null };
     });
   },
   changeChips: (cat, amount) => {

@@ -17,7 +17,7 @@ const getResTrigger = () => {
 };
 
 const readStore = create((set) => ({
-  fireItems: [],
+  fireLoot: [],
   addFireItem: (uid, fireItem) => {
     set((state) => {
       let newList = [...state.fireItems, fireItem];
@@ -25,37 +25,11 @@ const readStore = create((set) => ({
       return { fireItems: newList };
     });
   },
-  setFireStuff: (uid, items, resWords, onItemsNull) => {
+  setFireStuff: (fireLoot, resWords, triggerWords) => {
     set((state) => {
-      if (items != null) {
-        localStorage.setItem(uid + "fireItems", JSON.stringify(items));
-        // setTriggerWords
-        const triggerWords = [];
-        forArrayLength(items, (item) => {
-          forArrayLength(item.triggerWords, (tWord) => {
-            forArrayLength(tWord.obj.words.english, (string) => {
-              const triggerWord = {
-                string,
-                item,
-                language: "english",
-              };
-              triggerWords.push(triggerWord);
-            });
-            forArrayLength(tWord.obj.words.german, (string) => {
-              const triggerWord = {
-                string,
-                item,
-                language: "german",
-              };
-              triggerWords.push(triggerWord);
-            });
-          });
-        });
-        state.setTriggerWords(triggerWords, resWords);
-        return { fireItems: items };
-      } else {
-        if (onItemsNull != null) onItemsNull();
-      }
+      // setTriggerWords
+      state.setTriggerWords(triggerWords, resWords);
+      return { fireLoot: fireLoot };
     });
   },
 
@@ -123,8 +97,8 @@ const readStore = create((set) => ({
     });
   },
 
-  triggerWords: {},
-  setTriggerWords: (items, resWords) => {
+  alphabetWords: {},
+  setTriggerWords: (triggerWords, resWords) => {
     set((state) => {
       let wordsObj = {};
       forArrayLength(alphabet, (char) => {
@@ -136,11 +110,11 @@ const readStore = create((set) => ({
         wordsObj[firstChar].ressources.push(resWord);
       });
 
-      forArrayLength(items, (item) => {
-        let firstChar = umlautFix(item.string[0]).toLowerCase();
-        wordsObj[firstChar]["loot"].push(item);
+      forArrayLength(triggerWords, (word) => {
+        let firstChar = umlautFix(word.string[0]).toLowerCase();
+        wordsObj[firstChar]["loot"].push(word);
       });
-      return { triggerWords: wordsObj };
+      return { alphabetWords: wordsObj };
     });
   },
   recentlyTyped: [],

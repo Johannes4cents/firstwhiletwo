@@ -2,7 +2,6 @@ import { getDownloadURL, ref } from "firebase/storage";
 import { useEffect, useRef, useState } from "react";
 import { animated, config, useSpring } from "react-spring";
 import { storage } from "../../firebase/fireInit";
-import { getConnectedStringFromMessage } from "../../scanTexts/handleLoot";
 import listsStore from "../../stores/listsStore";
 import userStore from "../../stores/userStore";
 
@@ -25,10 +24,6 @@ const ItemMessageHolder = ({ item, onItemClicked, message }) => {
 
   const addLootToStuff = () => {
     console.log("item is - ", item);
-    item.connectedString = getConnectedStringFromMessage(
-      info.language,
-      message
-    );
     addLoot(info.uid, item.toObj());
   };
 

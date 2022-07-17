@@ -18,6 +18,7 @@ const useOnHover = ({
   normalBgColor = "#4f4f4f",
   checkboxSize = "icon20",
   hoverElement = null,
+  hoverDescription = null,
   hoverTimer = 2000,
   hoverOptions = {
     direction: "horizontal",
@@ -155,6 +156,25 @@ const useOnHover = ({
             setShowHoverMenu={setShowHoverMenu}
             inside={hoverOptions.inside}
           />
+        )}
+      </div>
+    ),
+    hoverDescription: (
+      <div style={{ position: "relative", display: "flex" }}>
+        {hover && (
+          <div
+            style={{
+              backgroundColor: "#4f4f4f",
+              padding: "2px",
+              borderRadius: "1rem/1rem",
+              border: "1px solid grey",
+              position: "fixed",
+              pointerEvents: "none",
+              zIndex: 9999999,
+            }}
+          >
+            <div className="textWhite">{hoverDescription}</div>
+          </div>
         )}
       </div>
     ),

@@ -8,6 +8,7 @@ import ItemMessageHolder from "./ItemMessageHolder";
 import AttachedItemHolder from "./AttachedMessageHolder";
 import MessageMediaField from "./MessageMediaField";
 import MessageNickField from "./MessageElements/MessageNickField";
+import VotesBar from "./VotesBar";
 
 const MessageHolder = ({ message, lastMsg }) => {
   const [chained, setChained] = useState(false);
@@ -17,7 +18,6 @@ const MessageHolder = ({ message, lastMsg }) => {
   const [hover, setHover] = useState(false);
 
   useEffect(() => {
-    console.log("lastMsg == message.id - ", lastMsg == message.author.id);
     if (lastMsg) {
       if (lastMsg == message.author.id) setChained(true);
     }
@@ -110,33 +110,8 @@ const MessageHolder = ({ message, lastMsg }) => {
           </div>
         )}
 
-        <div
-          className="ressourceContainer"
-          style={{
-            marginRight: "5px",
-            height: messageDiv.current
-              ? messageDiv.current.offsetHeight + 15
-              : "",
-            width: `${
-              (message.ressources
-                ? objectToArray(message.ressources).length
-                : 1) * 115
-            }px`,
-          }}
-        >
-          {hover &&
-            objectToArray(message.ressources).map((r) => {
-              return (
-                <VoteRessourceArrows
-                  key={r.key}
-                  dbVotes={r.value}
-                  ressource={r.key}
-                  message={message}
-                  hover={hover}
-                  setHover={setHover}
-                />
-              );
-            })}
+        <div style={{ position: "relative" }}>
+          {hover && <VotesBar message={message} />}
         </div>
       </div>
     </div>

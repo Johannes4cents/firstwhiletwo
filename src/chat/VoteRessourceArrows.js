@@ -3,13 +3,7 @@ import { incrementField } from "../misc/handleFirestore";
 import miscStore from "../stores/miscStore";
 import userStore from "../stores/userStore";
 
-const VoteRessourceArrows = ({
-  ressource,
-  hover,
-  setHover,
-  message,
-  dbVotes,
-}) => {
+const VoteRessourceArrows = ({ ressource, hover, message, dbVotes }) => {
   const [voteHover, setVoteHover] = useState({ up: false, down: false });
   const [votes, setVotes] = useState({ upvotes: 0, downvotes: 0 });
   const [firevotes, setFireVotes] = useState({ upvotes: 0, downvotes: 0 });
@@ -62,7 +56,7 @@ const VoteRessourceArrows = ({
     }
   }
   return (
-    <div className="divColumn" style={{ position: "absolute" }}>
+    <div className="divColumn" style={{ backgroundColor: "#4f4f4f" }}>
       <div className="divRow" style={{ justifyContent: "center" }}>
         <div
           className="textBoldWhite"
@@ -81,11 +75,9 @@ const VoteRessourceArrows = ({
           onClick={() => vote("downvotes")}
           onMouseEnter={() => {
             setVoteHover({ down: true, up: false });
-            setHover(false);
           }}
           onMouseLeave={() => {
             setVoteHover({ down: false, up: false });
-            setHover(true);
           }}
           onMouseDown={() => {
             setVoteHover({ down: false, up: false });
@@ -122,11 +114,9 @@ const VoteRessourceArrows = ({
           onClick={() => vote("upvotes")}
           onMouseEnter={() => {
             setVoteHover({ down: false, up: true });
-            setHover(false);
           }}
           onMouseLeave={() => {
             setVoteHover({ down: false, up: false });
-            setHover(true);
           }}
           onMouseDown={() => {
             setVoteHover({ down: false, up: false });

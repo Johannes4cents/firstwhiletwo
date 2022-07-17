@@ -16,6 +16,7 @@ import { ref, uploadBytes } from "firebase/storage";
 import db, { storage, functions } from "../firebase/fireInit";
 import { httpsCallable } from "firebase/functions";
 import { forArrayLength } from "./helperFuncs";
+import { availableLanguages } from "./lists/otherLists";
 
 async function getInfoFromRawId(rawId, afterFunc) {
   var fireInfo = null;
@@ -323,21 +324,15 @@ function getSuggestedStrains(category) {
   }
 }
 
-async function getGeneralStuff(local, uid, setFireItems, setAllStrains) {
-  let localItems = local ?? [];
-  const lootDocRef = doc(db, "general/", "fireItems");
+async function getGeneralStuff(uid, setFireStuff, setAllStrains) {
   const listsDocRef = doc(db, "general", "lists");
   const listsDoc = await getDoc(listsDocRef);
-  const lootDoc = await getDoc(lootDocRef);
-  const items = lootDoc.data()["items"] ?? [];
-  const spells = lootDoc.data()["spells"] ?? [];
-  const creatures = lootDoc.data()["creatures"] ?? [];
-  const buildings = lootDoc.data()["buildings"] ?? [];
-  const events = lootDoc.data()["events"] ?? [];
 
   // get resWords and transform them to multiple string objects
   const resWords = listsDoc.data()["resWords"];
-  const allStrings = [];
+  const triggerWords = listsDoc.data()["triggerWords"];
+  const fireLoot = listsDoc.data()["fireLoot"];
+  const resWordStrings = [];
   forArrayLength(resWords, (word) => {
     let combinedList = word.texts.english.concat(word.texts.german);
     forArrayLength(combinedList, (string) => {
@@ -348,33 +343,27 @@ async function getGeneralStuff(local, uid, setFireItems, setAllStrains) {
         maxOccurences: word.maxOccurences,
         ressource: word.ressource,
       };
-      allStrings.push(stringObj);
+      resWordStrings.push(stringObj);
     });
+  });
+
+  var triggerWordStrings = [];
+
+  forArrayLength(triggerWords, (tw) => {
+    var allTwStrings = [];
+    forArrayLength(availableLanguages, (language) => {
+      allTwStrings = allTwStrings.concat(tw.texts[language]);
+    });
+    let mappedStrings = allTwStrings.map((s) => {
+      return { string: s, id: tw.id };
+    });
+    triggerWordStrings = triggerWordStrings.concat(mappedStrings);
   });
 
   // setAllStrains
   setAllStrains(uid, listsDoc.data()["strainList"]);
 
-  if (localItems.length < 1) {
-    await getCustomUserList(uid, "fireItems", (firestoreItems) => {
-      firestoreItems.forEach((i) => localItems.push(i));
-
-      const localIds = localItems.map((i) => i.id);
-
-      const list = items
-        .concat(spells)
-        .concat(creatures)
-        .concat(buildings)
-        .concat(events);
-      for (let i = 0; i < list.length; i++) {
-        let item = list[i];
-        if (!localIds.includes(item.id)) localItems.push(item);
-      }
-      setFireItems(uid, localItems, allStrings);
-    });
-  } else {
-    setFireItems(uid, localItems, allStrings);
-  }
+  setFireStuff(fireLoot, resWordStrings, triggerWordStrings);
 }
 
 async function getCustomUserList(uid, collection, onCollectionRetrieved) {

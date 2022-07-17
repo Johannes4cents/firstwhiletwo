@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { checkMessagesForUpdate } from "../chat/handleChat";
-import { incrementField, updateDocInFirestore } from "../misc/handleFirestore";
-import { checkTimeDiff, dateToTimestamp } from "../misc/helperFuncs";
+import {
+  getDocListener,
+  getSingleDocFromFirestore,
+  incrementField,
+  updateDocInFirestore,
+} from "../misc/handleFirestore";
+import {
+  checkTimeDiff,
+  dateToTimestamp,
+  forArrayLength,
+} from "../misc/helperFuncs";
 import { realDb } from "../firebase/fireInit";
 
 import chatStore from "../stores/chatStore";
@@ -11,11 +20,34 @@ import { onDisconnect, onValue, ref, set } from "firebase/database";
 
 const useHandleUpdating = () => {
   const { displayedMessages, updateDisplayedMessage } = chatStore();
-  const { info, loggedIn } = userStore();
+  const { info, loggedIn, lastUpdated, changeLastUpdated, setInfo } =
+    userStore();
   const [updateMessages, setUpdateMessages] = useState([]);
   const [updateStuff, setUpdateStuff] = useState();
   const { lastActive, toUpdateStuff, clearUpdateList } = miscStore();
   const [active, setActive] = useState(null);
+  const [updateSubscription, setUpdateSubscription] = useState(null);
+
+  function updateInfo(timestamp) {
+    getSingleDocFromFirestore("users", info.uid, (doc) => {
+      setInfo(doc);
+      changeLastUpdated("newInfo", timestamp);
+    });
+  }
+
+  useEffect(() => {
+    if (info && loggedIn) {
+      let unsubscribe = getDocListener("general", "updates", (updateDoc) => {
+        const updateList = [{ name: "newInfo", func: updateInfo }];
+        forArrayLength(updateList, (field) => {
+          var localValue = lastUpdated[field.name];
+          var fireValue = updateDoc[field.name];
+          if (localValue != fireValue) field.func(fireValue);
+        });
+      });
+      setUpdateSubscription(unsubscribe);
+    }
+  }, [info]);
 
   useEffect(() => {
     setUpdateStuff(toUpdateStuff);

@@ -6,8 +6,13 @@ import { forArrayLength, getRandomId, newTrim } from "../misc/helperFuncs";
 import chatStore from "../stores/chatStore";
 import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
+import readStore from "../stores/readStore";
 import userStore from "../stores/userStore";
-import { checkCorrectChatDepth, sendMessageToTurfChats } from "./handleChat";
+import {
+  checkCorrectChatDepth,
+  scanMessageForWords,
+  sendMessageToTurfChats,
+} from "./handleChat";
 import InputOptionsBar from "./InputOptionsBar";
 
 const InputField = () => {
@@ -21,6 +26,7 @@ const InputField = () => {
     setMessageContent,
     resetCurrentMessage,
   } = chatStore();
+  const { alphabetWords } = readStore();
   const { updateLootItem, activeStrains } = listsStore();
   const { setInputHeight, updateLastActive, setInputWidth } = miscStore();
   const windowsize = useWindowSize();
@@ -112,8 +118,16 @@ const InputField = () => {
     const onError = (e) => {
       console.log("e - ", e);
     };
-    cloudFunc("postMessage", currentMessage, onSend, onError);
 
+    function sendMessageAfterCheck(message) {
+      cloudFunc("postMessage", message, onSend, onError);
+    }
+
+    scanMessageForWords(
+      { ...currentMessage },
+      alphabetWords,
+      sendMessageAfterCheck
+    );
     resetCurrentMessage();
   };
 

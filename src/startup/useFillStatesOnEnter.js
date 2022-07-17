@@ -102,8 +102,7 @@ const useFillStatesOnEnter = () => {
     }
 
     // generalStuff
-    let fireitems = JSON.parse(localStorage.getItem(uid + "fireItems"));
-    getGeneralStuff(fireitems, uid, setFireStuff, setAllStrains);
+    getGeneralStuff(uid, setFireStuff, setAllStrains);
 
     //
     let showPeopleFilter = JSON.parse(localStorage.getItem(uid + "showPeople"));

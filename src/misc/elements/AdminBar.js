@@ -8,9 +8,11 @@ import listsStore from "../../stores/listsStore";
 import userStore from "../../stores/userStore";
 
 const AdminBar = () => {
-  const { info, setInfo, changeChips, myAnswers, savedChats } = userStore();
+  const { info, setInfo, changeChips, myAnswers, savedChats, lastUpdated } =
+    userStore();
 
-  const { triggerWords, clearRecentlyTyped, resTrigger } = readStore();
+  const { triggerWords, clearRecentlyTyped, resTrigger, alphabetWords } =
+    readStore();
   const { displayedMessages, currentMessage } = chatStore();
   const {
     fireFlags,
@@ -28,10 +30,8 @@ const AdminBar = () => {
   }
 
   const checkStuff = () => {
-    console.log("turfChats - ", turfChats);
-    console.log("userComparissons - ", userComparissons);
-    console.log("info - ", info);
-    console.log("savedChats - ", savedChats);
+    console.log("alphabetWords - ", alphabetWords);
+    console.log("lastUpdated - ", lastUpdated);
   };
 
   const queryTest = () => {

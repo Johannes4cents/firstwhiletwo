@@ -12,12 +12,8 @@ import useFillStatesOnEnter from "./startup/useFillStatesOnEnter";
 import useListenToActiveStrains from "./hooks/useListenToActiveStrains";
 import listsStore from "./stores/listsStore";
 import chatStore from "./stores/chatStore";
-import useCheckArraysForResTrigger from "./scanTexts/useCheckArraysForResTrigger";
-import useScanChatMessages from "./scanTexts/useScanChatMessages";
-import triggerStore from "./stores/triggerStore";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-
 import useHandleUpdating from "./hooks/useHandleUpdating";
 import ClickedImageContainer from "./misc/elements/ClickedImageContainer";
 import AfterSignUpPage from "./firebase/signUpOptions/AfterSignUpPage";
@@ -57,9 +53,6 @@ function App() {
       localStorage.setItem("clearCheck", JSON.stringify(true));
     }
   }, []);
-
-  useCheckArraysForResTrigger();
-  useScanChatMessages();
 
   useEffect(() => {
     var unsubscribe = () => {};

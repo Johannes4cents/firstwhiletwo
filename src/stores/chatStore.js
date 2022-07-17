@@ -55,6 +55,7 @@ const chatStore = create((set) => ({
     });
   },
   updateDisplayedMessage: (message) => {
+    console.log("message - ", message);
     set((state) => {
       let index = state.displayedMessages.map((m) => m.id).indexOf(message.id);
       let newList = [...state.displayedMessages];
