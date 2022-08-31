@@ -1,7 +1,7 @@
 import { dateToTimestamp, getRandomId } from "../misc/helperFuncs";
 
 export default function ChatMessage(
-  ressources = ["cash"],
+  ressources = ["love"],
   chats,
   msg = "",
   author,

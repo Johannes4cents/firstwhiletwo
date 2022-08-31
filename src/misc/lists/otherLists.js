@@ -25,3 +25,5 @@ const schools = [
 const availableLanguages = ["english", "german"];
 
 export { ressources, schools, availableLanguages };
+
+const test = () => {}

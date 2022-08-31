@@ -132,7 +132,7 @@ function getCollectionListener(colRef, onCollection) {
   });
 }
 
-async function getDocListener(col, id, onChange) {
+function getDocListener(col, id, onChange) {
   console.log("col - ", col, " | id - ", id);
   const docRef = doc(db, col, id);
   let unsubscribe = onSnapshot(docRef, (doc) => {

@@ -36,8 +36,9 @@ const useHandleUpdating = () => {
   }
 
   useEffect(() => {
-    if (info && loggedIn) {
-      let unsubscribe = getDocListener("general", "updates", (updateDoc) => {
+    var unsubscribe = null;
+    if (loggedIn) {
+      unsubscribe = getDocListener("general", "updates", (updateDoc) => {
         const updateList = [{ name: "newInfo", func: updateInfo }];
         forArrayLength(updateList, (field) => {
           var localValue = lastUpdated[field.name];
@@ -46,8 +47,16 @@ const useHandleUpdating = () => {
         });
       });
       setUpdateSubscription(unsubscribe);
+    } else {
+      setUpdateSubscription((unsubscribe) => {
+        if (unsubscribe) unsubscribe();
+        return unsubscribe;
+      });
     }
-  }, [info]);
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [loggedIn]);
 
   useEffect(() => {
     setUpdateStuff(toUpdateStuff);

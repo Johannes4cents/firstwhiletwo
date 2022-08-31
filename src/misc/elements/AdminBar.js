@@ -6,14 +6,22 @@ import readStore from "../../stores/readStore";
 import { queryCollectionGroup } from "../../misc/handleFirestore";
 import listsStore from "../../stores/listsStore";
 import userStore from "../../stores/userStore";
+import RessourceBlinker from "../../ressources/RessourceBlinker";
 
 const AdminBar = () => {
-  const { info, setInfo, changeChips, myAnswers, savedChats, lastUpdated } =
-    userStore();
+  const {
+    info,
+    setInfo,
+    changeChips,
+    myAnswers,
+    savedChats,
+    lastUpdated,
+    lastRessource,
+  } = userStore();
 
   const { triggerWords, clearRecentlyTyped, resTrigger, alphabetWords } =
     readStore();
-  const { displayedMessages, currentMessage } = chatStore();
+  const { displayedMessages, currentMessage, resScore } = chatStore();
   const {
     fireFlags,
     statements,
@@ -30,8 +38,7 @@ const AdminBar = () => {
   }
 
   const checkStuff = () => {
-    console.log("alphabetWords - ", alphabetWords);
-    console.log("lastUpdated - ", lastUpdated);
+    console.log("lastRessource - ", lastRessource);
   };
 
   const queryTest = () => {
@@ -51,6 +58,7 @@ const AdminBar = () => {
 
   return (
     <div className="divRow">
+      <RessourceBlinker />
       <div>
         <img
           className="icon40"

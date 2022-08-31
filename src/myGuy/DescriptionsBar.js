@@ -31,6 +31,12 @@ const DescriptionsBar = ({
 
   useEffect(() => {
     if (sorting.identifier != "") {
+      console.log(
+        "sorting.identifier - ",
+        sorting.identifier,
+        " | sortingList - ",
+        sortingList
+      );
       setSortingList(
         [...sortingList].sort((a, b) =>
           sorting.ascending

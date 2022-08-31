@@ -9,6 +9,7 @@ import {
   fireAnswersToExtended,
 } from "../misc/handleFirestore";
 import { updateTimeCheck } from "../misc/handleUpdates";
+import chatStore from "../stores/chatStore";
 import listsStore from "../stores/listsStore";
 import miscStore from "../stores/miscStore";
 import readStore from "../stores/readStore";
@@ -30,6 +31,7 @@ const useFillStatesOnEnter = () => {
   const { setLastUpdates } = miscStore();
   const { setFireStuff, setScannedMessages } = readStore();
   const { setMediaFolder, setAnswers, setSavedChats } = userStore();
+  const { setupResScore } = chatStore();
 
   function getCollectionFromUser(uid, collection, setFunc) {
     const localList = JSON.parse(localStorage.getItem(uid + collection));
@@ -75,10 +77,12 @@ const useFillStatesOnEnter = () => {
   }
 
   function fillStates(uid) {
+    console.log("fillStates called");
     getUserListsOnStartUp(uid, [
       { list: "myStrains", set: setMyStrains },
       { list: "myMedia", set: setMyMedia },
     ]);
+    setupResScore();
     storageListToState(uid, "activeStrains", setActiveStrains);
     storageListToState(uid, "scannedMessages", setScannedMessages);
     storageListToState(uid, "mediaFolder", setMediaFolder);

@@ -11,26 +11,30 @@ const useGeneralListListener = () => {
   const { setFireFlags, setTurfChats, setOtherUser, setAllStrains } =
     listsStore();
   const { info, loggedIn } = userStore();
+  const [unsub, setUnsub] = useState(null);
 
   useEffect(() => {
     var unsubscribe = () => {};
 
-    if (info && loggedIn) {
+    if (loggedIn) {
       const docRef = doc(db, "general", "lists");
       unsubscribe = onSnapshot(docRef, (d) => {
         const lists = d.data();
-        console.log("docs updated", lists);
         setFireFlags(info.uid, lists["fireFlags"]);
         setTurfChats(lists["turfChats"]);
         setOtherUser(info.uid, lists["userList"]);
         setAllStrains(info.uid, lists["strainList"]);
       });
+      setUnsub(unsubscribe);
     } else {
-      unsubscribe();
+      setUnsub((unsub) => {
+        if (unsub) unsub();
+        return null;
+      });
     }
 
     return () => unsubscribe();
-  }, [info]);
+  }, [loggedIn]);
 
   return <div>useGeneralListListener</div>;
 };

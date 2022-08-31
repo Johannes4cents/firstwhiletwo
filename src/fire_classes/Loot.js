@@ -10,7 +10,7 @@ export default class Loot {
     type = "",
     connectedString = "",
     fireItemId,
-    upvotes = ["cash"],
+    upvotes = ["love"],
     message = null,
     attached = null,
     id = getRandomId(),

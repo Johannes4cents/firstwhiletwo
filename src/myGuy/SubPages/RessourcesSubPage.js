@@ -10,9 +10,17 @@ const RessourcesSubPage = () => {
 
   useEffect(() => {
     if (info != null) {
-      setDisplayedList(objectToArray(info.ressources));
+      let resList = objectToArray(info.ressources).map((kv) => {
+        return {
+          name: kv.key,
+          dropChance: kv.value.dropChance,
+          amount: kv.value.amount,
+        };
+      });
+
+      setDisplayedList(resList);
     }
-  }, [info]);
+  }, [info.ressources]);
   return (
     <div
       className="divColumn"
@@ -25,7 +33,7 @@ const RessourcesSubPage = () => {
             makeDescriptionField("name", null, null, 1),
             makeDescriptionField("dropChance", "11px", "100px"),
           ]}
-          startField={"name"}
+          startField={"amount"}
           sortingList={displayedList}
           setSortingList={setDisplayedList}
         />
@@ -36,11 +44,7 @@ const RessourcesSubPage = () => {
       >
         {displayedList.map((r, index) => {
           return (
-            <RessourceHolderList
-              key={r.key}
-              ressource={r.value}
-              index={index}
-            />
+            <RessourceHolderList key={r.name} ressource={r} index={index} />
           );
         })}
       </div>

@@ -188,6 +188,13 @@ const userStore = create((set) => ({
       }
     });
   },
+
+  lastRessource: null,
+  setLastRessource: (res) => {
+    set((state) => {
+      return { lastRessource: res };
+    });
+  },
 }));
 
 export default userStore;

@@ -3,9 +3,25 @@ import { toast } from "react-toastify";
 import create from "zustand";
 import ChatMessage from "../fire_classes/ChatMessage";
 import { forArrayLength } from "../misc/helperFuncs";
+import { ressources } from "../misc/lists/otherLists";
 
 const chatStore = create((set) => ({
-  lastMsgRessources: ["cash"],
+  resScore: {},
+  setupResScore: () => {
+    let resObj = {};
+    forArrayLength(ressources, (res) => {
+      resObj[res] = 0;
+    });
+    set((state) => {
+      return { resScore: resObj };
+    });
+  },
+  setResScore: (score) => {
+    set((state) => {
+      return { resScore: score };
+    });
+  },
+  lastMsgRessources: ["love"],
   setMsgRessources: (ressource) => {
     set((state) => {
       return {
@@ -55,7 +71,6 @@ const chatStore = create((set) => ({
     });
   },
   updateDisplayedMessage: (message) => {
-    console.log("message - ", message);
     set((state) => {
       let index = state.displayedMessages.map((m) => m.id).indexOf(message.id);
       let newList = [...state.displayedMessages];
